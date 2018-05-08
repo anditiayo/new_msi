@@ -13,6 +13,7 @@ function Parse_Data($data,$p1,$p2){
     return $hasil; 
 }
 
+
 function to_currency($number)
 {
     if($number >= 0)
@@ -228,3 +229,4 @@ function is_array_empty($arr){
       return false;
   }
 }
+

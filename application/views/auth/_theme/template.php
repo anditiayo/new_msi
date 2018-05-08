@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<div class="auth_user">
 						<img style="width: 25%; height: 25%;display: block;
     margin-left: auto;
-    margin-right: auto;" src="<?php echo base_url();?>asets/img/logos/msi.jpg" alt="image" /><h4>PT MEGAH SEMBADA INDUSTRIES</h4>
+    margin-right: auto;" src="<?php echo base_url();?>asets/img/logos/msi.jpg" alt="image" /><h4 style="text-align: center;">PT MEGAH SEMBADA INDUSTRIES</h4>
 					</div>
 					{content}
 				</div>

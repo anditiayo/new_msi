@@ -8,7 +8,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						</div>
 
 						<?php
-							echo anchor('backend', 'Dashboard');
+							if($this->ion_auth->is_admin()){
+								echo anchor('backend', 'Dashboard');	
+							}else{
+								echo anchor('staff', 'Dashboard');
+							}
 							echo anchor('auth/logout', 'Log Out');
 							//echo anchor('/', 'Site Web');
 						?>

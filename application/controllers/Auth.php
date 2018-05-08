@@ -94,13 +94,14 @@ class Auth extends Authenticate
 		elseif ($this->ion_auth->logged_in() && $this->ion_auth->is_admin())
 		{
 			$this->data['subtitle'] = $this->lang->line('login_heading');
-
 			$this->data['page_content'] = 'auth/choice';
 			$this->render();
 		}
 		else
 		{
-			redirect('/', 'refresh');
+			$this->data['subtitle'] = $this->lang->line('login_heading');
+			$this->data['page_content'] = 'auth/choice';
+			$this->render();
 		}
 	}
 

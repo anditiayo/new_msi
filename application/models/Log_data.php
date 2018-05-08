@@ -96,6 +96,23 @@ class Log_data extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+
+	public function insert_log($PIN,$DateTime,$date,$time,$day,$Verified,$Status){
+		
+		$sql = "INSERT INTO msi_log_data (pin, date_time,tgl,waktu,day, ver,status)
+                SELECT '$PIN', '$DateTime','$date','$time','$day','$Verified','$Status'
+                FROM msi_log_data
+                WHERE NOT EXISTS(
+                    SELECT pin, date_time,ver,status
+                    FROM msi_log_data
+                    WHERE pin = '$PIN'
+                      AND date_time = '$DateTime'
+                      AND ver = '$Verified'
+                      AND status = '$Status'
+                )LIMIT 1";
+        $q = $this->db->query($sql);
+        return $q;
+	}
 	
 
 }

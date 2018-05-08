@@ -5,38 +5,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <nav class="page-sidebar">
             <ul class="side-menu metismenu scroller">
             	<li class="active">
-                    <a href="<?php echo site_url('backend/dashboard'); ?>">{lang_dashboard}</a>
+                    <a href="<?php echo site_url('staff/dashboard'); ?>">{lang_dashboard}</a>
                 </li>
-            	<li class="heading">SETTING</li>
-                <li>
-                    <a href="javascript:;"><i class="sidebar-item-icon ti-user"></i>
-                        <span class="nav-label">User Setting</span><i class="fa fa-angle-left arrow"></i></a>
-                    <ul class="nav-2-level collapse">
-                        
-                        <li>
-                            <a  href="<?php echo site_url('backend/users'); ?>">{lang_users}</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo site_url('backend/groups'); ?>">{lang_security_groups}</a>
-                        </li>
-                        <li>
-                            <a href="<?php echo site_url('backend/maintenance'); ?>">{lang_maintenance} (beta)</a>
-                        </li>
-                        
-                       
-                    </ul>
-                </li>
-                <li class="heading">EMPLOYEE</li>
+            	<li class="heading">EMPLOYEE</li>
                  <li>
                     <a href="javascript:;"><i class="sidebar-item-icon ti-user"></i>
                         <span class="nav-label">Employee</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
                         
                         <li>
-                            <a  href="<?php echo site_url('backend/add'); ?>">Add Employee</a>
+                            <a  href="<?php echo site_url('staff/add'); ?>">Add Employee</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/list'); ?>">List Employee</a>
+                            <a href="<?php echo site_url('staff/list'); ?>">List Employee</a>
                         </li>
                        
                     </ul>
@@ -48,18 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <span class="nav-label">REPORT</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
                         <li>
-                            <a href="<?php echo site_url('backend/report'); ?>"> {lang_report} </a>
-                        </li>
-                        
-                    </ul>
-                </li>
-                <li>
-
-                    <a href="javascript:;"><i class="sidebar-item-icon ti-bar-chart"></i>
-                        <span class="nav-label">PULL DATA</span><i class="fa fa-angle-left arrow"></i></a>
-                    <ul class="nav-2-level collapse">
-                        <li>
-                            <a href="<?php echo site_url('backend/pull'); ?>">PULL</a>
+                            <a href="<?php echo site_url('staff/report'); ?>"> {lang_report} </a>
                         </li>
                         
                     </ul>
