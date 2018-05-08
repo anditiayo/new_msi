@@ -11,15 +11,15 @@ class Log_data extends CI_Model {
     }
 
     public function get_employee(){
-		$this->db->from('employee');
-		$this->db->where('code BETWEEN 2100 and 2200 order by code asc');
+		$this->db->from('msi_employees');
+		$this->db->where('employee_id BETWEEN 2100 and 2200 order by employee_id asc');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 	public function get_employee_name($code){
-		$this->db->select('name');
-		$this->db->from('employee');
-		$this->db->where('code ='.$code);
+		$this->db->select('front_name as name');
+		$this->db->from('msi_employees');
+		$this->db->where('employee_id ='.$code);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -39,10 +39,10 @@ class Log_data extends CI_Model {
 		$results = array();
 		$codes = array();
 		foreach ($emp as $key){
-			$code = $key['code'];
+			$code = $key['employee_id'];
 			$codes[] = array(
-				'code' => $key['code'],
-				'nama' => $key['name']
+				'code' => $key['employee_id'],
+				'nama' => $key['front_name']
 			);
 			for($i = 0; $i < loop_date($start_date,$end_date) + 1; $i++)
 	        {
@@ -91,7 +91,7 @@ class Log_data extends CI_Model {
 
 	 public function get_employee_join(){
 		$this->db->from('msi_log_data a');
-		$this->db->join('employee b','on a.pin = b.code');
+		$this->db->join('msi_employees b','on a.pin = b.employee_id');
 		$this->db->where("a.tgl BETWEEN '2018-04-01' and '2018-04-30'  order by a.tgl,a.date_time,a.status");
 		$query = $this->db->get();
 		return $query->result_array();
