@@ -40,31 +40,8 @@ class Report extends Staff
 	        $this->data['bydate'] = $this->Log_data->get_log_by_date($start_date,$end_date);
 	        $employee = $this->Log_data->get_employee();
 	       	$join = $this->Log_data->get_log($start_date,$end_date);
-	       	$array_join = array();
-	       	foreach ($employee as $keyone)
-	       	{
-	       		
-	       		$code = $keyone['code'];
-		       	foreach ($join as $key)
-		       	{
-		       		$pin = $key['pin'];
-		       		
-		       		if($pin==$code)
-		       		{
-		       			$array_join[$pin][]=array(
-		       				'datetime' 	=> $key['date_time'],
-		       				'tgl' 		=> $key['tgl'],
-		       				'waktu' 	=> $key['waktu'],
-		       				'day'		=> $key['day'],
-		       				'status'	=> $key['status'] 
-		       			);	
-		       		}
-		       		
-		       	}
-	       	}
-		    $this->data['array_join'] = $array_join;
-			
-			$this->data['page_content'] = 'backend/report/index';
+	       
+			$this->data['page_content'] = 'staff/report/index';
 
 			
 

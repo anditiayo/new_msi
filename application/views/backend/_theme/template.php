@@ -19,9 +19,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link href="<?php echo base_url();?>asets/vendors/toastr/toastr.min.css" rel="stylesheet" />
     <link href="<?php echo base_url();?>asets/vendors/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
     <!-- PLUGINS STYLES-->
-    <link href="<?php echo base_url();?>asets/vendors/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url();?>asets/vendors/fullcalendar/dist/fullcalendar.print.min.css" rel="stylesheet" media="print" />
+    <link href="<?php echo base_url();?>asets/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
     <link href="<?php echo base_url();?>asets/vendors/smalot-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/clockpicker/dist/bootstrap-clockpicker.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/jquery-minicolors/jquery.minicolors.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/multiselect/css/multi-select.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/dataTables/datatables.min.css" rel="stylesheet" />
     <!-- THEME STYLES-->
     <link href="<?php echo base_url();?>asets/css/main.min.css" rel="stylesheet" />
     <!-- PAGE LEVEL STYLES-->
@@ -198,7 +207,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			            <div class="font-13">2018 © <b>PT Megah Sembada Industries</b></div>
 			            <div>
 			                
-			                <a class="px-3" href="#" target="_blank">V.B 1.001</a>
+			                <a class="px-3" href="#" target="_blank">V.B 1.009</a>
 			            </div>
 			            <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
 			        </footer>
@@ -220,15 +229,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url();?>asets/vendors/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <!-- PAGE LEVEL PLUGINS-->
-    <script src="<?php echo base_url();?>asets/vendors/chart.js/dist/Chart.min.js"></script>
-    <script src="<?php echo base_url();?>asets/vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/select2/dist/js/select2.full.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/moment/min/moment.min.js"></script>
-    <script src="<?php echo base_url();?>asets/vendors/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/jquery-minicolors/jquery.minicolors.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/multiselect/js/jquery.multi-select.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/bootstrap-maxlength/src/bootstrap-maxlength.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/dataTables/datatables.min.js"></script>
     <!-- CORE SCRIPTS-->
     <script src="<?php echo base_url();?>asets/js/app.min.js"></script>
+    <script src="<?php echo base_url();?>asets/js/scripts/form-plugins.js"></script>
     <!-- PAGE LEVEL SCRIPTS-->
     <script src="<?php echo base_url();?>asets/js/scripts/dashboard_6.js"></script>
     <script src="<?php echo base_url();?>asets/js/scripts/calendar-demo.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 	</body>
 </html>

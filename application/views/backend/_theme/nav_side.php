@@ -14,6 +14,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <ul class="nav-2-level collapse">
                         
                         <li>
+                            <a href="<?php echo base_url();?>backend/users/add"> {lang_add_user}</a>
+                        </li>
+                        <li>
                             <a  href="<?php echo site_url('backend/users'); ?>">{lang_users}</a>
                         </li>
                         <li>
@@ -56,15 +59,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <li>
 
                     <a href="javascript:;"><i class="sidebar-item-icon ti-bar-chart"></i>
-                        <span class="nav-label">PULL DATA</span><i class="fa fa-angle-left arrow"></i></a>
+                        <span class="nav-label">LOG DATA</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
                         <li>
                             <a href="<?php echo site_url('backend/pull'); ?>">PULL</a>
                         </li>
+                        <li>
+                            <a href="<?php echo site_url('backend/log'); ?>">LOG</a>
+                        </li>
                         
                     </ul>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="javascript:;"><i class="sidebar-item-icon ti-package"></i>
                         <span class="nav-label">Components</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
@@ -418,7 +424,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <li>
                     <a href="javascript:;"><i class="sidebar-item-icon ti-anchor"></i>
                         <span class="nav-label">Menu Levels</span><i class="fa fa-angle-left arrow"></i></a>

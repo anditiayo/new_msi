@@ -24,11 +24,11 @@ class Log_data extends CI_Model {
 		return $query->result();
 	}
 
-	public function get_log($start_date,$end_date){
+	public function get_log(){
+		
 		$this->db->from('msi_log_data');
-		$this->db->where('tgl BETWEEN "'. date('Y-m-d', strtotime($start_date)). '" and "'. date('Y-m-d', strtotime($end_date)).'"');
-
-		$query = $this->db->get();
+		$this->db->where("tgl BETWEEN '2018-04-01' and '2018-04-10'  order by tgl,date_time");
+        $query = $this->db->get();
 		return $query->result_array();
 	}
 

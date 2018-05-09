@@ -2,23 +2,65 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="ibox ibox-fullheight">
-            <div class="ibox-head">
-                <div class="ibox-title">REPORT</div>
-                <div class="ibox-tools">
-                    <a class="dropdown-toggle" data-toggle="dropdown"><i class="ti-more-alt"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item"> <i class="ti-pencil"></i>Create</a>
-                        <a class="dropdown-item"> <i class="ti-pencil-alt"></i>Edit</a>
-                        <a class="dropdown-item"> <i class="ti-close"></i>Remove</a>
-                    </div>
-                </div>
+            <!-- START PAGE CONTENT-->
+            <div class="page-heading">
+                <h1 class="page-title"><?$subtitle?></h1>
             </div>
-            <div class="ibox-body">
-                <div class="ibox-fullwidth-block">
-                	                                        <style type="text/css">
+            <div class="page-content fade-in-up">
+                <div class="ibox">
+                    <div class="ibox-body">
+                        <h5 class="font-strong mb-4">REPORT</h5>
+                        <div class="flexbox mb-4">
+                            <div class="flexbox">
+                                <label class="mb-0 mr-2">FACTORY</label>
+                                <select class="selectpicker show-tick form-control" id="type-filter" title="Please select" data-style="btn-solid" data-width="150px">
+                                    <option value="">All</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                                <label class="mb-0 mr-2"></label>
+                                <label class="mb-0 mr-2">GROUP</label>
+                                <select class="selectpicker show-tick form-control" id="type-filter" title="Please select" data-style="btn-solid" data-width="150px">
+                                    <option value="">All</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                                <label class="mb-0 mr-2"></label>
+                                <label class="mb-0 mr-2">DEPT</label>
+                                <select class="selectpicker show-tick form-control" id="type-filter" title="Please select" data-style="btn-solid" data-width="150px">
+                                    <option value="">All</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="flexbox mb-4">
+                            <div class="flexbox">
+                            <div class="form-group" id="date_5">
+                                    <label class="font-normal">Range select</label>
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input class="input-sm form-control" type="text" name="start" value="04/12/2017">
+                                        <span class="input-group-addon pl-2 pr-2">to</span>
+                                        <input class="input-sm form-control" type="text" name="end" value="08/17/2018">
+                                    </div>
+                                </div>
+                            </div>
+                          
+                       
+                            <div class="flexbox">
+                                <button class="btn btn-primary btn-air">SEARCH</button>
+                            </div>
+                          
+                        </div>
+                        <div class="table-responsive row">
+                                                                                        <style type="text/css">
 
         #outerdiv {
             position: absolute;
@@ -27,7 +69,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             right: 23em;
         }
         #innerdiv {
-            width: 78%;
+            width: 88%;
             overflow-x:scroll;
             margin-left: 20.01em;
             padding-top:-10px;
@@ -114,31 +156,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </style>
 
 <div id="innerdiv">
-                	<table class="table table-hover" border='0'>
+                            <table class="table table-hover" border='0'>
                         <thead class="thead-default">
                            <?PHP
-                           	    $start  = '2018-04-01';
+                                $start  = '2018-04-01';
                                 $end    = '2018-04-30';
                            ?>
-                           	<tr>
-                           		<th class='headcol-1'>NO</th>
-                           		<th class='headcol2'>NIK</th>
-                           		<th class='headcol'>NAMA</th>
-                           		<th class=''></th>
-                           		<?
-                           			for($i = 0; $i < loop_date($start,$end) + 1; $i++)
-								        {
-								            echo '<th style="text-align: center">'.date("m/d", strtotime($start . ' + ' . $i . 'day')) .'</th>'; 
-								        }
-                           		?>
+                            <tr>
+                                <th class='headcol-1'>NO</th>
+                                <th class='headcol2'>NIK</th>
+                                <th class='headcol'>NAMA</th>
+                                <th class=''></th>
+                                <?
+                                    for($i = 0; $i < loop_date($start,$end) + 1; $i++)
+                                        {
+                                            echo '<th style="text-align: center">'.date("m/d", strtotime($start . ' + ' . $i . 'day')) .'</th>'; 
+                                        }
+                                ?>
                                 <th class=''>HARI</th>
-                           	</tr>
+                            </tr>
                            
 
                         </thead>
 
                         <tbody>
-			            <?php
+                        <?php
 
                      /* echo "<pre>";
                         print_r($bydate);*/
@@ -234,15 +276,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 echo "</tr>";
                                 $hitung++;
                         }
-			    		?>
-			           
-					   </tbody>
-					</table>
-					                        
-                      
-           </div>
+                        ?>
+                       
+                       </tbody>
+                    </table>
+                    </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            </div>
-        </div>
-    </div>
-</div>
+
