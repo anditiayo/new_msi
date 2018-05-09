@@ -181,40 +181,17 @@ function loop_date($start,$end){
     return $datediff;
 }
 
-function cek_tgl($cek){
-    $day = date("d", strtotime($cek));
-    $month = date("m", strtotime($cek));
-    $year = date("Y", strtotime($cek));
-
-        if($day <= 02 ){
-            return $cek;
-        }else{
-            return $year.'-'.$month.'-'.'01';
-        }
-
-        if($day == 02){
-            return $cek;
-        }else{
-            return $year.'-'.$month.'-'.'02';
-        }
-  
-}
-
 function get_mot($month, $year)
 {
    return $month == 2 ? ($year % 4 ? 28 : ($year % 100 ? 29 : ($year %400 ? 28 : 29))) : (($month - 1) % 7 % 2 ? 30 : 31);
 }
 
 function get_employee($code){
-    // Get a reference to the controller object
+
     $CI = get_instance();
-
-    // You may need to load the model if it hasn't been pre-loaded
     $CI->load->model('Log_data');
-
-    // Call a function of the model
-    $query = $CI->Log_data->get_employee_name($code);
-    return $query;
+    $detail = $CI->Log_data->get_details($code);
+    return $detail;
 
 }
 

@@ -16,7 +16,7 @@ class Log_data extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-	public function get_employee_name($code){
+	public function get_details($code){
 		$this->db->select('front_name as name');
 		$this->db->from('msi_employees');
 		$this->db->where('employee_id ='.$code);
@@ -24,10 +24,16 @@ class Log_data extends CI_Model {
 		return $query->result();
 	}
 
-	public function get_log(){
-		
+	public function get_log($start,$end){
 		$this->db->from('msi_log_data');
-		$this->db->where("tgl BETWEEN '2018-04-01' and '2018-04-10'  order by tgl,date_time");
+		$this->db->where("tgl BETWEEN '$start' and '$end'  order by tgl,date_time");
+        $query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function get_log_by_id($id){
+		$this->db->from('msi_log_data');
+		$this->db->where("id",$id);
         $query = $this->db->get();
 		return $query->result_array();
 	}
@@ -46,7 +52,6 @@ class Log_data extends CI_Model {
 			);
 			for($i = 0; $i < loop_date($start_date,$end_date) + 1; $i++)
 	        {
-	           	
 	           	$date = date("Y-m-d", strtotime($start_date . ' + ' . $i . 'day')); 
 	        	$this->db->select("*,(SELECT min(date_time) from msi_log_data where status = 1 and pin = '$code' and tgl ='$date') as keluar,(SELECT min(date_time) from msi_log_data where status = 0 and  pin = '$code' and tgl ='$date') as masuk");
 	        	$this->db->from('msi_log_data');
@@ -76,9 +81,6 @@ class Log_data extends CI_Model {
 		            'status'	=> $status,
 		            'masuk'		=> $masuk,
 		            'keluar'	=> $keluar
-		            
-		            
-		                
 		        );
 			}
 

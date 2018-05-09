@@ -29,8 +29,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                        
                     </ul>
                 </li>
-                <li class="heading">EMPLOYEE</li>
-                 <li>
+                 
+               <li class="heading">MENU</li>
+               <li>
                     <a href="javascript:;"><i class="sidebar-item-icon ti-user"></i>
                         <span class="nav-label">Employee</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
@@ -44,7 +45,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                        
                     </ul>
                 </li>
-               <li class="heading">MENU</li>
                 <li>
 
                     <a href="javascript:;"><i class="sidebar-item-icon ti-bar-chart"></i>
@@ -425,7 +425,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
                     </ul>
                 </li> -->
-                <li>
+                <!-- <li>
                     <a href="javascript:;"><i class="sidebar-item-icon ti-anchor"></i>
                         <span class="nav-label">Menu Levels</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
@@ -445,7 +445,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </ul>
                         </li>
                     </ul>
-                </li> 
+                </li>  -->
             </ul>
         </nav>
         <!-- END SIDEBAR-->

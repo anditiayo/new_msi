@@ -1,7 +1,7 @@
             <!-- START PAGE CONTENT-->
-            <div class="page-heading">
+            <!-- <div class="page-heading">
                 <h1 class="page-title"><?$subtitle?></h1>
-            </div>
+            </div> -->
             <div class="page-content fade-in-up">
                 <div class="ibox">
                     <div class="ibox-body">
@@ -10,14 +10,31 @@
                             <div class="flexbox">
                                  <div class="form-group" id="date_5">
                                     <label class="font-normal">Range select</label>
-                                    <div class="input-daterange input-group" id="datepicker">
-                                        <input class="input-sm form-control" type="text" name="start" value="04/12/2017">
-                                        <span class="input-group-addon pl-2 pr-2">to</span>
-                                        <input class="input-sm form-control" type="text" name="end" value="08/17/2018">
-                                        <button class="btn btn-primary btn-air">FIND</button>
-                                    </div>
+                                    <?php echo form_open(current_url());
 
-		                                
+                                    	if(!empty($start))
+                                    	{
+                                    		$start 	= $start;
+                                    		$end 	= $end;
+                                    	}else
+                                    	{
+                                    		$start 	= date("m/d/Y");
+                                    		$end 	= date("m/d/Y");
+                                    	}
+
+                                    ?>
+
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input class="input-sm form-control" type="text" name="start" id="start" value="<?=$start;?>">
+                                        <span class="input-group-addon pl-2 pr-2">to</span>
+                                        <input class="input-sm form-control" type="text" name="end" id="end" value="<?=$end;?>">
+                                       
+                                    </div>
+                                     <label class="mb-0 mr-2"></label>
+                                   	<div class="input-daterange input-group" >
+                                   		<?php echo form_submit('submit', 'FIND', array('class' => 'btn btn-primary')); ?>
+                                   	</div>
+		                             <?php echo form_close(); ?>
 		                            
                                 </div>
                             </div>
@@ -27,12 +44,13 @@
                             </div>
                         </div>
                         <div class="table-responsive row">
+
                             <table class="table table-bordered table-hover" id="datatable">
                                 <thead class="thead-default thead-lg">
                                     <tr>
-                                        
                                         <th>PIN</th>
                                         <th>DATETIME</th>
+                                        <th>DATE</th>
                                         <th>TIME</th>
                                         <th>WEEK</th>
                                         <th>STATUS</th>
@@ -42,14 +60,19 @@
                                 </thead>
                                 <tbody>
                                 	 <?PHP
-                                    	
-                                    	foreach ($log as $key) {
+                                	 	
+
+                                    	if(!empty($log)){
+                                    		foreach ($log as $key) {
                                     		echo "<tr>";
                                     		echo "<td>";
-                                    		echo $key['pin'];
+                                    		echo sprintf("%'04d", $key['pin']);
                                     		echo "</td>";
                                     		echo "<td>";
                                     		echo $key['date_time'];
+                                    		echo "</td>";
+                                    		echo "<td>";
+                                    		echo $key['tgl'];
                                     		echo "</td>";
                                     		echo "<td>";
                                     		echo $key['waktu'];
@@ -61,10 +84,13 @@
                                     		echo $key['status'];
                                     		echo "</td>";
                                     		echo "<td >";
-                                    		echo '<a class="badge badge-success badge-pill" href="log/'.$key['id'].'">ACTION</a>';
+                                    		echo '<a class="btn btn-warning" href="log/edit/'.$key['id'].'">EDIT</a>';
+
                                     		echo "</td>";
                                     		echo "</tr>";
+                                    		}
                                     	}
+                                    	
 
                                     ?>
                                   

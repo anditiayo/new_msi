@@ -57,7 +57,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </ul>
             <!-- END TOP-LEFT TOOLBAR-->
             <!--LOGO-->
-            <a class="page-brand" href="<?php echo site_url('backend/dashboard'); ?>"><img style="width: 75%; height: 75%" src="<?php echo base_url();?>asets/img/logos/msi.jpg" alt="image" /></a>
+            <a class="page-brand" href="<?php echo site_url('auth'); ?>"><img style="width: 75%; height: 75%" src="<?php echo base_url();?>asets/img/logos/msi.jpg" alt="image" /></a>
             <!-- START TOP-RIGHT TOOLBAR-->
             <ul class="nav navbar-toolbar">
                 <li class="dropdown dropdown-user">
