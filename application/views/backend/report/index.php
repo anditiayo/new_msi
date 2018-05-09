@@ -42,23 +42,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </div>
                         </div>
                         <div class="flexbox mb-4">
-                            <div class="flexbox">
                             <div class="form-group" id="date_5">
                                     <label class="font-normal">Range select</label>
+                                    <?php echo form_open(current_url());
+
+                                        if(!empty($start))
+                                        {
+                                            $start  = $start;
+                                            $end    = $end;
+                                        }else
+                                        {
+                                            $start  = date("m/d/Y");
+                                            $end    = date("m/d/Y");
+                                        }
+
+                                    ?>
+
                                     <div class="input-daterange input-group" id="datepicker">
-                                        <input class="input-sm form-control" type="text" name="start" value="04/12/2017">
+                                        <input class="input-sm form-control" type="text" name="start" id="start" value="<?=$start;?>">
                                         <span class="input-group-addon pl-2 pr-2">to</span>
-                                        <input class="input-sm form-control" type="text" name="end" value="08/17/2018">
+                                        <input class="input-sm form-control" type="text" name="end" id="end" value="<?=$end;?>">
+                                       
                                     </div>
+
                                 </div>
-                            </div>
-                          
-                       
-                            <div class="flexbox">
-                                <button class="btn btn-primary btn-air">SEARCH</button>
-                            </div>
-                          
                         </div>
+                          <div class="flexbox mb-4">
+                                <?php echo form_submit('submit', 'FIND', array('class' => 'btn btn-primary')); ?>
+                        </div>
+                         <?php echo form_close(); ?>
                         <div class="table-responsive row">
                                                                                         <style type="text/css">
 
@@ -158,10 +170,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div id="innerdiv">
                             <table class="table table-hover" border='0'>
                         <thead class="thead-default">
-                           <?PHP
-                                $start  = '2018-04-01';
-                                $end    = '2018-04-30';
-                           ?>
                             <tr>
                                 <th class='headcol-1'>NO</th>
                                 <th class='headcol2'>NIK</th>
@@ -188,8 +196,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         $hitung =1;
                        
                         $total_kerja = 0;
-                        foreach ($bydate as $a => $b)
+                        if(!empty($bydate))
                         {
+                                foreach ($bydate as $a => $b)
+                                {       
                                 echo "<tr style='overflow: visible;'>";
                                 echo "<td class='headcol-1'>";
                                     echo $hitung;
@@ -218,11 +228,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             foreach ($f as $key=>$value){
                                              // echo '='.$value;
                                             } 
-                                        }elseif ($e == 'datetime') {
+                                        }
+
+                                        if ($e == 'datetime') {
                                             //echo 'status';
                                             $KERJA =0;
                                             
-                                            if($day == '01'){
+                                            $d = date("d", strtotime($start));
+
+                                            if($day == $d){
                                                 $val = 0;   
                                             }
                                             foreach ($f as $key=>$value){
@@ -244,9 +258,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     }
                                                 }
                                             }
-                                            $KERJA +=$val;
-                                        }elseif ($e == 'masuk') {
+                                            if(!empty($val)){
+                                                $KERJA +=$val;    
+                                            }
+                                            
+                                        }
+                                        $var = 0;
+                                        if ($e == 'masuk') {
                                            // echo 'status';
+                                            
                                             foreach ($f as $key=>$value){
                                             //echo date("H:i", strtotime($value));
                                                 if(empty($value)){
@@ -255,8 +275,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     echo "IN!";
                                                     echo '</td>';
                                                 }
-                                            } 
-                                        }elseif ($e == 'keluar') {
+                                               $var =  date("H:i", strtotime($value));
+                                               if($var==true){
+                                                    $var = $var;    
+                                               }
+                                            }
+
+                                        }
+                                        if ($var != 0) {
+                                            echo $var;
+                                        }
+
+                                        if ($e == 'keluar') {
                                            // echo 'status';
                                             foreach ($f as $key=>$value){
                                             //echo date("H:i", strtotime($value));
@@ -268,6 +298,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 }
                                             } 
                                         }
+
+
                                         echo '</table>';
                                     }
                                      echo '</td>';
@@ -275,7 +307,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 echo '<td>'.$KERJA.'</td>'; 
                                 echo "</tr>";
                                 $hitung++;
+                                }                      
                         }
+
                         ?>
                        
                        </tbody>

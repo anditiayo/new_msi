@@ -32,9 +32,17 @@ class Report extends Backend
 			$this->data['count_users']  = $this->db->count_all($this->config->item('tables', 'ion_auth')['users']);
 			$this->data['subtitle']     = $this->lang->line('users');
 			
+			$start 	= $this->input->post('start');
+			$end 	= $this->input->post('end');
+
+			$start_date 	= date("Y-m-d", strtotime($start));
+			$end_date 		= date("Y-m-d", strtotime($end));
+			$this->data['log']     		= $this->Log_data->get_log($start_date,$end_date);
+				
+			$this->data['start']     	= $start;
+			$this->data['end']     		= $end;
 			
-			$start_date ='2018-04-01';
-			$end_date ='2018-04-30';
+			
 	        $this->data['log'] = $this->Log_data->get_log($start_date,$end_date);
 	        $this->data['employee'] = $this->Log_data->get_employee();
 	        $this->data['bydate'] = $this->Log_data->get_log_by_date($start_date,$end_date);
