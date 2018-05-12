@@ -30,7 +30,7 @@ class Report extends Backend
 			}
 
 			$this->data['count_users']  = $this->db->count_all($this->config->item('tables', 'ion_auth')['users']);
-			$this->data['subtitle']     = $this->lang->line('users');
+			$this->data['subtitle']     = $this->lang->line('Report');
 			
 			$start 	= $this->input->post('start');
 			$end 	= $this->input->post('end');
@@ -42,12 +42,8 @@ class Report extends Backend
 			$this->data['start']     	= $start;
 			$this->data['end']     		= $end;
 			
-			
-	        $this->data['log'] = $this->Log_data->get_log($start_date,$end_date);
-	        $this->data['employee'] = $this->Log_data->get_employee();
-	        $this->data['bydate'] = $this->Log_data->get_log_by_date($start_date,$end_date);
-	        $employee = $this->Log_data->get_employee();
-	       	$join = $this->Log_data->get_log($start_date,$end_date);
+			$this->data['report']     	= 'class="active"';
+	        $this->data['bydate'] 		= $this->Log_data->get_log_by_date($start_date,$end_date);
 	       
 			$this->data['page_content'] = 'backend/report/index';
 
@@ -57,12 +53,4 @@ class Report extends Backend
 		}
 	}
 
-	public function grocery(){
-		$this->Log_data->grocery_data();
-		$crud = new grocery_CRUD();
-		$crud->set_table('msi_log_data');
-		$crud->unset_operations();
-		$output = $crud->render();
-
-	}
 }

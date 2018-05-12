@@ -20,10 +20,8 @@ class Groups extends Backend
 		else
 		{
 			$this->data['groups'] = $this->ion_auth->groups()->result();
-			// IN TEST
-			//$this->data['color'] = $this->db->select('id_groups, color')->get('dp_auth_groups_color');
-			//$this->data['color'] = $this->db->get('dp_auth_groups_color');
 
+			$this->data['active']     	= 'class="active"';
 			$this->data['count_groups']   = $this->db->count_all($this->config->item('tables', 'ion_auth')['groups']);
 			$this->data['subtitle']       = $this->lang->line('security_groups');
 			$this->data['page_content']   = 'backend/groups/index';
@@ -71,6 +69,7 @@ class Groups extends Backend
 					'class' => 'form-control'
 				);
 
+				$this->data['active']     	= 'class="active"';
 				$this->data['message']      = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 				$this->data['subtitle']     = $this->lang->line('create_group_title');
 				$this->data['page_content'] = 'backend/groups/add';
@@ -132,6 +131,7 @@ class Groups extends Backend
 				'class' => 'form-control'
 			);
 
+			$this->data['active']     	= 'class="active"';
 			$this->data['message']      = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 			$this->data['subtitle']     = 'Group edit';
 			$this->data['page_content'] = 'backend/groups/edit';

@@ -26,6 +26,7 @@ class Users extends Backend
 				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
 
+			$this->data['active']     	= 'class="active"';
 			$this->data['count_users']  = $this->db->count_all($this->config->item('tables', 'ion_auth')['users']);
 			$this->data['subtitle']     = $this->lang->line('users');
 			$this->data['page_content'] = 'backend/users/index';
@@ -146,6 +147,7 @@ class Users extends Backend
 				);
 
 				$this->data['message']      = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+				$this->data['active']     	= 'class="active"';
 				$this->data['subtitle']     = $this->lang->line('create_user_heading');
 				$this->data['page_content'] = 'backend/users/add';
 
@@ -382,6 +384,7 @@ class Users extends Backend
 				'class' => 'form-control form-control-warning'
 			);
 
+			$this->data['active']     	 = 'class="active"';
 			$this->data['csrf']          = $this->_get_csrf_nonce();
 			$this->data['user_id']       = $user->id;
 			$this->data['groups']        = $groups;

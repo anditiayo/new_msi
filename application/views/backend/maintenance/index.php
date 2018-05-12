@@ -3,6 +3,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?>
 
+						            <!-- START PAGE CONTENT-->
+            <div class="page-heading">
+                <h1 class="page-title">MAINTENANCE</h1>
+            </div>
+            <div class="page-content fade-in-up">
+               
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">DETAILS</div>
+                    </div>
+                    <div class="ibox-body">
 						<div class="row">
 							<div class="col-md-3">
 								<div class="card text-center">
@@ -87,3 +98,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
  							</div>
  						</div>
+  </div>
+                </div>
+            </div>

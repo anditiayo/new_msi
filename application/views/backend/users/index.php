@@ -6,7 +6,8 @@ $user_active   = array('class' => 'btn btn-success btn-sm', 'role' => 'button');
 $user_inactive = array('class' => 'btn btn-secondary btn-sm', 'role' => 'button');
 $nbr_users     = ($count_users > 0) ? ' <span class="badge badge-info">' . $count_users . '</span>' : NULL;
 
-?>                <div class="row">
+?>               
+				 <div class="row">
                     <div class="col-xl-12">
                         <div class="ibox ibox-fullheight">
                             <div class="ibox-head">
@@ -64,12 +65,12 @@ $nbr_users     = ($count_users > 0) ? ' <span class="badge badge-info">' . $coun
 													</td>
 													<td>
 														<?php echo anchor('backend/users/edit/' . $user->id, '{lang_edit}', array('class' => 'btn btn-primary btn-sm', 'role' => 'button')); ?>
-														<?php echo anchor('#' . $user->id, '{lang_see}', array('class' => 'btn btn-primary btn-sm', 'role' => 'button')); ?>
+														<?php /*echo anchor('#' . $user->id, '{lang_see}', array('class' => 'btn btn-primary btn-sm', 'role' => 'button'));*/ ?>
 	<?php
 
 	if ($user->id != 1)
 	{
-		echo anchor('#' . $user->id, '{lang_delete}', array('class' => 'btn btn-danger btn-sm', 'role' => 'button'));
+		/*echo anchor('#' . $user->id, '{lang_delete}', array('class' => 'btn btn-danger btn-sm', 'role' => 'button'));*/
 	}
 
 	?>

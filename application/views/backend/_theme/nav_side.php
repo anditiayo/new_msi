@@ -1,15 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
 ?>
 <!-- START SIDEBAR-->
         <nav class="page-sidebar">
             <ul class="side-menu metismenu scroller">
-            	<li class="active">
+            	<li <?php if(!empty($dashboard)){ echo $dashboard; } ?> >
                     <a href="<?php echo site_url('backend/dashboard'); ?>">{lang_dashboard}</a>
                 </li>
             	<li class="heading">SETTING</li>
-                <li>
-                    <a href="javascript:;"><i class="sidebar-item-icon ti-user"></i>
+                <li <?php if(!empty($active)){ echo $active = $active; } ?> >
+                    <a href="javascript:;"><i class="sidebar-item-icon ti-settings"></i>
                         <span class="nav-label">User Setting</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
                         
@@ -23,49 +24,85 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a href="<?php echo site_url('backend/groups'); ?>">{lang_security_groups}</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/maintenance'); ?>">{lang_maintenance} (beta)</a>
+                            <a href="javascript:;">
+                                <span class="nav-label">Configuration</span><i class="fa fa-angle-left arrow"></i></a>
+                            <ul class="nav-3-level collapse">
+                                <li>
+                                    <a href="#"> Company Information</a>
+                                </li>
+                                <li>
+                                    <a href="#"> Allowance</a>
+                                </li>
+
+                                <li>
+                                    <a href="#"> Deduction</a>
+                                </li>
+
+                                 <li>
+                                    <a href="#"> Departement List</a>
+                                </li>
+
+                                <li>
+                                    <a href="#"> Outsource List</a>
+                                </li> 
+
+                                <li>
+                                    <a href="#"> Work Shift List</a>
+                                </li> 
+
+                                <li>
+                                    <a href="#"> Machine List</a>
+                                </li>
+
+                                <li>
+                                    <a href="#"> Holyday List</a>
+                                </li>     
+                            </ul>
                         </li>
                         
-                       
+                        <li>
+                            <a href="<?php echo site_url('backend/maintenance'); ?>">{lang_maintenance} (beta)</a>
+                        </li>
                     </ul>
                 </li>
+              
                  
                <li class="heading">MENU</li>
-               <li>
+              <li <?php if(!empty($employee)){ echo $employee; } ?> >
                     <a href="javascript:;"><i class="sidebar-item-icon ti-user"></i>
                         <span class="nav-label">Employee</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
                         
                         <li>
-                            <a  href="<?php echo site_url('backend/add'); ?>">Add Employee</a>
+                            <a  href="<?php echo site_url('backend/employee/add'); ?>">Add Employee</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/list'); ?>">List Employee</a>
+                            <a href="<?php echo site_url('backend/employee'); ?>">List Employee</a>
                         </li>
                        
                     </ul>
                 </li>
-                <li>
+                 <li <?php if(!empty($report)){ echo $report; } ?> >
 
-                    <a href="javascript:;"><i class="sidebar-item-icon ti-bar-chart"></i>
-                        <span class="nav-label">REPORT</span><i class="fa fa-angle-left arrow"></i></a>
+                    <a href="javascript:;"><i class="sidebar-item-icon ti-layout-tab-window"></i>
+                        <span class="nav-label">{lang_report}</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
                         <li>
-                            <a href="<?php echo site_url('backend/report'); ?>"> {lang_report} </a>
+                            <a href="<?php echo site_url('backend/report'); ?>">Calculation </a>
                         </li>
                         
                     </ul>
                 </li>
-                <li>
+                <li <?php if(!empty($logs)){ echo $logs; } ?> >
 
-                    <a href="javascript:;"><i class="sidebar-item-icon ti-bar-chart"></i>
-                        <span class="nav-label">LOG DATA</span><i class="fa fa-angle-left arrow"></i></a>
+                    <a href="javascript:;"><i class="sidebar-item-icon ti-server"></i>
+                        <span class="nav-label">Log Data</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
                         <li>
-                            <a href="<?php echo site_url('backend/pull'); ?>">PULL</a>
+                            <a href="<?php echo site_url('backend/pull'); ?>">Pull Machine</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/log'); ?>">LOG</a>
+                            <a href="<?php echo site_url('backend/log'); ?>">List Log</a>
                         </li>
                         
                     </ul>

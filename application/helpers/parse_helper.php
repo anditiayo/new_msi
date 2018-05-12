@@ -181,6 +181,17 @@ function loop_date($start,$end){
     return $datediff;
 }
 
+function header_date_loop($start,$end){
+    $detail = NULL;
+    for($i = 0; $i < loop_date($start,$end) + 1; $i++)
+    {
+      $detail .= '<th style="text-align: center">'.date("m/d", strtotime($start . ' + ' . $i . 'day')) .'</th>';
+    }
+    return $detail;
+}
+
+
+
 function get_mot($month, $year)
 {
    return $month == 2 ? ($year % 4 ? 28 : ($year % 100 ? 29 : ($year %400 ? 28 : 29))) : (($month - 1) % 7 % 2 ? 30 : 31);
@@ -205,5 +216,34 @@ function is_array_empty($arr){
       }
       return false;
   }
+}
+
+    function ck_connect(){
+            date_default_timezone_set('Asia/Jakarta');
+            $IP     = "192.168.1.201";
+            
+            $date   = date("Y-m-d h:i:s" );
+
+            $Connect = fsockopen($IP, "80", $errno, $errstr, 1);
+            if (!$Connect) {
+                echo "$errstr ($errno)<br />\n";
+            } else {
+                return $Connect;
+            }
+    }
+
+function beda_waktu($date1, $date2, $format = false) 
+{
+    $diff = date_diff( date_create($date1), date_create($date2) );
+    if ($format)
+        return $diff->format($format);
+    
+    return array('y' => $diff->y,
+                'm' => $diff->m,
+                'd' => $diff->d,
+                'h' => $diff->h,
+                'i' => $diff->i,
+                's' => $diff->s
+            );
 }
 

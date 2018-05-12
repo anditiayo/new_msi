@@ -80,7 +80,7 @@ $db['default'] = array(
 	'password' => 'toor',
 	'database' => 'smarthr',
 	'dbdriver' => 'mysqli',
-	'dbprefix' => '',
+	'dbprefix' => 'msi_',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,

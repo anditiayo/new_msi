@@ -29,7 +29,7 @@ class Maintenance extends Backend
 			$this->data['db_version']     = $this->db->version();
 
 			$this->data['apache_version'] = $this->backend_tools_model->server_version();
-
+			$this->data['active']     	= 'class="active"';
 			$this->data['php_version']    = phpversion();
 			$this->data['zend_version']   = zend_version();
 			$this->data['disk_freespace'] = byte_format($this->backend_tools_model->disk_freespace());

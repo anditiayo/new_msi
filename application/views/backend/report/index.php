@@ -100,7 +100,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             /*only relevant for first row*/
             margin-top:-3px;
             /*compensate for top border*/
-            background:yellow;
+            /*background:yellow;*/
         }
         .headcol-1:before {
            
@@ -117,7 +117,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             /*only relevant for first row*/
             margin-top:-3px;
             /*compensate for top border*/
-            background:yellow;
+            /*background:yellow;*/
         }
         .headcol2 {
             position:absolute;
@@ -131,7 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             /*only relevant for first row*/
             margin-top:-3px;
             /*compensate for top border*/
-            background:yellow;
+           /* background:yellow;*/
         }
         .headcol2:before {
            
@@ -175,13 +175,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <th class='headcol2'>NIK</th>
                                 <th class='headcol'>NAMA</th>
                                 <th class=''></th>
-                                <?
-                                    for($i = 0; $i < loop_date($start,$end) + 1; $i++)
-                                        {
-                                            echo '<th style="text-align: center">'.date("m/d", strtotime($start . ' + ' . $i . 'day')) .'</th>'; 
-                                        }
-                                ?>
+                                <?echo header_date_loop($start,$end);?>
                                 <th class=''>HARI</th>
+                                <th class=''>SHIFT</th>
                             </tr>
                            
 
@@ -190,13 +186,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <tbody>
                         <?php
 
-                     /* echo "<pre>";
+
+
+                       /* echo "<pre>";
+
                         print_r($bydate);*/
-                        
-                        $hitung =1;
-                       
+
+
+                       $hitung = 1;
                         $total_kerja = 0;
-                        if(!empty($bydate))
+                       
+                       /*foreach ($bydate as $key => $value) {
+                                echo "<tr style='overflow: visible;'>";
+                                echo "<td class='headcol-1'>";
+                                    echo $hitung;
+                                echo "</td>";
+                                echo "<td class='headcol2' >";
+                                    $code = $key;
+                                    echo sprintf("%'04d", $code);     
+                                echo "</td>";
+                                echo "<td class='headcol'>";
+                                    $array = get_employee($code);               
+                                    foreach($array as $object) {
+                                        echo $name[] = $object->name;
+                                    }
+                                echo '</td>'; 
+                                echo '<td></td>';
+                               echo header_date_loop($start,$end);
+                                foreach ($value as $keys => $values) {
+                                    echo '<td class="long">';
+                                    echo $values['tgl'];
+                                    echo '</td>';
+                                }
+                               
+                                echo '<td></td>'; 
+                                echo "</tr>"; 
+                           
+                       }*/
+                       if(!empty($bydate))
                         {
                                 foreach ($bydate as $a => $b)
                                 {       
@@ -205,7 +232,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     echo $hitung;
                                 echo "</td>";
                                 echo "<td class='headcol2' >";
-                                    echo $code = $a;     
+                                    $code = $a;
+                                    echo sprintf("%'04d", $code);     
                                 echo "</td>";
                                 echo "<td class='headcol'>";
                                     $array = get_employee($code);               
@@ -216,95 +244,182 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 echo '<td></td>'; 
                                 foreach ($b as $c => $d) 
                                 {
-                                    echo '<td class="long">';
-                                    $time = $c;
-                                    $day = date("d", strtotime($time));
+                                    $time   = $c;
+                                    $sun    = date("D", strtotime($time));
+                                    $day    = date("d", strtotime($time));
+                                    if($sun == "Sun"){
+                                        $sun = "background:pink";    
+                                    }else{
+                                        $sun = "background:#FFF";
+                                    }
+                                    echo '<td class="long" style="padding:1px; '.$sun.'">';
+                                    //Bisa digunakan untuk array hari libur/function
+                                   
+                                    //function for holiday calendar
+                                    
+                                    //echo date("l", strtotime($time));
+                                    echo '<table>';
+                                    echo '<tr>';
+                                    
                                     foreach ($d as $e => $f)
                                     {
-                                        echo '<table>';
                                         //echo $e;
-                                        if($e =='status'){
-                                            //echo 'status';
-                                            foreach ($f as $key=>$value){
-                                             // echo '='.$value;
-                                            } 
+                                        $mask   = NULL;
+                                        $IN     = 0;
+                                        $OUT    = 0;
+                                        $d      = date("d", strtotime($start));
+                                        $SHIFT = 0;
+                                        if($day == $d)
+                                        {
+                                            $val    = 0;   
+                                            $masuk  = 0;
+                                            $keluar = 0;
                                         }
 
-                                        if ($e == 'datetime') {
+                                        if($e =='status')
+                                        {
+                                          
                                             //echo 'status';
-                                            $KERJA =0;
-                                            
-                                            $d = date("d", strtotime($start));
+                                            foreach ($f as $key=>$value)
+                                            {
+                                           
+                                                if($value == 0)
+                                                {
+                                                    $mask = 'masuk';
+                                                }
+                                                else
+                                                {
+                                                    $mask = 'keluar';
+                                                }
+                                            }   
+                                        }
 
-                                            if($day == $d){
-                                                $val = 0;   
+                                        $in     = 0;
+                                        $err    = 0;
+
+
+                                        if ($e == 'masuk')
+                                        {
+                                           // echo 'status';
+                                            foreach ($f as $key=>$value)
+                                            {
+                                                if(empty($value))
+                                                {
+                                                    $err = 1;
+                                                }
+
+                                                $in =  date("Y-m-d H:i:s", strtotime($value));
+                                                if($in == true)
+                                                {
+                                                    $in = $in;    
+                                                }
                                             }
-                                            foreach ($f as $key=>$value){
-                                                if($key == 0){
-                                                    echo '<tr>';
-                                                    echo '<td  style="font-size:12px; text-align: center;">';
-                                                    echo date("H:i", strtotime($value));
-                                                    echo '</td>';
-                                                    if(!empty($value)){
-                                                        $val += 0.5;
-                                                    }
+                                        }
+                                        $expin = 0;
+                                        $shift = 0;
+                                        if ($in != 0 )
+                                        {
+                                            if($err == 0)
+                                            {
+                                                $expin     = explode(':',  date("H:i", strtotime($in)));
+                                                if($expin[0] > 17)
+                                                {
+                                                    echo '<td align="right" style="font-size:13px; text-align: center;padding:3px; background:green;color:white";>';
                                                 }else{
-                                                    echo '<td  style="font-size:12px; text-align: center;">';
-                                                    echo date("H:i", strtotime($value));
-                                                    echo '</td>';
-                                                    echo '</tr>';
-                                                    if(!empty($value)){
-                                                        $val += 0.5;
-                                                    }
+                                                    echo '<td  style="font-size:13px; text-align: center;padding:3px; background:green;color:white">';
                                                 }
-                                            }
-                                            if(!empty($val)){
-                                                $KERJA +=$val;    
-                                            }
-                                            
-                                        }
-                                        $var = 0;
-                                        if ($e == 'masuk') {
-                                           // echo 'status';
-                                            
-                                            foreach ($f as $key=>$value){
-                                            //echo date("H:i", strtotime($value));
-                                                if(empty($value)){
-                                                    echo '<tr>';
-                                                    echo '<td  style="font-size:12px; text-align: center;">';
-                                                    echo "IN!";
-                                                    echo '</td>';
-                                                }
-                                               $var =  date("H:i", strtotime($value));
-                                               if($var==true){
-                                                    $var = $var;    
-                                               }
-                                            }
+                                                
+                                                echo  date("H:i", strtotime($in));
+                                                echo '</td>';
 
-                                        }
-                                        if ($var != 0) {
-                                            echo $var;
+                                                $cut      =  date("Y-m-d", strtotime($in));
+                                                $date = new DateTime($cut);
+                                                $time = new DateTime('08:30:00');
+
+                                                $merge  = new DateTime($date->format('Y-m-d') .' ' .$time->format('H:i:s'));
+                                                $date_expire   = $merge->format('Y-m-d H:i:s'); // Outputs '2017-03-14 13:37:42'
+
+                                                //echo $code.'</br>';
+                                                //echo beda_waktu($in, $date_expire, '%H:%i:%s'); // Output: Selisih 28 tahun;
+
+                                                $masuk += 0.5; 
+                                                $expin     = explode(':',  date("H:i", strtotime($in)));
+                                                //$expin[0];
+                                            }
+                                            else
+                                            {
+                                                echo '<td  style="font-size:13px; text-align: center;padding:3px; background:red;color:white">';
+                                                echo  date("H:i", strtotime($in));
+                                                echo '</td>';
+
+                                            }
                                         }
 
-                                        if ($e == 'keluar') {
+                                        
+                                        if($expin[0] > 17)
+                                        {
+                                            echo '<td  style="font-size:13px; text-align: center;padding:3px;background:blue;color:white">';
+                                            echo  "3";
+                                            $shift = 1;
+                                            echo '</td>';   
+                                        }
+
+                                       
+
+                                        $out = 0;
+                                        if ($e == 'keluar')
+                                        {
                                            // echo 'status';
-                                            foreach ($f as $key=>$value){
+                                            foreach ($f as $key=>$value)
+                                            {
                                             //echo date("H:i", strtotime($value));
-                                                if(empty($value)){
-                                                    echo '<td  style="font-size:12px; text-align: center;">';
-                                                    echo "OUT!";
-                                                    echo '</td>';
-                                                    echo '</tr>';
+                                                if(empty($value))
+                                                {
+                                                   $err = 1;
+                                                }
+
+                                                $out =  date("H:i", strtotime($value));
+                                                if($out == true)
+                                                {
+                                                    $out = $out;    
                                                 }
                                             } 
+                                        }   
+
+
+                                        if ($out != 0)
+                                        {
+                                            
+                                            if($err == 0){
+                                                echo '<td  style="font-size:13px; text-align: center;padding:3px; background:yellow;">';
+                                                echo  date("H:i", strtotime($out));
+                                                echo '</td>';
+
+                                                $keluar += 0.5; 
+                                                $out     = explode(':', $out);
+
+                                            }else{
+                                                
+                                                echo '<td  style="font-size:13px; text-align: center;padding:3px; background:red;color:white">';
+                                                echo  date("H:i", strtotime($out));
+                                                echo '</td>';
+                                            }
                                         }
-
-
-                                        echo '</table>';
                                     }
-                                     echo '</td>';
+                                            echo '</tr>';
+                                        echo '</table>';
+                                    echo '</td>';
                                 }
-                                echo '<td>'.$KERJA.'</td>'; 
+                           
+                                if(!empty($masuk)){
+                                    $IN +=$masuk;    
+                                }
+                                if(!empty($keluar)){
+                                    $OUT +=$keluar;    
+                                }
+
+                                
+                                echo '<td>'.($OUT+$IN).'</td>'; 
                                 echo "</tr>";
                                 $hitung++;
                                 }                      

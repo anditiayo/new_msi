@@ -62,8 +62,8 @@
                                 	 <?PHP
                                 	 	
 
-                                    	if(!empty($log)){
-                                    		foreach ($log as $key) {
+                                    	if(!empty($log_data)){
+                                    		foreach ($log_data as $key) {
                                     		echo "<tr>";
                                     		echo "<td>";
                                     		echo sprintf("%'04d", $key['pin']);
