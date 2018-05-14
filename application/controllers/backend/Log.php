@@ -53,7 +53,20 @@ class Log extends Backend
 
 			$start_date 	= date("Y-m-d", strtotime($start));
 			$end_date 		= date("Y-m-d", strtotime($end));
-			$this->data['log_data']     = $this->Log_data->get_log($start_date,$end_date);
+			if(!empty($start) || !empty($end) ){
+				$this->data['log_data']     = $this->Log_data->get_log($start_date,$end_date);
+			}else{
+				
+				$date 		= $this->input->get('tgl', TRUE);
+				$start_date = date("Y-m-d", strtotime($date));
+				$end_date 	= date("Y-m-d", strtotime($date));
+				$pin 		= $this->input->get('pin', TRUE);
+
+				$this->data['log_data']     = $this->Log_data->get_log_pin($start_date,$end_date,$pin);
+			}
+
+			
+			
 				
 			$this->data['start']     	= $start;
 			$this->data['end']     		= $end;

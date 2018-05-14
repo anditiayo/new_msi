@@ -27,7 +27,14 @@ class Log_data extends CI_Model {
 
 	public function get_log($start,$end){
 		$this->db->from('log_data');
-		$this->db->where("tgl BETWEEN '$start' and '$end'  order by tgl,date_time");
+		$this->db->where("tgl BETWEEN '$start' and '$end' order by tgl,date_time");
+        $query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function get_log_pin($start,$end,$pin){
+		$this->db->from('log_data');
+		$this->db->where("pin='$pin' AND tgl BETWEEN '$start' AND '$end' order by tgl,date_time");
         $query = $this->db->get();
 		return $query->result_array();
 	}
@@ -55,35 +62,38 @@ class Log_data extends CI_Model {
 			for($i = 0; $i < loop_date($start_date,$end_date) + 1; $i++)
 	        {
 	           	$date = date("Y-m-d", strtotime($start_date . ' + ' . $i . 'day')); 
-	        	$this->db->select("*,(SELECT min(date_time) from ".$this->db->dbprefix('log_data')." where status = 1 and pin = '$code' and tgl ='$date') as keluar,(SELECT min(date_time) from ".$this->db->dbprefix('log_data')." where status = 0 and  pin = '$code' and tgl ='$date') as masuk");
+	        	$this->db->select("pin,tgl,day,ver,
+									(SELECT max(status) from ".$this->db->dbprefix('log_data')." where status = 1 and pin = '$code' and tgl ='$date' ) as statout,
+									(SELECT min(status) from ".$this->db->dbprefix('log_data')." where status = 0 and pin = '$code' and tgl ='$date' ) as statin,
+									(SELECT max(date_time) from ".$this->db->dbprefix('log_data')." where status = 1 and pin = '$code' and tgl ='$date' ) as keluar,
+									(SELECT min(date_time) from ".$this->db->dbprefix('log_data')." where status = 0 and pin = '$code' and tgl ='$date' ) as masuk,
+									(SELECT min(id) from ".$this->db->dbprefix('log_data')." where status = 0 and pin = '$code' and tgl ='$date' ) as id_in,
+									(SELECT max(id) from ".$this->db->dbprefix('log_data')." where status = 1 and pin = '$code' and tgl ='$date' ) as id_out
+									");
 	        	$this->db->from('log_data');
-				$this->db->where("pin = '$code' and tgl ='$date' GROUP by status order by date_time asc");
+				$this->db->where("pin = '$code' AND tgl = '$date' GROUP BY tgl order by tgl asc");
 				$query = $this->db->get();
-			   	
-			   	$arr    	= $query->result_array();
 
-				$tgl 		= array_column($arr, 'tgl');
+			   	
+			  $results[$code][$date] = $query->result_array();
+			   	/*$ar			= $arr['tgl'];
+				$tgl 		= array_shift($ar);
 				$pin 		= array_column($arr, 'pin');
 				$datetime 	= array_column($arr, 'date_time');
 				$day 		= array_column($arr, 'day');
 				$status 	= array_column($arr, 'status');
 				$waktu 		= array_column($arr, 'waktu');
 				$keluar 	= array_column($arr, 'keluar');
-				$masuk 		= array_column($arr, 'masuk');
+				$masuk 		= array_column($arr, 'masuk');*/
 
-				if($tgl == $date){
+				/*if($tgl == $date){
 					$obj_date = $date;
 				
 				}else{
 					$obj_date = $tgl;
 				}
 
-		        $results[$code][$date] = array(
-		            'datetime' 	=> $datetime,
-		            'status'	=> $status,
-		            'masuk'		=> $masuk,
-		            'keluar'	=> $keluar
-		        );
+		        $results[$code][$date] = array($tgl,$status,$masuk,$keluar);*/
 			}
 
 		}

@@ -190,6 +190,22 @@ function header_date_loop($start,$end){
     return $detail;
 }
 
+function data_loop($start,$end,$data){
+    $detail = NULL;
+    for($i = 0; $i < loop_date($start,$end) + 1; $i++)
+    {   
+        $loop = date("m/d", strtotime($start . ' + ' . $i . 'day'));
+        $real = date("m/d", strtotime($data));
+        if($loop==$real){
+            $detail .= '<td class="long">'.$loop.'</td>';
+        }else{
+            $detail .= '<td class="long">'.$real.'</td>';
+        }
+        
+    
+    }
+    return $detail;
+}
 
 
 function get_mot($month, $year)
