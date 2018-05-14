@@ -73,31 +73,9 @@ class Log_data extends CI_Model {
 	        	$this->db->from('log_data');
 				$this->db->where("pin = '$code' AND tgl = '$date' GROUP BY tgl order by tgl asc");
 				$query = $this->db->get();
-
-			   	
-			  $results[$code][$date] = $query->result_array();
-			   	/*$ar			= $arr['tgl'];
-				$tgl 		= array_shift($ar);
-				$pin 		= array_column($arr, 'pin');
-				$datetime 	= array_column($arr, 'date_time');
-				$day 		= array_column($arr, 'day');
-				$status 	= array_column($arr, 'status');
-				$waktu 		= array_column($arr, 'waktu');
-				$keluar 	= array_column($arr, 'keluar');
-				$masuk 		= array_column($arr, 'masuk');*/
-
-				/*if($tgl == $date){
-					$obj_date = $date;
-				
-				}else{
-					$obj_date = $tgl;
-				}
-
-		        $results[$code][$date] = array($tgl,$status,$masuk,$keluar);*/
+			  	$results[$code][$date] = $query->result_array();
 			}
-
 		}
-		
 		 return $results;
 		
 		
