@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li>
                             <a href="<?php echo site_url('backend/groups'); ?>">{lang_security_groups}</a>
                         </li>
-                        <li>
+                        <li <?php if(!empty($config)){ echo $config = $config; } ?> >
                             <a href="javascript:;">
                                 <span class="nav-label">Configuration</span><i class="fa fa-angle-left arrow"></i></a>
                             <ul class="nav-3-level collapse">
@@ -47,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </li> 
 
                                 <li>
-                                    <a href="#"> Work Shift List</a>
+                                    <a href="<?php echo base_url();?>backend/config/worktime"> Work Time</a>
                                 </li> 
 
                                 <li>
@@ -78,6 +78,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
                         <li>
                             <a href="<?php echo site_url('backend/employee'); ?>">List Employee</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('backend/employee'); ?>">Positioning</a>
                         </li>
                        
                     </ul>

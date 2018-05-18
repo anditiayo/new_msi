@@ -33,6 +33,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link href="<?php echo base_url();?>asets/vendors/dataTables/datatables.min.css" rel="stylesheet" />
     <!-- THEME STYLES-->
     <link href="<?php echo base_url();?>asets/css/main.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?php echo base_url();?>asets/css/bootstrap.css'?>">
+    <link rel="stylesheet" href="<?php echo base_url();?>asets/css/jquery.dataTables.css'?>">
     <!-- PAGE LEVEL STYLES-->
 </head>
 
@@ -181,6 +183,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url();?>asets/vendors/bootstrap-maxlength/src/bootstrap-maxlength.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/dataTables/datatables.min.js"></script>
+
+    <script src="<?php echo base_url();?>asets/vendors/dataTables/jquery.js'?>"></script>
+    <script src="<?php echo base_url();?>asets/vendors/dataTables/bootstrap.js'?>"></script>
+    <script src="<?php echo base_url();?>asets/vendors/dataTables/jquery.dataTables.js'?>"></script>
     <!-- CORE SCRIPTS-->
     <script src="<?php echo base_url();?>asets/js/app.min.js"></script>
     <script src="<?php echo base_url();?>asets/js/scripts/form-plugins.js"></script>
@@ -190,6 +196,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url();?>asets/vendors/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/jquery.steps/build/jquery.steps.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/jquery.maskedinput/dist/jquery.maskedinput.min.js"></script>
     <script>
         $(function() {
             $('#datatable').DataTable({
@@ -265,5 +272,76 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             });
         })
     </script>
+    
+    <script>
+        $(function() {
+            $('#ex-date').mask('99/99/9999', {
+                placeholder: 'dd/mm/yyyy'
+            });
+            $('#time_in').mask('99:99:99', {
+                placeholder: 'tt:mm:dd'
+            });
+            $('#time_out').mask('99:99:00', {
+                placeholder: 'tt:mm:dd'
+            });
+            $('#time_in_e').mask('99:99:99', {
+                placeholder: 'tt:mm:dd'
+            });
+            $('#time_out_e').mask('99:99:00', {
+                placeholder: 'tt:mm:dd'
+            });
+            $('#ex-phone').mask('99 999-9999');
+            $('#ex-phone2').mask('999 999-99999');
+            $('#ex-ext').mask('(999) 999-9999? x9999');
+            $('#ex-credit').mask('****-****-****-****', {
+                placeholder: '*'
+            });
+            //$('#salary').mask('999.999.999.999');
+            $('#npwp').mask('99.999.999.9-999.999');
+            $('#bpjstk').mask('9999 9999 9999 9999');
+            $('#bpjsk').mask('9999 9999 9999 9999');
+            $('#ex-tax').mask('99-9999999');
+            $('#ex-currency').mask('$ 99.99');
+            $('#ex-product').mask('a*-999-a999', {
+                placeholder: 'a*-999-a999'
+            });
+
+            $.mask.definitions['~'] = '[+-]';
+            $('#ex-eye').mask('~9.99 ~9.99 999');
+        })
+    </script>
+    <style type="text/css">
+    table{
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+    table, th, td{
+        border: 1px solid #cdcdcd;
+    }
+    table th, table td{
+        padding: 5px;
+        text-align: left;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".add-row").click(function(){
+          
+            var markup = "<tr><td><label class='ui-switch switch-icon switch-large switch-square'><input type='checkbox' id='record'><span></span></label></td><td><input class='form-control' type='text' id='record' name='name[]' placeholder='Name'></td><td><input class='form-control' type='text' id='record' name='family_status[]'' placeholder='Family Status'></td></tr>";
+            $("table tbody").append(markup);
+        });
+        
+        // Find and remove selected table rows
+        $(".delete-row").click(function(){
+            $("table tbody").find('input[id="record"]').each(function(){
+                if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+    });    
+</script>
 	</body>
 </html>

@@ -104,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                    	echo form_hidden('id', $user_id);
 									echo form_hidden($csrf);
 									echo form_submit('submit', '{lang_save}', array('class' => 'btn btn-primary'));
-									echo anchor('backend/users', '{lang_cancel}', array('class' => 'btn btn-primary'));
+									echo anchor('backend/users', '{lang_cancel}', array('class' => 'btn btn-outline-secondary'));
                                    ?>
                                 </div>
                             </div>

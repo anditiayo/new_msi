@@ -10,22 +10,27 @@
 </div>
 <div class="page-content fade-in-up">
 
-
     <div class="ibox">
+        <?php 
+
+           
+            foreach ($info as $key) {?>
+               
         
             <div class="ibox-head">
                 <div class="ibox-title">General</div>
             </div>
             <div class="ibox-body">
+                <?php echo form_open(current_url()); ?>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="Enter Full Name">
+                            <input class="form-control" type="text" placeholder="Enter Full Name" value="<?=$key['first_name'];?>">
                         </div>
                         <div class="form-group mb-4">
                             <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Enter Last Name">
+                            <input class="form-control" type="text" placeholder="Enter Last Name" value="<?=$key['last_name'];?>">
                         </div>
                         <div class="form-group mb-4">
                             <label>Email</label>
@@ -33,19 +38,29 @@
                         </div>
                         <div class="form-group mb-4">
                             <label>Place of Birth</label>
-                           <select class="selectpicker form-control" data-live-search="true">
-                                <option>Mustard</option>
-                                <option>Ketchup</option>
-                                <option>Flashlight</option>
-                                <option>Tabasco Nick</option>
-                            </select>
+                            <input class="form-control" type="text" placeholder="Enter Place of Birth">
+                            <!-- <select class="selectpicker form-control" data-live-search="true">
+                                <?php foreach ($regencies as $keys) {
+
+                                    if($keys['id'] == $key['place_of_birth']){
+                                        $selected = "selected";
+                                    }else{
+                                        $selected = "";
+                                    }
+
+                                    ?>
+                                     <option <?php echo 'value="'.$keys['id'].'" '.$selected; ?> ><?echo $keys['name'];?></option>
+                                <?}?>
+                               
+                            
+                            </select> -->
 
                         </div>
                         <div class="form-group mb-4">
                             <label>Date of Birth</label>
-                            <input class="form-control" id="ex-date" type="text">
+                            <input class="form-control" id="ex-date" type="text" value="<? echo date('d/m/Y',strtotime($key['birthday'])); ?>">
                             <span class="help-block">Data format dd/mm/yyyy
-                                            <span></span>
+                                <span></span>
                             </span>
 
                         </div>
@@ -155,20 +170,20 @@
     </div> -->
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Employee Detail</div>
+            <div class="ibox-title">Details</div>
         </div>
         <div class="ibox-body">
             <div class="row">
                 <div class="col-md-2">
                     <div class="form-group mb-4">
                         <label>NIK</label>
-                        <input class="form-control" type="text" placeholder="Enter NIK">
+                        <input class="form-control" type="text" placeholder="Enter NIK" disabled="" value="<?=$key['employee_id'];?>">
                     </div>
                     <div class="form-group" id="date_1">
                         <label class="font-normal">Join</label>
                         <div class="input-group date">
                             <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
-                            <input class="form-control" type="text" value="<? echo date(" m/d/Y ");?>">
+                            <input class="form-control" type="text" disabled=""  value="<? echo date(" m/d/Y ");?>">
                         </div>
                     </div>
                     <div class="form-group mb-4">
@@ -222,15 +237,17 @@
                 <div class="col-md-3">
                     <div class="form-group mb-4">
                         <label>Work Attendace Group</label>
-                        
                         <select class="selectpicker form-control">
-                            <?php foreach($worklist as $key){ ?>
-                                <option value="<?=$key['id']?>" ><? echo $key['time_name'];?></option> 
-                            <?php } ?>
+                            <option>Mustard</option>
+                            <option>Ketchup</option>
+                            <option disabled="">Disabled</option>
+                            <option>Mayonnaise</option>
+                            <option>Barbecue Sauce</option>
+                            <option>Salad Dressing</option>
+                            <option>Tabasco</option>
+                            <option>Salsa</option>
                         </select>
                     </div>
-
-
                     <div class="form-group mb-4">
                         <label>Allowence & Deduction</label>
                         <select class="multi-select" id="multi_select" multiple="multiple" name="multi_select[]">
@@ -250,10 +267,15 @@
             </div>
         </div>
         <div class="ibox-footer">
-            <button class="btn btn-primary mr-2" type="button">Submit</button>
-            <button class="btn btn-outline-secondary" type="reset">Cancel</button>
+            <?php 
+            echo form_submit('submit', '{lang_save}', array('class' => 'btn btn-primary'));
+            echo anchor('backend/employee', '{lang_cancel}', array('class' => 'btn btn-outline-secondary'));
+            ?>
+           
         </div>
+        <?    }
+        ?>
+        <?php echo form_close(); ?>
     </div>
 
 </div>
-

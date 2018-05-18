@@ -57,7 +57,7 @@
                                             echo sprintf("%'04d", $key['employee_id']);
                                             echo "</td>";
                                             echo "<td>";
-                                            echo $key['front_name'];
+                                            echo $key['first_name'];
                                             echo "</td>";
                                             echo "<td>";
                                             echo $key['last_name'];
@@ -72,7 +72,7 @@
                                             echo $key['status'];
                                             echo "</td>";
                                             echo "<td >";
-                                            echo '<a class="btn btn-warning" href="log/edit/'.$key['id'].'">EDIT</a>';
+                                            echo '<a class="btn btn-warning" href="employee/edit/'.$key['employee_id'].'">EDIT</a>';
 
                                             echo "</td>";
                                             echo "</tr>";

@@ -12,13 +12,13 @@ class Log_data extends CI_Model {
 
     public function get_employee(){
 		$this->db->from('employees');
-		$this->db->where('employee_id BETWEEN 2100 and 2200 order by employee_id asc');
+		$this->db->where('employee_id BETWEEN 1 and 400 order by employee_id asc');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 	
 	public function get_details($code){
-		$this->db->select('front_name as name');
+		$this->db->select('first_name as name');
 		$this->db->from('employees');
 		$this->db->where('employee_id ='.$code);
 		$query = $this->db->get();
@@ -57,7 +57,7 @@ class Log_data extends CI_Model {
 			$code = $key['employee_id'];
 			$codes[] = array(
 				'code' => $key['employee_id'],
-				'nama' => $key['front_name']
+				'nama' => $key['first_name']
 			);
 			for($i = 0; $i < loop_date($start_date,$end_date) + 1; $i++)
 	        {

@@ -14,4 +14,13 @@ class Employee_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array();
     }
+
+    public function get_info($id){
+        $this->db->from('employees a');
+        $this->db->join('regencies b',' on a.place_of_birth = b.id');
+        $this->db->where("a.employee_id = '$id'");
+
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

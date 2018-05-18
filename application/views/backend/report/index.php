@@ -232,7 +232,7 @@
                                                     }
                                                     foreach ($val as $keyes => $values) {
 
-                                                    echo '<table>';
+                                                    echo '<table style="margin:0">';
                                                     echo '<tr>';
                                                         $masuk      = date("H:i", strtotime($values['masuk']));
                                                         $keluar     = date("H:i", strtotime($values['keluar']));
