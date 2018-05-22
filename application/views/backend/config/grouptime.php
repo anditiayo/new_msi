@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>               
     <div class="page-heading">
-        <h1 class="page-title">Work Time</h1>
+        <h1 class="page-title">Group Event</h1>
     </div>
     <div class="page-content fade-in-up">
         <div class="col-md-6">
@@ -12,7 +12,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown"><i class="ti-more-alt"></i></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <!-- <a class="dropdown-item" href="<?php echo base_url();?>backend/employee/add"> <i class="ti-pencil"></i>Add Time</a> -->
-                                <a href="#"  class="dropdown-item" data-toggle="modal" data-target="#ModalaAdd"><i class="ti-pencil"></i>Add Time</a>
+                                <a href="#"  class="dropdown-item" data-toggle="modal" data-target="#ModalaAdd"><i class="ti-pencil"></i>Add New Group</a>
                                <!--  <a class="dropdown-item" href="<?php echo base_url();?>backend/employee/import"> <i class="la la-sign-in"></i>{lang_import_list}</a>
 
                                 <a class="dropdown-item" href="<?php echo base_url();?>backend/employee/export"> <i class="la la-sign-out"></i>{lang_export_list}</a> -->
@@ -35,8 +35,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>In</th>
-                                    <th>Out</th>
+                                    <th>Work Time</th>
                                     <th style="text-align: right;">Action</th>
                                 </tr>
                             </thead>
@@ -52,7 +51,7 @@
             <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="myModalLabel">Add Work Time</h3>
+                <h3 class="modal-title" id="myModalLabel">Add group Time</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 
             </div>
@@ -62,22 +61,22 @@
                     <div class="form-group">
                         <label class="control-label col-xs-3" >Name</label>
                         <div class="col-xs-9">
-                            <input name="time_name" id="time_name" class="form-control" type="text" style="width:335px;" required>
+                            <input name="group_name" id="group_name" class="form-control" type="text" style="width:335px;" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-3" >In</label>
+                        <label class="control-label col-xs-3" >Work Time</label>
                         <div class="col-xs-9">
-                            <input name="time_in" id="time_in" class="form-control" type="text" style="width:335px;" required>
-                           
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-xs-3" >Out</label>
-                        <div class="col-xs-9">
-                            <input name="time_out" id="time_out" class="form-control" type="text" style="width:335px;" required>
+                            <select name="work_time" id="work_time" class="selectpicker show-tick form-control" data-width="335px">
+                                <option selected="" disabled="" value="NULL">Work Time List</option>
+                                <?
+                                    foreach ($worktimelist as $key) {
+                                        echo "<option value='".$key['id']."'>".$key['time_name']."</option>";
+                                    }
+                                ?>
+                            </select>
+                            
                         </div>
                     </div>
 
@@ -108,29 +107,38 @@
                     <div class="form-group">
                         <label class="control-label col-xs-3" >Name</label>
                         <div class="col-xs-9">
-                            <input name="time_name_e" id="time_name_e" class="form-control" type="text" style="width:335px;" required>
+                            <input name="group_name_e" id="group_name_e" class="form-control" type="text" style="width:335px;" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-3" >In</label>
+                        <label class="control-label col-xs-3" >Before</label>
                         <div class="col-xs-9">
-                            <input name="time_in_e" id="time_in_e" class="form-control" type="text" style="width:335px;" required>
-                           
+                            <input disabled="" name="work_time_display" id="work_time_display" class="form-control" type="text" style="width:335px;">
+                            <input name="id_time_e" id="id_time_e" class="form-control" type="hidden">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-3" >Out</label>
+                        <label class="control-label col-xs-3" >Change Work Time to</label>
                         <div class="col-xs-9">
-                            <input name="time_out_e" id="time_out_e" class="form-control" type="text" style="width:335px;" required>
+                            <select name="work_time_e" id="work_time_e" class="selectpicker show-tick form-control" data-width="335px">
+                               
+                                <option selected="" disabled="" value="NULL">Work Time List</option>
+                                <?
+                                    foreach ($worktimelist as $key) {
+                                       echo "<option value='".$key['id']."'>".$key['time_name']."</option>";
+                                    }
+                                ?>
+                            </select>
+                            
                         </div>
                     </div>
 
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Tutup</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     <button class="btn btn-info" id="btn_update">Update</button>
                 </div>
             </form>
@@ -169,14 +177,13 @@
 <script type="text/javascript">
     $(document).ready(function(){
         show_time();   //pemanggilan fungsi tampil 
-        
         $('#mydata').dataTable();
          
  
         function show_time(){
             $.ajax({
                 type  : 'ajax',
-                url   : '<?php echo base_url()?>backend/config/worktimelist',
+                url   : '<?php echo base_url()?>backend/config/grouptimelist',
                 async : false,
                 dataType : 'json',
                 success : function(data){
@@ -184,9 +191,8 @@
                     var i;
                     for(i=0; i<data.length; i++){
                         html += '<tr>'+
+                                '<td>'+data[i].name_group+'</td>'+
                                 '<td>'+data[i].time_name+'</td>'+
-                                '<td>'+data[i].time_in+'</td>'+
-                                '<td>'+data[i].time_out+'</td>'+
                                 '<td style="text-align:right;">'+
                                     '<a href="javascript:;" class="btn btn-info btn-xs item_edit" data="'+data[i].id+'">Edit</a>'+' '+
                                     '<a href="javascript:;" class="btn btn-danger btn-xs item_hapus" data="'+data[i].id+'">Hapus</a>'+
@@ -204,16 +210,16 @@
             var id=$(this).attr('data');
             $.ajax({
                 type : "GET",
-                url  : "<?php echo base_url()?>backend/config/get_worktimelist",
+                url  : "<?php echo base_url()?>backend/config/get_grouptimelist",
                 dataType : "JSON",
                 data : {id:id},
                 success: function(data){
-                    $.each(data,function(id,time_name, time_in, time_out){
+                    $.each(data,function(id,group_name,work_time){
                         $('#ModalaEdit').modal('show');
                         $('[name="edit_id"]').val(data.id);
-                        $('[name="time_name_e"]').val(data.time_name);
-                        $('[name="time_in_e"]').val(data.time_in);
-                        $('[name="time_out_e"]').val(data.time_out);
+                        $('[name="group_name_e"]').val(data.name_group);
+                        $('[name="work_time_display"]').val(data.time_name);
+                        $('[name="id_time_e"]').val(data.id_time);
                     });
                 }
             });
@@ -228,20 +234,21 @@
             $('[name="kode"]').val(id);
         });
 
-        //Simpan
+        //Simpan 
         $('#btn_simpan').on('click',function(){
 
-            var time_name=$('#time_name').val();
-            var time_in=$('#time_in').val();
-            var time_out=$('#time_out').val();
+            var group_name=$('#group_name').val();
+            var work_time=$('#work_time').val();
             $.ajax({
                 type : "POST",
-                url  : "<?php echo base_url()?>backend/config/add_worktimelist",
+                url  : "<?php echo base_url()?>backend/config/add_grouptimelist",
                 dataType : "JSON",
-                data : {time_name:time_name , time_in:time_in, time_out:time_out},
+                data : {group_name:group_name , work_time:work_time},
                 success: function(data){
                     $('#ModalaAdd').modal('hide');
                     show_time();
+                },error: function(data){
+                    alert(data);
                 }
             });
             return false;
@@ -249,16 +256,16 @@
 
         //Update
         $('#btn_update').on('click',function(){
+            var edit_id         = $('#edit_id').val();
+            var group_name_e    = $('#group_name_e').val();
+            var work_time_e     = $('#work_time_e').val();
+            var id_time_e       = $('#id_time_e').val();
             
-            var edit_id     = $('#edit_id').val();
-            var time_name_e = $('#time_name_e').val();
-            var time_in_e   = $('#time_in_e').val();
-            var time_out_e  = $('#time_out_e').val();
             $.ajax({
                 type : "POST",
-                url  : "<?php echo base_url()?>backend/config/edit_worktimelist",
+                url  : "<?php echo base_url()?>backend/config/edit_grouptimelist",
                 dataType : "JSON",
-                data : {edit_id:edit_id, time_name_e:time_name_e , time_in_e:time_in_e, time_out_e:time_out_e},
+                data : {edit_id:edit_id, group_name_e:group_name_e , work_time_e:work_time_e, id_time_e:id_time_e},
                 success: function(data){
                     $('#ModalaEdit').modal('hide');
                      show_time();
@@ -267,12 +274,12 @@
             return false;
         });
 
-        //Hapus 
+        //Hapus
         $('#btn_hapus').on('click',function(){
             var id=$('#textkode').val();
             $.ajax({
             type : "POST",
-            url  : "<?php echo base_url()?>backend/config/del_worktimelist",
+            url  : "<?php echo base_url()?>backend/config/del_grouptimelist",
             dataType : "JSON",
                     data : {id: id},
                     success: function(data){

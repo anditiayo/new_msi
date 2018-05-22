@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+date_default_timezone_set('Asia/Jakarta');
 /*
 | -------------------------------------------------------------------
 | AUTO-LOADER
@@ -133,3 +133,5 @@ $autoload['language'] = array('auth');
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = array('user_info_model');
+
+

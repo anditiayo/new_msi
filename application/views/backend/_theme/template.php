@@ -36,6 +36,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url();?>asets/css/bootstrap.css'?>">
     <link rel="stylesheet" href="<?php echo base_url();?>asets/css/jquery.dataTables.css'?>">
     <!-- PAGE LEVEL STYLES-->
+     <link href="<?php echo base_url();?>asets/vendors/toastr/toastr.min.css" rel="stylesheet" />
+    <? if(isset($segment)){?>
+    <link href="<?php echo base_url();?>asets/vendors/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url();?>asets/vendors/fullcalendar/dist/fullcalendar.print.min.css" rel="stylesheet" media="print" />
+    <link href="<?php echo base_url();?>asets/vendors/smalot-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <?}?>
 </head>
 
 	<body>
@@ -64,8 +70,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	                    <div class="ibox-body">
 	                        <div id="calendar"></div>
 	                    </div>
-                	</div>
- -->
+                	</div> -->
+ 
                 	<!-- New Event Dialog-->
                     <div class="modal fade" id="new-event-modal" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
@@ -159,7 +165,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- CORE PLUGINS-->
 
 
+
+    <?php
+    if(!isset($group_dept)){?>
     <script src="<?php echo base_url();?>asets/vendors/jquery/dist/jquery.min.js"></script>
+
+    <?}?>
+    
+
     <script src="<?php echo base_url();?>asets/vendors/popper.js/dist/umd/popper.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/metisMenu/dist/metisMenu.min.js"></script>
@@ -192,11 +205,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url();?>asets/js/scripts/form-plugins.js"></script>
     <!-- PAGE LEVEL SCRIPTS-->
     <script src="<?php echo base_url();?>asets/js/scripts/dashboard_6.js"></script>
-    <script src="<?php echo base_url();?>asets/js/scripts/calendar-demo.js"></script>
+   
     <script src="<?php echo base_url();?>asets/vendors/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/jquery.steps/build/jquery.steps.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/jquery.maskedinput/dist/jquery.maskedinput.min.js"></script>
+
+    <? if(isset($segment)){?>
+    <script src="<?php echo base_url();?>asets/vendors/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script src="<?php echo base_url();?>asets/vendors/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script src="<?php echo base_url();?>asets/js/scripts/toastr-demo.js"></script>
+    <script src="<?php echo base_url();?>asets/js/scripts/calendar-demo.js"></script>
+    <?}?>
     <script>
         $(function() {
             $('#datatable').DataTable({
@@ -308,6 +330,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             $.mask.definitions['~'] = '[+-]';
             $('#ex-eye').mask('~9.99 ~9.99 999');
+
         })
     </script>
     <style type="text/css">

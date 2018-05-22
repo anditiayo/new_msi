@@ -43,7 +43,7 @@
                                         <th>LAST NAME</th>
                                         <th>JOIN</th>
                                         <th>STATUS</th>
-                                        <th>YEARS</th>
+                                        <th>HAVE WORKED</th>
                                         <th>ACTION</th>
                                         
                                     </tr>
@@ -60,16 +60,20 @@
                                             echo $key['first_name'];
                                             echo "</td>";
                                             echo "<td>";
-                                            echo $key['last_name'];
+                                            echo $key['mid_name'].' '.$key['last_name'];
                                             echo "</td>";
                                             echo "<td>";
-                                            echo $key['cost_center_id'];
+                                            echo $key['join_in'];
                                             echo "</td>";
                                             echo "<td>";
-                                            echo $key['place_of_birth'];
+                                            echo status($key['status']);
                                             echo "</td>";
                                             echo "<td>";
-                                            echo $key['status'];
+                                                if($key['join_in'] == '0000-00-00'){
+                                                    echo '';
+                                                }else
+                                                echo umur($key['join_in']);
+                                            
                                             echo "</td>";
                                             echo "<td >";
                                             echo '<a class="btn btn-warning" href="employee/edit/'.$key['employee_id'].'">EDIT</a>';

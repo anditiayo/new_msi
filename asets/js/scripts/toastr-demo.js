@@ -4,7 +4,7 @@ $(function () {
     var $toastlast;
 
         var getMessage = function () {
-            var msg = 'Hi, welcome to AdminCa. This is example of Toastr notification box.';
+            var msg = 'Hi, YOGI';
             return msg;
         };
 

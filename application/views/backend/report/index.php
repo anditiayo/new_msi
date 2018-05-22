@@ -199,12 +199,7 @@
                                                     echo sprintf("%'04d", $code);     
                                                 echo "</td>";
                                                 echo "<td class='headcol'>";
-                                                    $array = get_employee($code);
-
-                                                    foreach($array as $object)
-                                                    {
-                                                        echo $name[] = $object->name;
-                                                    }
+                                                    echo get_employee($code);
                                                 echo '</td>'; 
                                                 echo '<td>'.count($value).'</td>';
 

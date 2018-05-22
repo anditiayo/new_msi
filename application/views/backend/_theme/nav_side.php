@@ -39,11 +39,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </li>
 
                                  <li>
-                                    <a href="#"> Departement List</a>
+                                    <a href="#"> Departement</a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> Outsource List</a>
+                                    <a href="#"> Outsource</a>
                                 </li> 
 
                                 <li>
@@ -51,12 +51,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </li> 
 
                                 <li>
-                                    <a href="#"> Machine List</a>
+                                    <a href="<?php echo base_url();?>backend/config/grouptime"> Group Event</a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> Holyday List</a>
-                                </li>     
+                                    <a href="<?php echo base_url();?>backend/config/schedule"> Calendar Events</a>
+                                </li>  
+
+                                <li>
+                                    <a href="#"> Machine</a>
+                                </li>
+
+                                    
                             </ul>
                         </li>
                         
@@ -77,10 +83,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a  href="<?php echo site_url('backend/employee/add'); ?>">Add Employee</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/employee'); ?>">List Employee</a>
+                            <a href="<?php echo site_url('backend/employee/'); ?>">List Employee</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/employee'); ?>">Positioning</a>
+                            <a href="<?php echo site_url('backend/employee/group'); ?>">Positioning</a>
                         </li>
                        
                     </ul>

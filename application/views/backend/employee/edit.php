@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-group mb-4">
                             <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Enter Last Name" value="<?=$key['last_name'];?>">
+                            <input class="form-control" type="text" placeholder="Enter Last Name" value="<?=$key['mid_name'].' '.$key['last_name'];?>">
                         </div>
                         <div class="form-group mb-4">
                             <label>Email</label>
@@ -183,7 +183,7 @@
                         <label class="font-normal">Join</label>
                         <div class="input-group date">
                             <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
-                            <input class="form-control" type="text" disabled=""  value="<? echo date(" m/d/Y ");?>">
+                            <input class="form-control" type="text" disabled=""  value="<? echo date("d F Y ",strtotime($key['join_in']));?>">
                         </div>
                     </div>
                     <div class="form-group mb-4">
@@ -219,7 +219,7 @@
                 <div class="col-md-3">
                     <div class="form-group mb-4">
                         <label>Salary</label>
-                        <input class="form-control" type="text" id="salary" placeholder="Enter Salary">
+                        <input class="form-control" type="text" id="salary" placeholder="Enter Salary" value="<?php echo salary($key['employee_id']);?>">
                     </div>
                     <div class="form-group mb-4">
                         <label>NPWP</label>

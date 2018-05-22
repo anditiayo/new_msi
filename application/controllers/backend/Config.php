@@ -23,30 +23,9 @@ class Config extends Backend
 		}
 		else
 		{
-			$count_user  = $this->db->count_all($this->config->item('tables', 'ion_auth')['users']);
-			$count_group = $this->db->count_all($this->config->item('tables', 'ion_auth')['groups']);
 
-			if ($count_user >= 1)
-			{
-				$this->data['lang_user_plural'] = plural($this->lang->line('user'));
-			}
-			else
-			{
-				$this->data['lang_user_plural'] = $this->lang->line('user');
-			}
-
-			if ($count_group >= 1)
-			{
-				$this->data['lang_group_plural'] = plural($this->lang->line('group'));
-			}
-			else
-			{
-				$this->data['lang_group_plural'] = $this->lang->line('group');
-			}
 
 			$this->data['active']     	= 'class="active"';
-			$this->data['nbr_user']     = $count_user;
-			$this->data['nbr_group']    = $count_group;
 			$this->data['subtitle']     = $this->lang->line('config');
 			$this->data['page_content'] = 'backend/config/dashboard';
 
@@ -65,34 +44,12 @@ class Config extends Backend
 		}
 		else
 		{
-			$count_user  = $this->db->count_all($this->config->item('tables', 'ion_auth')['users']);
-			$count_group = $this->db->count_all($this->config->item('tables', 'ion_auth')['groups']);
-
-			if ($count_user >= 1)
-			{
-				$this->data['lang_user_plural'] = plural($this->lang->line('user'));
-			}
-			else
-			{
-				$this->data['lang_user_plural'] = $this->lang->line('user');
-			}
-
-			if ($count_group >= 1)
-			{
-				$this->data['lang_group_plural'] = plural($this->lang->line('group'));
-			}
-			else
-			{
-				$this->data['lang_group_plural'] = $this->lang->line('group');
-			}
-
 			$this->General_model->get_data();
 
 
 			$this->data['active']     	= 'class="active"';
 			$this->data['config']     	= 'class="active"';
-			$this->data['nbr_user']     = $count_user;
-			$this->data['nbr_group']    = $count_group;
+
 			$this->data['subtitle']     = $this->lang->line('config');
 			$this->data['page_content'] = 'backend/config/worktime';
 
@@ -142,4 +99,98 @@ class Config extends Backend
 		$data=$this->General_model->del_worklist($id);
 		echo json_encode($data);
 	}
+
+
+	public function grouptime(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			$this->General_model->get_data();
+
+			$this->data['worktimelist']		= $this->General_model->worklist();
+			$this->data['active']     	= 'class="active"';
+			$this->data['config']     	= 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('config');
+			$this->data['page_content'] = 'backend/config/grouptime';
+
+			$this->render();
+		}
+	}
+
+	function grouptimelist(){
+		$data = $this->General_model->grouplist();
+		echo json_encode($data);
+	}
+
+	function add_grouptimelist(){
+		$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$group_name		= $this->input->post('group_name');
+		$work_time		= $this->input->post('work_time');
+		$date_created	= date('Y-m-d H:i:s');
+		$user_created 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->General_model->add_grouplist($group_name,$work_time,$date_created,$user_created);
+		echo json_encode($data);
+	}
+
+	function get_grouptimelist(){
+		$id 	= $this->input->get('id');
+		$data 	= $this->General_model->get_grouplist($id);
+		echo json_encode($data);
+	}
+
+	function edit_grouptimelist(){
+		$edit_id		= $this->input->post('edit_id');
+		$group_name		= $this->input->post('group_name_e');
+		$choose			= $this->input->post('work_time_e');
+		$still			= $this->input->post('id_time_e');
+
+		if(!isset($work_time) || $work_time == NULL){
+			$work_time = $still;
+		}else{
+			$work_time = $choose;
+		}
+		
+		$date_updated	= date('Y-m-d H:i:s');
+		$user_updated 	= $this->data['user_info']['fullname'];
+
+		$data 		= $this->General_model->edit_grouplist($edit_id,$group_name,$work_time,$date_updated,$user_updated);
+		echo json_encode($data);
+	}
+
+
+	public function schedule(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			
+			$this->data['segment'] 		= $this->uri->segment(3);
+			$this->data['grouplist'] 	= $this->General_model->grouplist();
+			$this->data['active']     	= 'class="active"';
+			$this->data['config']     	= 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('schedule');
+			$this->data['page_content'] = 'backend/config/schedule';
+
+			$this->render();
+		}
+	}
+
+
 }

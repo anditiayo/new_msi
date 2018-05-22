@@ -22,7 +22,11 @@ class Log_data extends CI_Model {
 		$this->db->from('employees');
 		$this->db->where('employee_id ='.$code);
 		$query = $this->db->get();
-		return $query->result();
+		 foreach ($query->result() as $row)
+        {
+                echo $row->name;
+        }
+        return $query->free_result();  
 	}
 
 	public function get_log($start,$end){

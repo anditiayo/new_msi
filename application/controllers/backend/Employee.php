@@ -141,4 +141,44 @@ class Employee extends Backend
 			$this->render();
 		}
 	}
+
+	public function group(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			
+			
+			$this->data['group_dept'] 			= $this->uri->segment(3);
+			$this->data['grouplist_emp']		= $this->Employee_model->groupworklist();
+			$this->data['grouplist_emp_all']	= $this->Employee_model->groupworklist_all();
+			
+			$this->data['grouplist']	= $this->General_model->grouplist();
+			$this->data['employee']     = 'class="active"';
+			$this->data['subtitle']     = $this->lang->line('group');
+			$this->data['page_content'] = 'backend/employee/group';
+
+			$this->render();
+		}
+	}
+
+	function change_list(){
+		$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$to_group		= $this->input->post('to_group');
+		$from_group		= $this->input->post('from_group');
+		$employee_id 	= isNumbers($this->input->post('name'));
+
+		$date_updated	= date('Y-m-d H:i:s');
+		$user_updated 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->edit_groupworklist($to_group,$from_group,$employee_id,$date_updated,$user_updated);
+		echo json_encode($data);
+	}
 }

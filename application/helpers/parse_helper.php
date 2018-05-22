@@ -16,7 +16,7 @@ function Parse_Data($data,$p1,$p2){
 
 function to_currency($number)
 {
-    if($number >= 0)
+    if($number > 0)
     {
         return 'Rp. '.number_format($number, 0, ',', '.');
     }
@@ -96,7 +96,7 @@ function umur($usia) {
 
     $age['seconds'] = $diff;
 
-    return $age['years'];
+    return $age['years'].' Years and '.$age['months'].' Month';
 
 }
 
@@ -263,3 +263,31 @@ function beda_waktu($date1, $date2, $format = false)
             );
 }
 
+function status($stat){
+    $CI = get_instance();
+    $CI->load->model('Employee_model');
+    $detail = $CI->Employee_model->get_status($stat);
+    return $detail;
+}
+
+function salary($id){
+    $CI = get_instance();
+    $CI->load->model('Employee_model');
+    $detail = $CI->Employee_model->get_salary($id);
+    return $detail;
+}
+function isNumbers($string){
+    $chars = '';
+    $nums = '';
+    for ($index=0;$index<strlen($string);$index++) {
+        if(isNumber($string[$index]))
+            $nums .= $string[$index];
+        else    
+            $chars .= $string[$index];
+    }
+    return $nums;
+}
+
+function isNumber($c) {
+    return preg_match('/[0-9]/', $c);
+} 
