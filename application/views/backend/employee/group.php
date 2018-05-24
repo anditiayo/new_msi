@@ -5,23 +5,50 @@
 <link href="<?php echo base_url();?>asets/css/pages/sort.jquery-ui.css" rel="stylesheet" />               
 <style type="text/css">
 .sortable_list {
-
-width: 265px;
+margin: 0 auto;
 min-height: 20px;
 list-style-type: none;
 margin: 0;
 padding: 5px 0 20px 0;
-margin-right: 10px;
 
 
 }
 
+.left{
+    width: 300;
+    margin-left: 3px;
+}
+.right{
+    width: 315px;
+}
 .sortable_list li {
-margin: 5px 0 0;
-padding: 5px;
+padding: 3px 3px;
 font-weight: normal;
 font-size: 1.2em;
 width: 255px;
+margin-top:4px;
+
+}
+
+.right li{
+background: #ebedee;
+border-radius: 3px;
+}
+
+.right li i, .left li i{ 
+    font-size:14px;color:white; 
+    padding:10px 9px 9px;
+    margin:-10px -5px -4px; 
+    border: 1px solid #aaa;
+    background: #ddd;
+    border-radius: 1px;
+    background-image: -webkit-gradient(linear,left bottom,left top,from(#ddd),to(#bbb));
+    background-image: -webkit-linear-gradient(bottom,#ddd 0,#bbb 100%);
+    background-image: -o-linear-gradient(bottom,#ddd 0,#bbb 100%);
+    background-image: linear-gradient(0deg,#ddd 0,#bbb 100%);
+}
+.right li i:hover, .right li:hover,.left li i:hover, .left li:hover{
+    background: #ebedee;
 }
 
 #snoAlertBox{
@@ -35,10 +62,27 @@ width: 255px;
     width: 300px;
     padding: 15px 15px 15px 50px;
 
+}
+.sort{
+margin: 5px 5px 5px 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+padding: 10px;
+}
+
+/*.sort:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}*/
+.right li:hover,.left li:hover{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    font-weight: bold;
+    width: 260px;
+}
+
 
 </style>
             <div class="page-heading">
-                <h1 class="page-title">Employee</h1>
                 
                 <div id="snoAlertBox" class="alert alert-success" data-alert="alert">
                    <span id="notification"></span>
@@ -48,14 +92,8 @@ width: 255px;
 
 
 
-            <div class="flexbox-b mb-5">
-                    <span class="mr-4 static-badge badge-pink"><i class="la la-calendar-check-o font-36"></i></span>
-                    <div>
-                        <h5 class="font-strong">Calendar Events</h5>
-                        <!-- <div class="text-light">Found 18 Events for this week</div> -->
-
-                    </div>
-                </div>
+                <div class="row">
+        <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="ibox">
@@ -64,11 +102,10 @@ width: 255px;
                             </div>
                             <div class="ibox-body">
                                 <div class="table-responsive row" style="overflow-y: auto;overflow-x: hidden; height: 1000px;resize: vertical;">
-                                <ul id="0" class="sortable_list connectedSortable">
-                                <li >LIST NAMA</li>
+                                <ul id="0" class="sortable_list left connectedSortable">
                                 <?php
                                     foreach ($grouplist_emp as $key => $value) {
-                                        echo '<li class="ui-state-highlight">['.$value['employee_id'].'] '.$value['f_name'].' '.$value['m_name'].'</li>';
+                                        echo '<li class="ui-state-highlight"><i class="fa fa-bars"></i>&nbsp;&nbsp;['.$value['employee_id'].'] '.$value['f_name'].' '.$value['m_name'].'</li>';
                                     }
                                 ?>
                                 </ul>
@@ -81,27 +118,31 @@ width: 255px;
                             <div class="ibox-head">
                                 <div class="ibox-title">Calendar Events</div>
                             </div>
+
                             <div class="ibox-body">
                                 <div class="table-responsive row">
                                <?php
-                                    foreach ($grouplist as $key => $value) {?>
-                                        <div><a><? echo $value['name_group'].'</a></br><a>'.$value['time_name'];?></a>
-                                        <ul id="<?=$value['id']?>" class="sortable_list connectedSortable">
+                                   
+
+                                    foreach ($departementlist as $key => $value) {?>
+                                        <div class="sort ibox-title" ><a><? echo $value['label'].'</a>';?>
+                                        <ul id="<?=$value['id']?>" class="sortable_list right  connectedSortable">
                                              <?php
                                                 foreach ($grouplist_emp_all as $keys => $values) {
                                                     if($value['id'] ==$values['grouptime'] ){
-                                                        echo '<li class="ui-state-default">['.$values['employee_id'].'] '.$values['f_name'].' '.$values['m_name'].'</li>';
+                                                        echo '<li class="ui-state-default"><i class="fa fa-bars"></i>&nbsp;&nbsp;['.$values['employee_id'].'] '.$values['f_name'].' '.$values['m_name'].'</li>';
                                                     }
-                                                   
                                                 }
                                             ?>
-                                           
-                                            
                                         </ul>
                                         </div>
                                 <?}?>
                                 </div>
                             </div>
+                            <!--  <?
+                                 echo "<pre>";
+                                    print_r($grouplist);
+                            ?> -->
                         </div>
                     </div>
                 </div>

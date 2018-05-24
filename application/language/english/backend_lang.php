@@ -52,3 +52,11 @@ $lang['status']                  = 'Status';
 $lang['see']                     = 'See';
 $lang['yes']                     = 'Yes';
 $lang['no']                      = 'No';
+
+
+$lang['employee_list']           = 'Employee Data';
+$lang['departement']           	 = 'Departement';
+
+
+
+

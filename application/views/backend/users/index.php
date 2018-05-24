@@ -27,9 +27,10 @@ $nbr_users     = ($count_users > 0) ? ' <span class="badge badge-info">' . $coun
                             </div>
                             <div class="ibox-body">
                                 
-                                <div class="ibox-fullwidth-block">
-                                    <table class="table table-hover">
-                                        <thead class="thead-default thead-lg">
+                            <div class="table-responsive row">
+
+                            <table class="table table-bordered table-hover" id="datatable">
+                                <thead class="thead-default thead-lg">
                                             <tr>
                                                 <th class="pl-4">No</th>
 												<th>{lang_first_name}</th>

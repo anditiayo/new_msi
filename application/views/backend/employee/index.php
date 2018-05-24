@@ -1,11 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>               
-            <div class="page-heading">
-                <h1 class="page-title">Employee</h1>
-            </div>
-            <div class="page-content fade-in-up">
+    <div class="row">
+        <div class="col-md-12">
                 <div class="ibox">
                     <div class="ibox-head">
-                                <div class="ibox-title">List Employee</div>
+                                <div class="ibox-title"></div>
                                 <div class="ibox-tools">
                                     <a class="dropdown-toggle" data-toggle="dropdown"><i class="ti-more-alt"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
@@ -76,7 +74,7 @@
                                             
                                             echo "</td>";
                                             echo "<td >";
-                                            echo '<a class="btn btn-warning" href="employee/edit/'.$key['employee_id'].'">EDIT</a>';
+                                            echo '<a class="btn btn-warning" href="edit/'.$key['employee_id'].'">EDIT</a>';
 
                                             echo "</td>";
                                             echo "</tr>";

@@ -56,22 +56,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			{nav_side}
 			<div class="content-wrapper">
 	            <!-- START PAGE CONTENT-->
+                <div class="page-heading">
+                    <h1 class="page-title">{subtitle}</h1>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="<?php echo site_url('backend/dashboard'); ?>"><i class="la la-home font-20"></i></a>
+                        </li>
+                        <li class="breadcrumb-item">Head Content Name</li>
+                        <li class="breadcrumb-item">Content Name</li>
+                        <li class="breadcrumb-item">Child Content Name</li>
+                    </ol>
+                </div>
 	            <div class="page-content fade-in-up">
 	            	{content}
-
-
-	            	<!-- <div class="ibox">
-                    	<div class="ibox-head">
-                        	<div class="ibox-title">CALENDAR</div>
-		                        <button class="btn btn-primary btn-rounded btn-air my-3" data-toggle="modal" data-target="#new-event-modal">
-		                            <span class="btn-icon"><i class="la la-plus"></i>New Event</span>
-		                        </button>
-                    	</div>
-	                    <div class="ibox-body">
-	                        <div id="calendar"></div>
-	                    </div>
-                	</div> -->
- 
                 	<!-- New Event Dialog-->
                     <div class="modal fade" id="new-event-modal" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">

@@ -1,9 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
     <!-- START PAGE CONTENT-->
-    <div class="page-heading">
-        <h1 class="page-title"><?$subtitle?></h1>
-    </div>
-    <div class="page-content fade-in-up">
+
         <div class="ibox">
             <div class="ibox-body">
                 <h5 class="font-strong mb-4">REPORT</h5>

@@ -91,7 +91,7 @@ class Maintenance extends Backend
 		}
 		else
 		{
-			$query    = 'SELECT * FROM dp_auth_groups';
+			$query    = 'SELECT * FROM '.$this->db->dbprefix('dp_auth_groups');
 			$category = 'security_groups';
 
 			$this->backend_tools_model->export_csv($query, $category);

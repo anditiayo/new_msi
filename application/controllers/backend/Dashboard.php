@@ -42,7 +42,7 @@ class Dashboard extends Backend
 				$this->data['lang_group_plural'] = $this->lang->line('group');
 			}
 
-			$this->data['dashboard']     	= 'class="active"';
+			$this->data['dashboard']     = 'class="active"';
 			$this->data['nbr_user']     = $count_user;
 			$this->data['nbr_group']    = $count_group;
 			$this->data['subtitle']     = $this->lang->line('dashboard');

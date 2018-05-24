@@ -1,8 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>               
-    <div class="page-heading">
-        <h1 class="page-title">Work Time</h1>
-    </div>
-    <div class="page-content fade-in-up">
+ <div class="row">
         <div class="col-md-6">
         <div class="ibox">
 

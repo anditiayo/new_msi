@@ -48,7 +48,7 @@ class Employee extends Backend
 			$this->data['employee']     = 'class="active"';
 			$this->data['nbr_user']     = $count_user;
 			$this->data['nbr_group']    = $count_group;
-			$this->data['subtitle']     = $this->lang->line('employee');
+			$this->data['subtitle']     = $this->lang->line('employee_list');
 			$this->data['page_content'] = 'backend/employee/index';
 
 			$this->render();
@@ -159,7 +159,7 @@ class Employee extends Backend
 			$this->data['grouplist_emp']		= $this->Employee_model->groupworklist();
 			$this->data['grouplist_emp_all']	= $this->Employee_model->groupworklist_all();
 			
-			$this->data['grouplist']	= $this->General_model->grouplist();
+			$this->data['departementlist']	= $this->General_model->departement();
 			$this->data['employee']     = 'class="active"';
 			$this->data['subtitle']     = $this->lang->line('group');
 			$this->data['page_content'] = 'backend/employee/group';
@@ -180,5 +180,29 @@ class Employee extends Backend
 		
 		$data 		= $this->Employee_model->edit_groupworklist($to_group,$from_group,$employee_id,$date_updated,$user_updated);
 		echo json_encode($data);
+	}
+
+	public function schedule(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			
+			$this->data['segment'] 		= $this->uri->segment(3);
+			$this->data['grouplist'] 	= $this->General_model->grouplist();
+			
+			$this->data['employee']     = 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('schedule');
+			$this->data['page_content'] = 'backend/employee/schedule';
+
+			$this->render();
+		}
 	}
 }

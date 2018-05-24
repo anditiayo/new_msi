@@ -1,8 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>               
-    <div class="page-heading">
-        <h1 class="page-title">Group Event</h1>
-    </div>
-    <div class="page-content fade-in-up">
+    <div class="row">
         <div class="col-md-6">
         <div class="ibox">
 
@@ -35,6 +32,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Departement</th>
                                     <th>Work Time</th>
                                     <th style="text-align: right;">Action</th>
                                 </tr>
@@ -62,6 +60,20 @@
                         <label class="control-label col-xs-3" >Name</label>
                         <div class="col-xs-9">
                             <input name="group_name" id="group_name" class="form-control" type="text" style="width:335px;" required>
+                        </div>
+                    </div>
+
+                     <div class="form-group">
+                        <label class="control-label col-xs-3" >Departement</label>
+                        <div class="col-xs-9">
+                            <select name="departement" id="departement" class="selectpicker show-tick form-control" data-width="335px">
+                                <option selected="" disabled="" value="NULL">Departement List</option>
+                                <?
+                                    foreach ($departement as $key) {
+                                        echo "<option value='".$key['id']."'>".$key['label']."</option>";
+                                    }
+                                ?>
+                            </select>
                         </div>
                     </div>
 
@@ -111,13 +123,32 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                     <div class="form-group">
                         <label class="control-label col-xs-3" >Before</label>
                         <div class="col-xs-9">
+                            <input disabled="" name="dept_display" id="dept_display" class="form-control" type="text" style="width:335px;">
+                            <input name="id_dept_e" id="id_dept_e" class="form-control" type="hidden">
                             <input disabled="" name="work_time_display" id="work_time_display" class="form-control" type="text" style="width:335px;">
                             <input name="id_time_e" id="id_time_e" class="form-control" type="hidden">
+                            
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-3" >Departement</label>
+                        <div class="col-xs-9">
+                            <select name="departement_e" id="departement_e" class="selectpicker show-tick form-control" data-width="335px">
+                                <option selected="" disabled="" value="NULL">Departement List</option>
+                                <?
+                                    foreach ($departement as $key) {
+                                        echo "<option value='".$key['id']."'>".$key['label']."</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+
+                   
 
                     <div class="form-group">
                         <label class="control-label col-xs-3" >Change Work Time to</label>
@@ -192,6 +223,7 @@
                     for(i=0; i<data.length; i++){
                         html += '<tr>'+
                                 '<td>'+data[i].name_group+'</td>'+
+                                '<td>'+data[i].name_dept+'</td>'+
                                 '<td>'+data[i].time_name+'</td>'+
                                 '<td style="text-align:right;">'+
                                     '<a href="javascript:;" class="btn btn-info btn-xs item_edit" data="'+data[i].id+'">Edit</a>'+' '+
@@ -220,6 +252,8 @@
                         $('[name="group_name_e"]').val(data.name_group);
                         $('[name="work_time_display"]').val(data.time_name);
                         $('[name="id_time_e"]').val(data.id_time);
+                        $('[name="id_dept_e"]').val(data.dept_id);
+                        $('[name="dept_display"]').val(data.name_dept);
                     });
                 }
             });
@@ -239,11 +273,14 @@
 
             var group_name=$('#group_name').val();
             var work_time=$('#work_time').val();
+            var departement=$('#departement').val();
+            
+
             $.ajax({
                 type : "POST",
                 url  : "<?php echo base_url()?>backend/config/add_grouptimelist",
                 dataType : "JSON",
-                data : {group_name:group_name , work_time:work_time},
+                data : {group_name:group_name , work_time:work_time, departement:departement},
                 success: function(data){
                     $('#ModalaAdd').modal('hide');
                     show_time();
@@ -259,13 +296,15 @@
             var edit_id         = $('#edit_id').val();
             var group_name_e    = $('#group_name_e').val();
             var work_time_e     = $('#work_time_e').val();
+            var departement_e   = $('#departement_e').val();
             var id_time_e       = $('#id_time_e').val();
+            var id_dept_e       = $('#id_dept_e').val();
             
             $.ajax({
                 type : "POST",
                 url  : "<?php echo base_url()?>backend/config/edit_grouptimelist",
                 dataType : "JSON",
-                data : {edit_id:edit_id, group_name_e:group_name_e , work_time_e:work_time_e, id_time_e:id_time_e},
+                data : {edit_id:edit_id, group_name_e:group_name_e , work_time_e:work_time_e, id_time_e:id_time_e, departement_e:departement_e, id_dept_e:id_dept_e},
                 success: function(data){
                     $('#ModalaEdit').modal('hide');
                      show_time();
