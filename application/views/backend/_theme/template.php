@@ -309,22 +309,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $('#time_out_e').mask('99:99:00', {
                 placeholder: 'tt:mm:dd'
             });
-            $('#ex-phone').mask('99 999-9999');
-            $('#ex-phone2').mask('999 999-99999');
+           
             $('#ex-ext').mask('(999) 999-9999? x9999');
             $('#ex-credit').mask('****-****-****-****', {
                 placeholder: '*'
             });
             //$('#salary').mask('999.999.999.999');
             $('#npwp').mask('99.999.999.9-999.999');
-            $('#bpjstk').mask('9999 9999 9999 9999');
-            $('#bpjsk').mask('9999 9999 9999 9999');
+            
             $('#ex-tax').mask('99-9999999');
             $('#ex-currency').mask('$ 99.99');
             $('#ex-product').mask('a*-999-a999', {
                 placeholder: 'a*-999-a999'
             });
-
+            
             $.mask.definitions['~'] = '[+-]';
             $('#ex-eye').mask('~9.99 ~9.99 999');
 

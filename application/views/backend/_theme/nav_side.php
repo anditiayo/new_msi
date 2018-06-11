@@ -28,22 +28,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <span class="nav-label">Configuration</span><i class="fa fa-angle-left arrow"></i></a>
                             <ul class="nav-3-level collapse">
                                 <li>
-                                    <a href="#"> Company Information</a>
+                                    <a href="<?php echo base_url();?>backend/config/info"> Company Information</a>
                                 </li>
                                 <li>
-                                    <a href="#"> Allowance</a>
+                                    <a href="<?php echo base_url();?>backend/config/allowance"> Allowance & Deduction</a>
                                 </li>
 
-                                <li>
-                                    <a href="#"> Deduction</a>
-                                </li>
+                          <!--       <li>
+                                    <a href="<?php echo base_url();?>backend/config/deduction"> Deduction</a>
+                                </li> -->
 
                                  <li>
                                     <a href="<?php echo base_url();?>backend/config/departement"> Departement</a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> Outsource</a>
+                                    <a href="<?php echo base_url();?>backend/config/os"> Outsource</a>
                                 </li> 
 
                                 <li>
@@ -53,11 +53,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <li>
                                     <a href="<?php echo base_url();?>backend/config/grouptime"> Group Event</a>
                                 </li>
-
-                               
-
                                 <li>
-                                    <a href="#"> Machine</a>
+                                    <a href="<?php echo base_url();?>backend/config/machine"> Machine</a>
                                 </li>
 
                                     

@@ -115,7 +115,7 @@ class Config extends Backend
 			$this->General_model->get_data();
 
 			$this->data['worktimelist']	= $this->General_model->worklist();
-			$this->data['departement'] 	= $this->General_model->departement();
+			$this->data['department'] 	= $this->General_model->departement();
 			$this->data['active']     	= 'class="active"';
 			$this->data['config']     	= 'class="active"';
 
@@ -136,11 +136,11 @@ class Config extends Backend
 		
 		$group_name		= $this->input->post('group_name');
 		$work_time		= $this->input->post('work_time');
-		$departement		= $this->input->post('departement');
+		$department	= $this->input->post('department');
 		$date_created	= date('Y-m-d H:i:s');
 		$user_created 	= $this->data['user_info']['fullname'];
 		
-		$data 		= $this->General_model->add_grouplist($group_name,$work_time,$date_created,$user_created,$departement);
+		$data 		= $this->General_model->add_grouplist($group_name,$work_time,$date_created,$user_created,$department);
 		echo json_encode($data);
 	}
 
@@ -155,17 +155,25 @@ class Config extends Backend
 		$group_name		= $this->input->post('group_name_e');
 		$choose			= $this->input->post('work_time_e');
 		$still			= $this->input->post('id_time_e');
-
-		if(!isset($work_time) || $work_time == NULL){
+		$change_dept_id	= $this->input->post('department_e');
+		$id_dept_e		= $this->input->post('id_dept_e');
+		
+		if(!isset($choose) || $choose == ''){
 			$work_time = $still;
 		}else{
 			$work_time = $choose;
+		}
+
+		if(!isset($change_dept_id) || $change_dept_id == ''){
+			$dept_id = $id_dept_e;
+		}else{
+			$dept_id = $change_dept_id;
 		}
 		
 		$date_updated	= date('Y-m-d H:i:s');
 		$user_updated 	= $this->data['user_info']['fullname'];
 
-		$data 		= $this->General_model->edit_grouplist($edit_id,$group_name,$work_time,$date_updated,$user_updated);
+		$data 		= $this->General_model->edit_grouplist($edit_id,$group_name,$work_time,$date_updated,$user_updated,$dept_id);
 		echo json_encode($data);
 	}
 
@@ -246,9 +254,140 @@ class Config extends Backend
 		$data=$this->General_model->del_departement_list($id);
 		echo json_encode($data);
 	}
-		
-		
 	
+
+	public function allowance(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			$this->General_model->get_data();
+
+			$this->data['worktimelist']	= $this->General_model->worklist();
+			$this->data['department'] 	= $this->General_model->departement();
+			$this->data['active']     	= 'class="active"';
+			$this->data['config']     	= 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('allowance');
+			$this->data['page_content'] = 'backend/config/allowance';
+
+			$this->render();
+		}
+	}
+
+	function allowances(){
+		$data = $this->General_model->allowances();
+		echo json_encode($data);
+	}
+
+	function addAllowance(){
+		$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+
+		$name			= $this->input->post('name');
+		$description	= $this->input->post('description');
+		$amount			= $this->input->post('amount');
+		$from_employee	= $this->input->post('from_employee');
+		$from_company	= $this->input->post('from_company');
+		
+		$pay			= $this->input->post('pay');
+		$type			= $this->input->post('type');
+
+		$start			= $this->input->post('start');
+		$end			= $this->input->post('end');
+
+		$mk1			= $this->input->post('mk1');
+		$mk2			= $this->input->post('mk2');
+
+		if($start == '' || $start == NULL || $start == '00/00/0000' || $start == '01/01/1970'){
+			$start			= '0000-00-00';
+		}else{
+			$start			= date("Y-m-d", strtotime($start));
+		}
+
+		if($end == '' || $end == NULL || $end == '00/00/0000' || $end == '01/01/1970'){
+			$end			= '0000-00-00';
+		}else{
+			$end			= date("Y-m-d", strtotime($end));
+		}
+
+		$date_created	= date('Y-m-d H:i:s');
+		$user_created 	= $this->data['user_info']['fullname'];
+		
+		$data 			= $this->General_model->addAllowance($type,$name,$description,$amount,$from_employee,$from_company,$start,$end,$pay,$date_created,$user_created,$mk1,$mk2);
+		echo json_encode($data);
+	}
+
+	function getAllowance(){
+		$id 	= $this->input->get('id');
+		$data 	= $this->General_model->getAllowance($id);
+		echo json_encode($data);
+	}
+		
+	function editAllowance(){
+		
+		$id				= $this->input->post('id_allow');
+		$typeold		= $this->input->post('typeold');
+		$payold			= $this->input->post('payold');
+
+		$name			= $this->input->post('nameEdit');
+		$description	= $this->input->post('descriptionEdit');
+		$amount			= $this->input->post('amountEdit');
+		$from_employee	= $this->input->post('from_employeeEdit');
+		$from_company	= $this->input->post('from_companyEdit');
+		
+		$pay			= $this->input->post('payEdit');
+		$type			= $this->input->post('typeEdit');
+
+		$start			= $this->input->post('startEdit');
+		$end			= $this->input->post('endEdit');
+
+		$mk1Edit		= $this->input->post('mk1Edit');
+		$mk2Edit		= $this->input->post('mk2Edit');
+
+
+		if($pay == '' || $pay == NULL){
+			$pay			= $payold;
+		}else{
+			$pay			= $pay;
+		}
+
+		if($type == '' || $type == NULL){
+			$type			= $typeold;
+		}else{
+			$type			= $type;
+		}
+
+		if($start == '' || $start == NULL || $start == '00/00/0000' || $start == '01/01/1970'){
+			$start			= '0000-00-00';
+		}else{
+			$start			= date("Y-m-d", strtotime($start));
+		}
+
+		if($end == '' || $end == NULL || $end == '00/00/0000' || $end == '01/01/1970'){
+			$end			= '0000-00-00';
+		}else{
+			$end			= date("Y-m-d", strtotime($end));
+		}
+
+		$date_updated	= date('Y-m-d H:i:s');
+		$user_updated 	= $this->data['user_info']['fullname'];
+		
+		$data 	= $this->General_model->editAllowances($id,$type,$name,$description,$amount,$from_employee,$from_company,$start,$end,$pay,$date_updated,$user_updated,$mk1Edit,$mk2Edit);
+		echo json_encode($data);
+
+	}
+
+	function delAllowance(){
+		$id=$this->input->post('id');
+		$data=$this->General_model->delAllowance($id);
+		echo json_encode($data);
+	}
 
 
 }

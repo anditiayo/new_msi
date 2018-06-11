@@ -41,7 +41,7 @@
                                         <th>LAST NAME</th>
                                         <th>JOIN</th>
                                         <th>STATUS</th>
-                                        <th>HAVE WORKED</th>
+                                        <th>HAVE BEEN WORKED</th>
                                         <th>ACTION</th>
                                         
                                     </tr>

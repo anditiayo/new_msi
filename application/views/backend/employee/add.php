@@ -225,16 +225,11 @@
                     <div class="form-group mb-4">
                         <label>Allowence & Deduction</label>
                         <select class="multi-select" id="multi_select" multiple="multiple" name="multi_select[]">
-                            <option>PPH 21 (Individu)</option>
-                            <option>PPH 21 (Company)</option>
-                            <option>BPJS Ketenagakerjaan</option>
-                            <option selected="">Uang Makan</option>
-                            <option selected="">BPJS Kesehatan</option>
-                            <option>Tunj. Jabatan</option>
-                            <option>Tunj. Masa Kerja</option>
-                            <option>Shift/day</option>
-                            <option>Lembur</option>
-                            <option>Asuransi</option>
+                            <?
+                                foreach ($allowances as $key => $value) {
+                                    echo '<option value="'.$value['id'].'">'.$value['allowance_name'].'</option>';
+                                }
+                            ?>
                         </select>
                     </div>
                 </div>

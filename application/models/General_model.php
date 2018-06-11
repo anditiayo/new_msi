@@ -63,21 +63,23 @@ class General_model extends CI_Model {
 
     public function del_worklist($id){
         $hasil=$this->db->query("DELETE FROM ".$this->db->dbprefix('worktime')." WHERE id='$id'");
+        //$this->db->query("ALTER TABLE ".$this->db->dbprefix('worktime')." AUTO_INCREMENT 1");
         return $hasil;
     }
 
     public function grouplist(){
-        $this->db->select('a.id as id,a.group_name as name_group,b.id as id_time,b.time_name as time_name, c.id as dept_id, c.label as name_dept');
+        $this->db->select('a.id as id,a.group_name as name_group,b.id as id_time,b.time_name as time_name, c.id as dept_id, c.label as name_dept,b.time_in, b.time_out');
         $this->db->from('grouptime a');
         $this->db->join('worktime b','on a.work_time = b.id','LEFT');
         $this->db->join('departement c','on a.department_id = c.id','LEFT');
+        $this->db->order_by('a.group_name','ASC');
         $query = $this->db->get();
         return $query->result_array();
     }
 
-    public function add_grouplist($group_name,$work_time,$date_created,$user_created,$departement){
-        $hasil=$this->db->query("INSERT INTO ".$this->db->dbprefix('grouptime')." (id,group_name,work_time,,departement_id,date_created,date_updated,user_created,user_updated)
-                                    VALUES('','$group_name','$work_time',',$departement','$date_created','','$user_created','')");
+    public function add_grouplist($group_name,$work_time,$date_created,$user_created,$department){
+        $hasil=$this->db->query("INSERT INTO ".$this->db->dbprefix('grouptime')." (id,group_name,work_time,department_id,date_created,date_updated,user_created,user_updated)
+                                    VALUES('','$group_name','$work_time','$department','$date_created','','$user_created','')");
         return $hasil;
     }
 
@@ -106,12 +108,13 @@ class General_model extends CI_Model {
         return $hasil;
     }
 
-    public function edit_grouplist($edit_id,$group_name,$work_time,$date_updated,$user_updated){
-        $hasil=$this->db->query("UPDATE ".$this->db->dbprefix('grouptime')." SET group_name = '$group_name', work_time ='$work_time', date_updated = '$date_updated' , user_updated = '$user_updated' WHERE id = '$edit_id'");
+    public function edit_grouplist($edit_id,$group_name,$work_time,$date_updated,$user_updated,$dept_id){
+        $hasil=$this->db->query("UPDATE ".$this->db->dbprefix('grouptime')." SET group_name = '$group_name', work_time ='$work_time', date_updated = '$date_updated' , user_updated = '$user_updated',department_id='$dept_id'  WHERE id = '$edit_id'");
         return $hasil;
     }
 
     public function get_departement(){
+        global $items;
         $this->db->from('departement');
         $query = $this->db->get();
 
@@ -140,6 +143,14 @@ class General_model extends CI_Model {
         $this->db->select('IFNULL(b.id,a.id) as id, IFNULL(b.label ,a.label) as label');
         $this->db->from('departement a');
         $this->db->join('departement b','on b.parent = a.id','LEFT');
+        $this->db->where(' a.parent=0');
+        $this->db->order_by("a.label", "asc");
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function departementHead(){
+        $this->db->from('departement a');
         $this->db->where(' a.parent=0');
         $this->db->order_by("a.id", "asc");
         $query = $this->db->get();
@@ -187,6 +198,118 @@ class General_model extends CI_Model {
 
     public function del_departement_list($id){
         $hasil=$this->db->query("DELETE FROM ".$this->db->dbprefix('departement')." WHERE id='$id'");
+         //$this->db->query("ALTER TABLE ".$this->db->dbprefix('departement')." AUTO_INCREMENT 1");
         return $hasil;
+    }
+
+
+    public function addEvent($title,$start,$end,$className,$grouptime_id){
+       $this->db->query("INSERT INTO ".$this->db->dbprefix('events')." (id,grouptimeID,title,description,color,start,end,allDay,className)
+                                    VALUES('','$grouptime_id','$title','','','$start','$end','','$className')");
+        return $this->db->insert_id();
+    }
+
+    public function getEvent(){
+        $this->db->from('events');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function delEvent($id){
+        $this->db->where('id', $id);
+        $this->db->delete('events');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function updEvent($id,$title,$start,$className)
+    {
+        $this->db->query("UPDATE ".$this->db->dbprefix('events')." SET title = '$title', start ='$start', className = '$className' WHERE id = '$id'");
+       return $this->db->insert_id();
+    }
+
+
+    public function allowances()
+    {
+        $this->db->from('allowance_type');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function addAllowance($type,$name,$description,$amount,$from_employee,$from_company,$start,$end,$pay,$date_created,$user_created,$mk1,$mk2)
+    {
+        return $this->db->query("INSERT INTO ".$this->db->dbprefix('allowance_type')." 
+            (id,type,allowance_name,description,amount,from_emp,from_comp,from_date,end_date,pay,mk1,mk2,date_created,user_created,date_updated,user_updated) 
+            VALUES('','$type','$name','$description','$amount','$from_employee','$from_company','$start','$end','$pay','$mk1','$mk2','$date_created','$user_created','','')");
+        
+    }
+    public function getAllowance($id){
+        $this->db->select('id,type,allowance_name,description,pay,amount,from_emp,from_comp,from_date,end_date,mk1,mk2');
+        $this->db->from('allowance_type');
+        $this->db->where('id',$id);
+
+        $query = $this->db->get();
+
+        $hasil = array();
+        if($query->num_rows()>0){
+            foreach ($query->result() as $data) {
+                $hasil=array(
+                    'id'                => $data->id,
+                    'type'              => $data->type,
+                    'allowance_name'    => $data->allowance_name,
+                    'description'       => $data->description,
+                    'pay'               => $data->pay,
+                    'amount'            => $data->amount,
+                    'from_employee'     => $data->from_emp,
+                    'from_company'      => $data->from_comp,
+                    'mk1'               => $data->mk1,
+                    'mk2'               => $data->mk2,
+                    'starts'             => date('m/d/Y',strtotime($data->from_date)),
+                    'ends'               => date('m/d/Y',strtotime($data->end_date))
+                    );
+            }
+        }
+        return $hasil;
+    }
+
+    public function editAllowances($id,$type,$name,$description,$amount,$from_employee,$from_company,$start,$end,$pay,$date_updated,$user_updated,$mk1Edit,$mk2Edit){
+        $hasil=$this->db->query("UPDATE ".$this->db->dbprefix('allowance_type')." SET type = '$type', allowance_name ='$name', description = '$description' , amount = '$amount',from_emp='$from_employee', from_comp = '$from_company', from_date = '$start', end_date = '$end', pay = '$pay',mk1='$mk1Edit',mk2='$mk2Edit', date_updated= '$date_updated', user_updated = '$user_updated'  WHERE id = '$id'");
+        return $hasil;
+    }
+
+    public function delAllowance($id){
+        $hasil=$this->db->query("DELETE FROM ".$this->db->dbprefix('allowance_type')." WHERE id='$id'");
+        //$this->db->query("ALTER TABLE ".$this->db->dbprefix('allowance_type')." AUTO_INCREMENT 1");
+        return $hasil;
+    }
+
+    public function allowancesSelect($id)
+    {
+        $this->db->from('allowance_type a');
+        $this->db->join('allowances b','on a.id = b.allowance_type_id');
+        $this->db->where('employee_id',$id);
+        $this->db->order_by('a.allowance_name','asc');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+     public function allowancesDiSelect($id)
+    {
+        $sql = ("SELECT * from ".$this->db->dbprefix('allowance_type')." 
+            WHERE id NOT IN  
+            (SELECT allowance_type_id FROM ".$this->db->dbprefix('allowances')." where employee_id = '$id') ORDER BY allowance_name asc");
+        $query = $this->db->query($sql);
+       return $query->result_array();
+    }
+
+
+    public function getStatus(){
+        $query = $this->db->from('status')->get();
+        return $query->result_array();
+    }
+
+    public function getPosition(){
+        $query = $this->db->from('positions')->get();
+        return $query->result_array();
     }
 }

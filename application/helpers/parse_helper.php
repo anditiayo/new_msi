@@ -96,7 +96,65 @@ function umur($usia) {
 
     $age['seconds'] = $diff;
 
-    return $age['years'].' Years and '.$age['months'].' Month';
+    return $age['years'].' Years and '.$age['months'].' Month '.$age['days']. ' Days';
+
+}
+
+function masa($tgl) {     
+    $year = date("Y", strtotime($tgl));
+    $month = date("m", strtotime($tgl));
+    $day = date("d", strtotime($tgl));
+    $birthday = strtotime($year.'-'.$month.'-'.$day);
+    $current_time = time();
+    $curr['month'] = date('n', $current_time);
+    $curr['lastmonth'] = $curr['month'] - 1;
+    $curr['year'] = date('Y', $current_time);
+    $curr['lastyear'] = $curr['year'] - 1;
+    $curr['day'] = date('j', $current_time);
+
+    $diff = $current_time - $birthday;
+    $age['years'] = intval($diff/31556926);
+    $diff = $diff - (31556926 * $age['years']);
+    if($curr['month'] > $month) {
+        $age['months'] = $curr['month'] - $month;
+    if($curr['day'] < $day) {
+        $age['months']--;
+        $month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
+    } else {
+        $month_temp = strtotime($curr['year'].'-'.$curr['month'].'-'.$day);
+    }
+        $diff = $current_time - $month_temp;
+    } elseif($curr['month'] == $month) {
+    if($curr['day'] >= $day) {
+        $age['months'] = 0;
+    } else {
+        $age['months'] = 11;
+        $month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
+        $diff = $current_time - $month_temp;
+    }
+    } else {
+        $age['months'] = $curr['month'] - $month + 12;
+    if($curr['day'] < $day) {
+        $age['months']--;
+        $month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
+    } else {
+        $month_temp = strtotime($curr['year'].'-'.$curr['month'].'-'.$day);
+    }
+        $diff = $current_time - $month_temp;
+    }
+
+    $age['days'] = intval($diff/86400);
+    $diff = $diff - (86400 * $age['days']);
+
+    $age['hours'] = intval($diff/3600);
+    $diff = $diff - (3600 * $age['hours']);
+
+    $age['minutes'] = intval($diff/60);
+    $diff = $diff - (60 * $age['minutes']);
+
+    $age['seconds'] = $diff;
+
+    return $age['years'];
 
 }
 
@@ -298,8 +356,10 @@ function isNumber($c) {
 function get_menu($items,$class = 'dd-list') {
 
     $html = "<ol class=\"".$class."\" id=\"menu-id\">";
+    if($items == NULL){
 
-    foreach($items as $key=>$value) {
+    }else{
+            foreach($items as $key=>$value) {
         $html.= '<li class="dd-item dd3-item" data-id="'.$value['id'].'" >
                     <div class="dd-handle dd3-handle">Drag</div>
                     <div class="dd3-content"><span id="label_show'.$value['id'].'">'.$value['label'].'</span> 
@@ -315,6 +375,9 @@ function get_menu($items,$class = 'dd-list') {
     $html .= "</ol>";
 
     return $html;
+  
+    }
+
 
 }
 
@@ -332,4 +395,19 @@ function parseJsonArray($jsonArray, $parentID = 0) {
     $return = array_merge($return, $returnSubSubArray);
   }
   return $return;
+}
+
+function timeCount($masuk,$keluar,$code){
+    $CI = get_instance();
+    $CI->load->model('Employee_model');
+    $return = $CI->Employee_model->getInfo($masuk,$keluar,$code);
+
+    return $return;
+   
+}
+
+function decimalHours($WORKHOUR)
+{
+    $hms = explode(":", $WORKHOUR);
+    return ($hms[0] + ($hms[1]/60) + ($hms[2]/3600));
 }

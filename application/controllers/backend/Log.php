@@ -112,10 +112,13 @@ class Log extends Backend
 			{
 				$this->data['lang_group_plural'] = $this->lang->line('group');
 			}
+			$status			= $this->input->post('status');
 
-			
-			
+			$this->Log_data->updateLog($id,$status);
 			$detail  = $this->Log_data->get_log_by_id($id);
+			
+
+
 			$this->data['log']     		= 'class="active"';
 			$this->data['detail']     	= $detail;
 			$this->data['nbr_user']     = $count_user;

@@ -13,6 +13,7 @@
         this.$calendarObj = null
     };
 
+    var base_url = 'http://localhost/smarthr2/';
     // handler for clicking on an empty calendar field
     CalendarApp.prototype.onSelect = function (start, end, allDay) {
         var $this = this;
@@ -31,6 +32,7 @@
             $this.$eventModal.modal();
             // fill in the values
             $this.$eventModal.find('#event-title').val(calEvent.title);
+            $this.$eventModal.find('#event-id').val(calEvent.id);
             $this.$eventModal.find('#event-start').val($.fullCalendar.formatDate(calEvent.start, "YYYY-MM-DD HH:mm:ss"));
             $this.$eventModal.find('#event-end').val(calEvent.end ? $.fullCalendar.formatDate(calEvent.end, "YYYY-MM-DD HH:mm:ss") : '');
             if(calEvent.className.length) $this.$eventModal.find('input[name="category"][value="'+calEvent.className+'"]').prop("checked", true);
@@ -43,18 +45,24 @@
                 // execute the query to remove the event from the database
                 // for example
                 
-                /*$.post('remove-event.php',{id: calEvent.id}).then(function(data){
+/*                $.post(base_url+'backend/employee/onDelete',{id: calEvent.id}).then(function(data){
                   // delete event
                 }).fail(function(){
                   alert('error');
                 });*/
-                
+
+                $.post(base_url+'backend/employee/onDelete',{                            
+                    id: calEvent.id
+                }, function(result){
+                    toastr.success('event successfully deleted');
+                });
+
                 // Remove Event
                 $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
                     return (ev._id == calEvent._id);
                 });
 
-                toastr.success('event successfully deleted');
+                //toastr.success('event successfully deleted');
                 $this.$eventModal.modal('hide');
             });
 
@@ -62,11 +70,13 @@
             $this.$eventModal.find('form').unbind('submit').on('submit', function () {
                 if($('#eventForm').valid()) {
                     var event = {};
+                    calEvent.id = event.id = $(this).find("#event-id").val();
                     calEvent.title = event.title = $(this).find("#event-title").val();
                     calEvent.start = event.start = $(this).find("#event-start").val();
+                    calEvent.end = event.end = $(this).find("#event-end").val();
                     if($(this).find("#event-end").val()) calEvent.end = event.end = $(this).find("#event-end").val();
                     
-                    calEvent.className = [$(this).find('input[name="category"]:checked').val()];
+                    calEvent.className = event.className = [$(this).find('input[name="category"]:checked').val()];
                     calEvent.allDay = event.allDay = $(this).find("#event-allDay").prop('checked');
                     // execute the query to update the event in the database
                     // for example
@@ -77,9 +87,17 @@
                         if(revertFunc) revertFunc();
                     });*/
 
-                    // update event
-                    $this.$calendarObj.fullCalendar('updateEvent', calEvent);
-                    toastr.success('event successfully updated');
+                    $.post(base_url+'backend/employee/onUpdate',{                            
+                    event: event
+                    }, function(result){
+                        // update event
+                       // alert(result);
+                        $this.$calendarObj.fullCalendar('updateEvent', calEvent);
+                        toastr.success('event successfully updated');
+                    });
+
+                    
+                    
 
                     $this.$eventModal.modal('hide');
                 }
@@ -105,13 +123,17 @@
         }).fail(function(){
           alert('error');
         });*/
-        
-        // Create event
-        copiedEventObject.id = Math.random();;
-        $this.$calendarObj.fullCalendar('renderEvent', copiedEventObject, true); // stick? = true
-        
-        toastr.success('event successfully created');
 
+        $.post(base_url+'backend/employee/onDrop',{                            
+            event: copiedEventObject
+        }, function(result){
+           
+            copiedEventObject.id = result;
+            $this.$calendarObj.fullCalendar('renderEvent', copiedEventObject, true); // stick? = true
+            toastr.success('event successfully created');
+        });
+        // Create event
+       
         // is the "remove after drop" checkbox checked?
         if ($('#drop-remove').is(':checked')) {
             // if so, remove the element from the "Draggable Events" list
@@ -148,12 +170,13 @@
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay,listWeek'
             },
-            events: APP.ASSETS_PATH+'demo/server/events.php',
+            events: base_url+'backend/employee/getEvents',
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar
             navLinks: true, // can click day/week names to navigate views
             eventLimit: true, // allow "more" link when too many events
             selectable: true,
+            displayEventTime: false,
             drop: function(date) { $this.onDrop($(this), date); },
             select: function (start, end, allDay) { $this.onSelect(start, end, allDay); },
             eventClick: function(calEvent, jsEvent, view) { $this.updateEvent(calEvent); },
@@ -223,9 +246,17 @@
         }).fail(function(){
           alert('error');
         });*/
+
+         $.post(base_url+'backend/employee/onDrop',{                            
+            event: newEvent
+        }, function(result){
+            newEvent.id = result;
+            CalendarApp.$calendarObj.fullCalendar('renderEvent', newEvent, true); // stick? = true
+            toastr.success('event successfully created');
+        });
         
         // Create Event
-        CalendarApp.$calendarObj.fullCalendar('renderEvent', newEvent, true); // stick? = true
+       
         
         toastr.success('event successfully created');
         CalendarApp.$modal.modal('hide');
