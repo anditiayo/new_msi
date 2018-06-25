@@ -86,7 +86,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                          <li>
                             <a href="<?php echo base_url();?>backend/employee/schedule"> Calendar Events</a>
                         </li>  
-                       
+                        <li>
+                            <a href="<?php echo site_url('backend/employee/leave'); ?>">Leaves </a>
+                        </li>
                     </ul>
                 </li>
                  <li <?php if(!empty($report)){ echo $report; } ?> >
@@ -97,6 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li>
                             <a href="<?php echo site_url('backend/report'); ?>">Calculation </a>
                         </li>
+                        
                         
                     </ul>
                 </li>

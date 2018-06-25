@@ -165,9 +165,12 @@
                                 z-index: 1;
                             }
                         </style>
-
+                         <?php  if ($bydate != ''){  ?>
                         <div id="innerdiv">
+
+                            
                             <table class="table table-hover" border='0'>
+                               
                                 <thead class="thead-default">
                                     <tr>
                                         <th class='headcol-1'>NO</th>
@@ -200,6 +203,8 @@
                                             global $countErr;
                                             global $countJam;
                                             global $SALARY;
+
+                                           
                                             foreach ($bydate as $key1 => $param1) {
                                                 echo "<tr style='overflow: visible;'>";
                                                 echo "<td class='headcol-1'>";
@@ -243,14 +248,27 @@
                                                         $SHIFT3     += $param3['SHIFT3'];
                                                         $SALARY     = $param3['SALARY'];
                                                         $RECRUITED  = $param3['RECRUITD'];
-                                                        $jam  = decimalHours($param3['WORKHOUR']);
+                                                       
+                                                        if($param3['WORKHOUR'] == ''){
+                                                            $jam = 0;
+                                                            $status = 'M';
+                                                            $background = 'color:red;';
+                                                        }else if($param3['WORKHOUR'] == '00:00:00'){
+                                                            $jam = 0;
+                                                            $status = 'EDIT';
+                                                            $background = 'background:blue;color:white;';
+                                                        }else{
+                                                            $jam  = decimalHours($param3['WORKHOUR']);
+                                                            $background = 'color:red;';
+                                                        }
+                                                       
                                                         if($jam == 0){
-                                                            echo '<a style="font-size:13px; text-align: center;padding:2px; background:blue;color:white"; href="log?tgl='.$tgl.'&pin='.$code.'" target="_blank">EDIT</a>';
+                                                            echo '<a style="font-size:13px; text-align: center;padding:2px;'.$background.'" href="log?tgl='.$tgl.'&pin='.$code.'" target="_blank">'.$status.'</a>';
                                                             $countErr += 1;
                                                         }else{
                                                             echo $jam;
                                                             $countJam += $jam;
-                                                        } 
+                                                        }
                                                     }
                                                     echo '</td>';
                                                    
@@ -261,8 +279,8 @@
                                                     $TOTALHARI = 0;
                                                 }else{
                                                     $countHari = $countHari;
-                                                    $GAJIPERHARI = $SALARY/$countHari;
-                                                    $TOTALHARI = $countHari-$countErr;
+                                                    $GAJIPERHARI = $SALARY/30;
+                                                    $TOTALHARI = $countHari;
                                                 }
                                                 $MASA = masa($RECRUITED);
                                                 if($MASA >= 10){
@@ -272,8 +290,15 @@
                                                 }else{
                                                     $TUNJANGAN = 0;
                                                 }
-                                                $SHIFT3 = $SHIFT3*3000;
-                                                $GAJI = $TOTALHARI*$GAJIPERHARI;
+
+                                                if($countHari > 0){
+                                                    $TUNJANGAN = $TUNJANGAN*1;
+                                                }else{
+                                                    $TUNJANGAN =  $TUNJANGAN*0;
+                                                }
+
+                                                $SHIFT3 = $SHIFT3;
+                                                $GAJI = $SALARY-($GAJIPERHARI*$countErr);
                                                 $AWAL = $GAJI+$TUNJANGAN+$SHIFT3;
 
                                                 echo '<td>'.$countHari.'</td>';
@@ -288,229 +313,18 @@
                                                 echo "</tr>";
                                                 $hitung++; 
                                             }
-/*                                          $hitung = 1;
-                                            global $RECRUITED;
-                                            global $SHIFT3;
-                                            global $countErr;
-                                            global $countJam;
-                                            global $salary;
-                                            foreach ($bydate as $key1 => $param1) {
-                                                echo "<tr style='overflow: visible;'>";
-                                                echo "<td class='headcol-1'>";
-                                                    echo $hitung;
-                                                echo "</td>";
-                                                echo "<td class='headcol2' >";
-                                                    $code = $key1;
-                                                    echo sprintf("%'04d", $code);     
-                                                echo "</td>";
-                                                echo "<td class='headcol'>";
-                                                    echo get_employee($code);
-                                                echo '</td>'; 
-                                                //echo '<td>'.count($param1).'</td>';
-                                                $countHari  = 0;
-                                                foreach ($param1 as $key2 => $param2) {
-                                                    $time   = $key2;
-                                                    $sun    = date("D", strtotime($time));
-                                                    $day    = date("d", strtotime($time));
-                                                    $d      = date("d", strtotime($start));
-                                                    if($sun == "Sun"){
-                                                        $sun = "background:pink";    
-                                                    }else{
-                                                        $sun = "background:#FFF";
-                                                    }
-                                                    echo '<td class="long" style="text-align:center;padding:0.5px; '.$sun.'">';
-                                                    if($day == $d)
-                                                    {
-                                                      
-                                                        $countJam  = 0;
-                                                        $countErr  = 0;
-                                                        $SHIFT3    = 0;
-                                                    }
+                                           
 
-
-                                                     $countHari   += 1;
-                                                    foreach ($param2 as $key3 => $param3) {
-                                                        $tgl        = date("Ymd", strtotime($param3['DATE']));
-
-                                                        
-                                                        $REAL_IN      = date("H:i", strtotime($param3['REAL_IN']));
-                                                        $WORKHOUR      = $param3['WORKHOUR'];
-                                                        if($WORKHOUR == 'ERROR1'){
-                                                            $countErr += 1;
-                                                            echo '<a href="log?tgl='.$tgl.'&pin='.$code.'" target="_blank">EDIT</a>';
-                                                        }else if($WORKHOUR == 'ERROR2'){
-                                                           $countErr += 1;
-                                                            echo '<a href="log?tgl='.$tgl.'&pin='.$code.'" target="_blank">EDIT</a>';
-                                                        }else if($WORKHOUR == 'ERROR3'){
-                                                            $countErr += 1;
-                                                            echo '<a href="log?tgl='.$tgl.'&pin='.$code.'" target="_blank">EDIT</a>';
-                                                        }else{
-                                                        echo $jam = decimalHours($WORKHOUR);
-                                                           //echo $WORKHOUR;
-                                                           $countJam += $jam;
-                                                        }
-                                                        $salary      = $param3['SALARY'];
-                                                        $RECRUITED   = $param3['RECRUITED'];
-                                                        $SHIFT   = $param3['TIMENAME'];
-                                                        if($SHIFT == 'SHIFT3'){
-                                                            $SHIFT3 += 1;
-                                                        }
-                                                        
-                                                    }
-                                                   
-                                                }
-                                                $MASA = masa($RECRUITED);
-                                                if($MASA >= 10){
-                                                    $TUNJANGAN = 120000;
-                                                }else if( $MASA >= 5 && $MASA <= 10){
-                                                    $TUNJANGAN = 60000;
-                                                }else{
-                                                    $TUNJANGAN = 0;
-                                                }
-                                                $TOTALHARI = $countHari-$countErr;
-                                                $GAJIPERHARI = $salary/$countHari;
-                                                $GAJI = $TOTALHARI*$GAJIPERHARI+$TUNJANGAN;
-                                                
-
-                                                echo '<td>'.$TOTALHARI.'</td>';
-                                                echo '<td>'.$SHIFT3.'</td>';
-                                                echo '<td>'.number_format($GAJIPERHARI).'</td>';
-                                                echo '<td>'.number_format($TUNJANGAN).'</td>';
-                                                echo '<td>'.$countJam.'</td>';
-                                                
-                                                
-                                                echo '<td>'.number_format($GAJI).'</td>';
-
-                                                $hitung++; 
-                                            }*/
-
-                                            /*$hitung = 1;
-                                            $total_kerja = 0;
-                                            $IN = 0;
-                                            $OUT = 0;
-                                            $SF = 0;
-                                            foreach ($bydate as $key => $value)
-                                            {
-                                                echo "<tr style='overflow: visible;'>";
-                                                echo "<td class='headcol-1'>";
-                                                    echo $hitung;
-                                                echo "</td>";
-                                                echo "<td class='headcol2' >";
-                                                    $code = $key;
-                                                    echo sprintf("%'04d", $code);     
-                                                echo "</td>";
-                                                echo "<td class='headcol'>";
-                                                    echo get_employee($code);
-                                                echo '</td>'; 
-                                                echo '<td>'.count($value).'</td>';
-
-                                                foreach ($value as $keys => $val)
-                                                {
-                                                    $time   = $keys;
-                                                    $sun    = date("D", strtotime($time));
-                                                    $day    = date("d", strtotime($time));
-                                                    if($sun == "Sun"){
-                                                        $sun = "background:pink";    
-                                                    }else{
-                                                        $sun = "background:#FFF";
-                                                    }
-
-
-
-                                                    echo '<td class="long" style="padding:2px; '.$sun.'">';
-
-                                                    $d      = date("d", strtotime($start));
-                                                    if($day == $d)
-                                                    {
-                                                        $IN     = 0;
-                                                        $OUT    = 0;
-                                                        $count_in  = 0;
-                                                        $count_out = 0;
-                                                        $count_sf  = 0;
-                                                    }
-                                                    foreach ($val as $keyes => $values) {
-
-                                                    echo '<table style="margin:0">';
-                                                    echo '<tr>';
-                                                        $masuk      = date("H:i", strtotime($values['masuk']));
-                                                        $keluar     = date("H:i", strtotime($values['keluar']));
-                                                        $tgl        = date("Ymd", strtotime($values['tgl']));
-                                                        $HM         = explode(":", $masuk);
-                                                        $HK         = explode(":", $keluar);
-
-                                                        timeCount($masuk,$keluar,$code);
-
-                                                        if($masuk == '01:00' && 07 >= $HK[0] && $HK[0]< 15 ){
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:blue;color:white";>';
-                                                            echo 'SF'.$count_sf += 0.5;
-                                                            echo '</td>';
-
-                                                        }elseif($masuk == '01:00'){
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:red;color:white";>';
-                                                            echo '<a href="log?tgl='.$tgl.'&pin='.$code.'" target="_blank">ERR!</a>';
-                                                            echo '</td>';
-                                                        }else{
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:green;color:white";>';
-                                                            echo $masuk;
-
-                                                            echo '</td>';
-                                                            $count_in += 0.5;
-                                                        }
-
-                                                        if( $keluar == '01:00' &&  $HM[0] > 17  ){
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:blue;color:white";>';
-                                                            echo 'SF'.$count_sf += 0.5;
-                                                            echo '</td>';
-
-                                                        }elseif($keluar == '01:00'){
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:red;color:white";>';
-                                                             echo '<a href="log?tgl='.$tgl.'&pin='.$code.'" target="_blank">ERR!</a>';
-                                                            echo '</td>';
-                                                        }elseif($HM[0] >= 17 && $HK [0] >= 06 ){
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:yellow;">';
-                                                            echo $keluar;
-                                                            echo '</td>';
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:blue;color:white";>';
-                                                            echo 'SF'.$count_sf += 1;
-                                                            echo '</td>';
-                                                            $count_out += 0.5;
-
-                                                        }else{
-                                                            echo '<td align="right" style="font-size:13px; text-align: center;padding:2px; background:yellow;">';
-                                                            echo $keluar;
-                                                            echo '</td>';
-                                                            $count_out += 0.5;
-                                                        }
-                                                echo '</tr>';
-                                                echo '</table>';
-                                                echo '</td>';
-                                                if(!empty($count_in)){
-                                                   $IN =$count_in;    
-                                                }
-
-                                                if(!empty($count_out)){
-                                                   $OUT =$count_out;    
-                                                }
-                                                }
-
-                                                if(!empty($count_sf)){
-                                                    $SF = $count_sf;  
-                                                }else{
-                                                    $SF = 0;  
-                                                }
-
-                                                $total_kerja = $OUT+$IN;
-                                            }
-                                            echo '<td>'.$total_kerja.'</td>';       
-                                            echo '<td>'. $SF .'</td>'; 
-                                            echo "</tr>";
-                                        $hitung++; 
-                                    }*/
+                                           
                                 ?>
 
                                 </tbody>
                             </table>
+
                         </div>
+                         <?php  }else{
+                                                ECHO 'select the filter';
+                                            } ?>
                     </div>
             </div>
         </div>

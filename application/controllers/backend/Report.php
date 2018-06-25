@@ -39,11 +39,20 @@ class Report extends Backend
 			$departement 	= $this->input->post('departement');
 			$status			= $this->input->post('status');
 
-			$start_date 	= date("Y-m-d", strtotime($start));
-			$end_date 		= date("Y-m-d", strtotime($end));
-
 			
 
+			
+			if ($start != NULL AND $end != NULL){
+				$start_date 	= date("Y-m-d", strtotime($start));
+				$end_date 		= date("Y-m-d", strtotime($end));
+				$this->data['start']     	= $start;
+				$this->data['end']     		= $end;
+			}else{
+				$start_date = NULL;
+				$end_date 	= NULL;
+				$this->data['start']     	= NULL;
+				$this->data['end']     		= NULL;
+			}
 			$this->data['log']     		= $this->Log_data->get_log($start_date,$end_date);
 			$this->data['departement'] 	= $this->General_model->departementHead();
 			
@@ -54,8 +63,7 @@ class Report extends Backend
 
 			$this->data['allowance']    = $this->General_model->allowances();
 				
-			$this->data['start']     	= $start;
-			$this->data['end']     		= $end;
+			
 			
 			$this->data['report']     	= 'class="active"';
 	        $this->data['bydate'] 		= $this->Log_data->get_log_by_date($start_date,$end_date,$status);

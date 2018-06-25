@@ -64,10 +64,6 @@ class Log extends Backend
 
 				$this->data['log_data']     = $this->Log_data->get_log_pin($start_date,$end_date,$pin);
 			}
-
-			
-			
-				
 			$this->data['start']     	= $start;
 			$this->data['end']     		= $end;
 			$this->data['logs']     	= 'class="active"';
@@ -129,5 +125,22 @@ class Log extends Backend
 			$this->render();
 			
 		}
+	}
+
+	public function add_log_manual(){
+		
+		$pin		= $this->input->post('pin');
+		$date		= $this->input->post('date');
+		$date		= date("Y-m-d", strtotime($date));
+		$tgl		= date("Ydm", strtotime($date));
+		$time		= $this->input->post('time');
+		$time		= date("H:i:s", strtotime($time));
+		$status		= $this->input->post('status');
+		$day      	= date('w',strtotime($date));
+		$date_time  = date('Y-m-d H:i:s',strtotime("$date $time"));
+		$data 		= $this->Log_data->add_log_manual($pin,$date_time,$date,$time,$status,$day);
+		var_dump($data);
+	
+		redirect('backend/log?tgl='.$tgl.'&pin='.$pin);
 	}
 }

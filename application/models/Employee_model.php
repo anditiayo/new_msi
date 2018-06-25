@@ -19,7 +19,7 @@ class Employee_model extends CI_Model {
 
         $this->db->select('a.employee_id as employee_id,
                             a.first_name as first_name,
-                            CONCAT(a.mid_name,a.last_name) as last_name,
+                            a.last_name as last_name,
                             a.email as email,
                             a.place_of_birth as pob,
                             a.birthday as birthday,

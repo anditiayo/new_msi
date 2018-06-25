@@ -21,7 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <label>Date</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <input class="form-control" id="daterange_3" name="date" type="text" value="<? echo date("d/m/Y", strtotime($object['tgl'])); ?>">
+                                        <input class="form-control" id="daterange_3" name="date" type="text" value="<? echo date("m/d/Y", strtotime($object['tgl'])); ?>">
                                     </div>
                                 </div>
 
