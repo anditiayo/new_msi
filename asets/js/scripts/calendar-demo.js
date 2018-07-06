@@ -13,7 +13,10 @@
         this.$calendarObj = null
     };
 
-    var base_url = 'http://localhost/smarthr2/';
+    var getUrl = window.location;
+    
+    var base_url =  getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+
     // handler for clicking on an empty calendar field
     CalendarApp.prototype.onSelect = function (start, end, allDay) {
         var $this = this;
@@ -51,7 +54,7 @@
                   alert('error');
                 });*/
 
-                $.post(base_url+'backend/employee/onDelete',{                            
+                $.post(base_url+'/backend/employee/onDelete',{                            
                     id: calEvent.id
                 }, function(result){
                     toastr.success('event successfully deleted');
@@ -87,7 +90,7 @@
                         if(revertFunc) revertFunc();
                     });*/
 
-                    $.post(base_url+'backend/employee/onUpdate',{                            
+                    $.post(base_url+'/backend/employee/onUpdate',{                            
                     event: event
                     }, function(result){
                         // update event
@@ -124,7 +127,7 @@
           alert('error');
         });*/
 
-        $.post(base_url+'backend/employee/onDrop',{                            
+        $.post(base_url+'/backend/employee/onDrop',{                            
             event: copiedEventObject
         }, function(result){
            
@@ -170,7 +173,7 @@
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay,listWeek'
             },
-            events: base_url+'backend/employee/getEvents',
+            events: base_url+'/backend/employee/getEvents',
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar
             navLinks: true, // can click day/week names to navigate views
@@ -247,7 +250,7 @@
           alert('error');
         });*/
 
-         $.post(base_url+'backend/employee/onDrop',{                            
+         $.post(base_url+'/backend/employee/onDrop',{                            
             event: newEvent
         }, function(result){
             newEvent.id = result;

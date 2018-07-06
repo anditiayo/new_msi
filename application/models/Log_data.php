@@ -17,9 +17,64 @@ class Log_data extends CI_Model {
 		return $query->result_array();
 	}
 
-	 public function employeeSearch($status){
-		$this->db->from('employees');
-		$this->db->where("status = '$status' order by employee_id asc");
+	 public function employeeSearch($status,$departement){
+	 	if($status == NULL && $departement != NULL){
+	 		$stat = "CASE WHEN a.status != 9 THEN
+						c.id = $departement
+					END";
+	 	}else if($status != NULL && $departement == NULL){
+	 		$stat = "
+	 			CASE WHEN a.status != 9 THEN
+					a.status = $status
+				END		
+	 		";
+	 	}else if($status != NULL && $departement != NULL){
+	 		$stat = "CASE WHEN a.status != 9 THEN
+					a.status = $status and c.id = $departement
+					END	
+					";
+	 	}else{
+	 		$stat ="CASE WHEN a.status != 9 THEN
+						a.employee_id != NULL
+					END";
+	 	}
+		$this->db->select('a.id as id,
+							a.employee_id as employee_id,
+							a.first_name as first_name,
+							a.last_name as last_name,
+							a.email as email,
+							a.place_of_birth as place_of_birth,
+							a.birthday as birthday,
+							a.gender as gender,
+							a.address1 as address1,
+							a.address2 as address2,
+							a.province_id_1 as province_id_1,
+							a.province_id_2 as province_id_2,
+							a.city_id_1 as city_id_1,
+							a.city_id_2 as city_id_2,
+							a.district_id_1 as district_id_1,
+							a.district_id_2 as district_id_2,
+							a.pos_code1 as pos_code1,
+							a.pos_code2 as pos_code2,
+							a.phone1 as phone1,
+							a.phone2 as phone2,
+							a.npwp as npwp,
+							a.bpjstk as bpjstk,
+							a.bpjs as bpjs,
+							a.regular as regular,
+							a.user_created as user_created,
+							a.date_created as date_created,
+							a.date_updated as user_updated,
+							a.user_updated as user_updated,
+							a.`status` as `status`,
+							a.position as position,
+							a.join_in as join_in');
+		
+		$this->db->from('employees a');
+		$this->db->join('groupwork b','on a.employee_id = b.employee_id');
+		$this->db->join('departement c','on b.grouptime_id = c.id');
+		$this->db->where("$stat");
+		$this->db->order_by("a.employee_id", "asc");
 		$query = $this->db->get();
 		return $query->result_array();
 	}
@@ -57,10 +112,10 @@ class Log_data extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function get_log_by_date($start_date,$end_date,$status){
+	public function get_log_by_date($start_date,$end_date,$status,$departement){
 		
 		 if ($start_date != NULL AND $end_date != NULL){
-		 		$emp = $this->employeeSearch($status);
+		 		$emp = $this->employeeSearch($status,$departement);
 				$results = array();
 				$codes = array();
 				$array = array();
@@ -85,6 +140,49 @@ class Log_data extends CI_Model {
 		
 		
 		
+	}
+
+	public function getDates($code,$date,$sun){
+		$query = $this->db->query("call GETDETAILSEMPLOYEE(".$code.",'$date')");
+		mysqli_next_result( $this->db->conn_id );
+		foreach ($query->result() as $row)
+        {	
+        		$tgl        = date("Ymd", strtotime($row->DATE));
+        		$NICKSTATUS = $row->NICKSTATUS;
+        		$EMPID 		= $row->EMPID;
+        		if(!empty($EMPID)){
+	        		if(!empty($row->WORKHOUR)){
+	        			if($row->WORKHOUR == '00:00:00'){
+	        				$status 	= 'EDIT';
+	                        $background = 'background:blue;color:white;';
+	                        $links 		= 'log';
+	        				$link 		= '<a style="font-size:13px; text-align: center;padding:2px;'.$background.'" href="'.$links.'?tgl='.$tgl.'&pin='.$code.'" target="_blank">'.$status.'</a>';
+	        				echo '<td style="text-align: center; '.$sun.'">'.$link.'</td>';
+	        			}else{
+	        				echo '<td style="text-align: center; '.$sun.'">'.decimalHours($row->WORKHOUR).'</td>';
+	        			}
+	                	
+	        		}else{
+	        			if(!empty($NICKSTATUS)){
+	                        $status 	= $NICKSTATUS;
+	                        $background = 'color:red;';
+	                        $links 		= 'employee/leave';
+	        				$link 		= '<a style="font-size:13px; text-align: center;padding:2px;'.$background.'" href="'.$links.'?tgl='.$tgl.'&pin='.$code.'" target="_blank">'.$status.'</a>';
+	        				echo '<td style="text-align: center; '.$sun.'">'.$link.'</td>';
+	        			}else{
+	        				$status 	= 'M';
+	                        $background = 'color:red;';
+	                        $links 		= 'employee/leave';
+	        				$link 		= '<a style="font-size:13px; text-align: center;padding:2px;'.$background.'" href="'.$links.'?tgl='.$tgl.'&pin='.$code.'" target="_blank">'.$status.'</a>';
+	        				echo '<td style="text-align: center; '.$sun.'">'.$link.'</td>';
+	        			}
+	        		}     			
+        		}else{
+        			echo '<td style="text-align: center; '.$sun.'"></td>';
+        		}
+
+        }
+        return $query->free_result();
 	}
 
 	 public function get_employee_join(){

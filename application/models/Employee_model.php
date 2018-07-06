@@ -15,6 +15,12 @@ class Employee_model extends CI_Model {
 		return $query->result_array();
     }
 
+    public function leave_permit(){
+        $this->db->from('leave_permit');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_info($id){
 
         $this->db->select('a.employee_id as employee_id,
@@ -208,6 +214,95 @@ class Employee_model extends CI_Model {
         return $hasil;
     }
 
+    function getalldec($code,$num){
+
+        $this->db->select('b.amount as amount,b.from_emp as fromemp ,b.from_comp as fromcomp,b.pay as pay');
+        $this->db->from('allowances a');
+        $this->db->join('allowance_type b','on a.allowance_type_id = b.id');
+        $this->db->where("a.employee_id = '$code' and allowance_type_id = '$num' LIMIT 1");       
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function leavelist(){
+        $this->db->select('a.id as id,
+                            a.date as THEDATE,
+                            DATE_FORMAT(a.date, "%W") as DATEFORM,
+                            a.approval as APPROVE,
+                            a.approvaldate as APPROVEDATE,
+                            a.approveby as APPROVEBY,
+                            c.first_name as FIRSTNAME,
+                            c.last_name as LASTNAME,
+                            b.name as STATUSNAME,
+                            b.nickname as NICKNAME,
+                            b.nilai as NILAI,
+                            d.given as GIVEN,
+                            d.`use` as USED');
+        $this->db->from('leaves a, leave_permit b,employees c, leave_credit d');
+        $this->db->where("a.permit = b.id and a.employee_id = c.employee_id and a.employee_id = d.employee_id");   
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function add_leavelist($code,$permit,$date,$date_created,$user_created){
+         $hasil=$this->db->query("INSERT INTO ".$this->db->dbprefix('leaves')." (id,employee_id,permit,date,create_datetime,create_user)
+                                    VALUES('','$code','$permit','$date','$date_created','$user_created')");
+        return $hasil;
+    }
+
+    public function get_leavelist($id){
+        $this->db->select("
+                            a.id as id,
+                            a.employee_id as edit_code,
+                            a.permit as edit_permit,
+                            a.date as edit_date,
+                            CONCAT('[',b.nickname,'] ',b.name) as namepermit,
+                            b.id as permitid
+                        ");
+        $this->db->from('leaves a, leave_permit b');
+        $this->db->where("a.permit = b.id AND a.id = '$id'");  
+
+        $query = $this->db->get();
+
+        $hasil = array();
+        if($query->num_rows()>0){
+            foreach ($query->result() as $data) {
+                $hasil=array(
+                    'id'            => $data->id,
+                    'edit_code'     => $data->edit_code,
+                    'edit_permit'   => $data->edit_permit,
+                    'edit_date'     => $data->edit_date,
+                    'namepermit'    => $data->namepermit,
+                    'permitid'      => $data->permitid
+                    );
+            }
+        }
+        return $hasil;
+    }
+
+    function edit_leavelist($id,$code,$permit,$date,$date_updated,$user_updated){
+        $hasil=$this->db->query("UPDATE ".$this->db->dbprefix('leaves')." SET employee_id = '$code', permit ='$permit', update_datetime = '$date_updated' , update_user = '$user_updated', date='$date'  WHERE id = '$id'");
+        return $hasil;
+    }
+
+    public function del_leavelist($id){
+        $hasil=$this->db->query("DELETE FROM ".$this->db->dbprefix('leaves')." WHERE id='$id'");
+        return $hasil;
+    }
+
+    function overtimelist(){
+        $this->db->select('a.id, a.employee_id, CONCAT(b.first_name,b.last_name) as nama, a.date');
+        $this->db->from('overtime a, employees b');
+        $this->db->where('a.employee_id = b.employee_id');    
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function add_overtimelist($code,$date,$date_created,$user_created){
+         $hasil=$this->db->query("INSERT INTO ".$this->db->dbprefix('overtime')." (id,employee_id,date,date_created,user_created)
+                                    VALUES('','$code','$date','$date_created','$user_created')");
+        return $hasil;
+    }
 
 
     

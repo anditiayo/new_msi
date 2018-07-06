@@ -146,7 +146,7 @@
     </div> -->
     <div class="ibox">
         <div class="ibox-head">
-            <div class="ibox-title">Employee Detail</div>
+            <div class="ibox-title">Details</div>
         </div>
         <div class="ibox-body">
             <div class="row">
@@ -164,29 +164,41 @@
                     </div>
                     <div class="form-group mb-4">
                         <label>Status</label>
-                        <select class="selectpicker form-control">
-                            <option>Mustard</option>
-                            <option>Ketchup</option>
-                            <option disabled="">Disabled</option>
-                            <option>Mayonnaise</option>
-                            <option>Barbecue Sauce</option>
-                            <option>Salad Dressing</option>
-                            <option>Tabasco</option>
-                            <option>Salsa</option>
+                        <select class="form-control" name="status" id="status">
+                            <option selected disabled value="NULL"> == Select == </option>
+                            <?
+                                foreach ($status as $keys) {
+
+                                    if($key['status'] == $keys['status_id']){
+                                        $selected = 'selected';
+                                    }else{
+                                        $selected = '';
+                                    }
+                                        echo '<option value="'.$keys['status_id'].'" '.$selected.' >'.$keys['status'].'</option>';
+                                    }  
+                            ?>
                         </select>
+
+                        
                     </div>
 
                     <div class="form-group mb-4">
                         <label>Position</label>
-                        <select class="selectpicker form-control">
-                            <option>Mustard</option>
-                            <option>Ketchup</option>
-                            <option disabled="">Disabled</option>
-                            <option>Mayonnaise</option>
-                            <option>Barbecue Sauce</option>
-                            <option>Salad Dressing</option>
-                            <option>Tabasco</option>
-                            <option>Salsa</option>
+                        <select class="form-control" name="position">
+                            <option selected disabled value="NULL"> == Select == </option>
+                            <?
+                                foreach ($getPosition as $keys => $values) {
+                                    
+                                    if($key['positionID'] == $values['id']){
+                                        $selected = 'selected';
+                                    }else{
+                                        $selected = '';
+                                    }
+                                    
+                                    echo '<option value="'.$values['id'].'" '.$selected.'>'.$values['name'].'</option>';
+                                }
+                            ?>
+                          
                         </select>
                     </div>
 
@@ -212,12 +224,26 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group mb-4">
-                        <label>Work Attendace Group</label>
+                        <label>Regular Worktime</label>
                         
-                        <select class="selectpicker form-control">
+                        <select class="form-control" name="regular">
+                            <option selected disabled value="NULL"> == Select == </option>
                             <?php foreach($worklist as $key){ ?>
                                 <option value="<?=$key['id']?>" ><? echo $key['time_name'];?></option> 
                             <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label>Group Worktime</label>
+                        <select class="form-control" name="group">
+                            <option selected disabled value="NULL"> == Select == </option>
+                             <?
+                                foreach ($departement as $keys => $values) {
+
+                                    echo '<option value="'.$values['id'].'">'.$values['label'].'</option>';
+                                }
+                            ?>
                         </select>
                     </div>
 
@@ -227,7 +253,12 @@
                         <select class="multi-select" id="multi_select" multiple="multiple" name="multi_select[]">
                             <?
                                 foreach ($allowances as $key => $value) {
-                                    echo '<option value="'.$value['id'].'">'.$value['allowance_name'].'</option>';
+                                    if($value['type'] == 'Allowance'){
+                                        $allo = '<a style="background-color:blue;">['.substr($value['type'], 0,4).']</a>';
+                                    }else if($value['type'] == 'Deduction'){
+                                        $allo = '<i class="badge badge-success badge-pill">['.substr($value['type'], 0,4).']</i>';
+                                    }
+                                    echo '<option value="'.$value['id'].'">'.$value['allowance_name'].' '.$allo.'</option>';
                                 }
                             ?>
                         </select>

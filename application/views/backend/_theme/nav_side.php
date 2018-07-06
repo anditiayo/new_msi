@@ -89,6 +89,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li>
                             <a href="<?php echo site_url('backend/employee/leave'); ?>">Leaves </a>
                         </li>
+                        <li>
+                            <a href="<?php echo site_url('backend/employee/overtime'); ?>">Overtime </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('backend/employee/upload'); ?>">Upload</a>
+                        </li>
                     </ul>
                 </li>
                  <li <?php if(!empty($report)){ echo $report; } ?> >
@@ -98,6 +104,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <ul class="nav-2-level collapse">
                         <li>
                             <a href="<?php echo site_url('backend/report'); ?>">Calculation </a>
+                        </li>
+
+                        <li>
+                            <a href="<?php echo site_url('backend/report/type'); ?>">Type 2 </a>
                         </li>
                         
                         
@@ -114,6 +124,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <li>
                             <a href="<?php echo site_url('backend/log'); ?>">List Log</a>
                         </li>
+                      
                         
                     </ul>
                 </li>

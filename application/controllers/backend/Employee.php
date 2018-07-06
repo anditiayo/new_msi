@@ -86,9 +86,11 @@ class Employee extends Backend
 			{
 				$this->data['lang_group_plural'] = $this->lang->line('group');
 			}
-
+			$this->data['departement']  = $this->General_model->departement();
 			$this->data['allowances']  	= $this->General_model->allowances();
 			$this->data['worklist'] 	= $this->General_model->worklist();
+			$this->data['getPosition']	= $this->General_model->getPosition();
+			$this->data['status']  		= $this->General_model->getStatus();
 			$this->data['employee']     = 'class="active"';
 			$this->data['nbr_user']     = $count_user;
 			$this->data['nbr_group']    = $count_group;
@@ -154,7 +156,7 @@ class Employee extends Backend
 	}
 
 	public function submit(){
-				if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
 		{
 			redirect('auth/login/backend', 'refresh');
 		}
@@ -288,6 +290,61 @@ class Employee extends Backend
 		}
 	}
 
+	public function leave(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			
+			$this->data['date']			= $this->input->get('tgl', TRUE);
+			$this->data['pin']			= $this->input->get('pin', TRUE);
+
+			$this->data['name']			= $this->Employee_model->get_all();
+			$this->data['leave_permit']	= $this->Employee_model->leave_permit();
+			$this->data['segment'] 		= $this->uri->segment(3);
+			$this->data['grouplist'] 	= $this->General_model->grouplist();
+			
+			$this->data['employee']     = 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('schedule');
+			$this->data['page_content'] = 'backend/employee/leave';
+
+			$this->render();
+		}
+	}
+		public function overtime(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			
+			$this->data['date']			= $this->input->get('tgl', TRUE);
+			$this->data['pin']			= $this->input->get('pin', TRUE);
+			$this->data['segment'] 		= $this->uri->segment(3);
+			$this->data['grouplist'] 	= $this->General_model->grouplist();
+			$this->data['name']			= $this->Employee_model->get_all();
+			
+			$this->data['employee']     = 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('schedule');
+			$this->data['page_content'] = 'backend/employee/overtime';
+
+			$this->render();
+		}
+	}
+
 	function onDrop(){
 		$events			= $this->input->post('event');
 		$event 			= json_encode($events);
@@ -347,6 +404,182 @@ class Employee extends Backend
 		$result=$this->General_model->getEvent();
 		echo json_encode($result);
 	}
+
+	function leavelist(){
+		$data = $this->Employee_model->leavelist();
+		echo json_encode($data);
+	}
+
+	function add_leavelist(){
+		$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$code		= $this->input->post('code');
+		$permit		= $this->input->post('permit');
+		$date		= $this->input->post('date');
+		$date			= date("Y-m-d", strtotime($date));
+		$date_created	= date('Y-m-d H:i:s');
+		$user_created 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->add_leavelist($code,$permit,$date,$date_created,$user_created);
+		echo json_encode($data);
+	}
+
+	function get_leavelist(){
+		$id 	= $this->input->get('id');
+		$data 	= $this->Employee_model->get_leavelist($id);
+		echo json_encode($data);
+	}
+
+	function edit_leavelist(){
+		$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$id			= $this->input->post('edit_id');
+		$code		= $this->input->post('edit_code');
+		$permit		= $this->input->post('edit_permit');
+		$date		= $this->input->post('edit_date');
+		$permitid	= $this->input->post('permitid');
+		
+		if($permit == true){
+			$permit = $permit;
+		}else{
+			$permit = $permitid;
+		}
+
+		$date			= date("Y-m-d", strtotime($date));
+		$date_updated	= date('Y-m-d H:i:s');
+		$user_updated 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->edit_leavelist($id,$code,$permit,$date,$date_updated,$user_updated);
+		echo json_encode($data);
+	}
+
+	function del_leavelist(){
+		$id 		= $this->input->post('id');
+		$data 		= $this->Employee_model->del_leavelist($id);
+		echo json_encode($data);
+	}
+
+	public function upload($error = NULL)
+    {
+        if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			$count_user  = $this->db->count_all($this->config->item('tables', 'ion_auth')['users']);
+			$count_group = $this->db->count_all($this->config->item('tables', 'ion_auth')['groups']);
+
+			if ($count_user >= 1)
+			{
+				$this->data['lang_user_plural'] = plural($this->lang->line('user'));
+			}
+			else
+			{
+				$this->data['lang_user_plural'] = $this->lang->line('user');
+			}
+
+			if ($count_group >= 1)
+			{
+				$this->data['lang_group_plural'] = plural($this->lang->line('group'));
+			}
+			else
+			{
+				$this->data['lang_group_plural'] = $this->lang->line('group');
+			}
+
+			$this->data['action'] =  site_url('backend/employee/proses');
+			$this->data['judul'] =  set_value('judul');
+			$this->data['error'] =  $error['error'];
+
+			$this->data['employee']     = 'class="active"';
+			$this->data['nbr_user']     = $count_user;
+			$this->data['nbr_group']    = $count_group;
+			$this->data['subtitle']     = $this->lang->line('employee_list');
+			$this->data['page_content'] = 'backend/employee/upload';
+
+			$this->render();
+		}
+       
+    }
+
+    public function proses()
+    {
+        // validasi judul
+        $this->form_validation->set_rules('judul', 'judul', 'trim|required');
+ 
+        if ($this->form_validation->run() == FALSE) {
+            // jika validasi judul gagal
+            $this->index();
+        } else {
+            // config upload
+            $config['upload_path'] = './temp_upload/';
+            $config['allowed_types'] = 'xls';
+            $config['max_size'] = '10000';
+            $this->load->library('upload', $config);
+ 
+            if ( ! $this->upload->do_upload('gambar')) {
+                // jika validasi file gagal, kirim parameter error ke index
+                $error = array('error' => $this->upload->display_errors());
+                $this->index($error);
+            } else {
+              // jika berhasil upload ambil data dan masukkan ke database
+              $upload_data = $this->upload->data();
+ 
+              // load library Excell_Reader
+              $this->load->library('excel_reader');
+ 
+              //tentukan file
+              $this->excel_reader->setOutputEncoding('230787');
+              $file = $upload_data['full_path'];
+              $this->excel_reader->read($file);
+              error_reporting(E_ALL ^ E_NOTICE);
+ 
+              // array data
+              $data = $this->excel_reader->sheets[0];
+              $dataexcel = Array();
+              for ($i = 1; $i <= $data['numRows']; $i++) {
+                   if ($data['cells'][$i][1] == '')
+                       break;
+                   $dataexcel[$i - 1]['nama'] = $data['cells'][$i][1];
+                   $dataexcel[$i - 1]['tempat_lahir'] = $data['cells'][$i][2];
+                   $dataexcel[$i - 1]['tanggal_lahir'] = $data['cells'][$i][3];
+              }
+              
+              //load model
+              $this->load->model('Data_model');
+              $this->Data_model->loaddata($dataexcel);
+ 
+              //delete file
+              $file = $upload_data['file_name'];
+              $path = './temp_upload/' . $file;
+              unlink($path);
+            }
+        //redirect ke halaman awal
+        redirect(site_url('backend/employee/upload'));
+        }
+    }
+
+    function overtimelist(){
+    	$data = $this->Employee_model->overtimelist();
+		echo json_encode($data);
+    }
+    function add_overtimelist(){
+    	$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$code		= $this->input->post('code');
+		$date		= $this->input->post('date');
+		$date			= date("Y-m-d", strtotime($date));
+		$date_created	= date('Y-m-d H:i:s');
+		$user_created 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->add_overtimelist($code,$date,$date_created,$user_created);
+		echo json_encode($data);
+    }
 
 
 

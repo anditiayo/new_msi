@@ -248,6 +248,28 @@ function header_date_loop($start,$end){
     return $detail;
 }
 
+function checkloopdate($start,$end,$code){
+    $CI = get_instance();
+    $CI->load->model('Log_data');
+    $detail = NULL;
+    for($i = 0; $i < loop_date($start,$end) + 1; $i++)
+    {
+        $sun    = date("D", strtotime($start . ' + ' . $i . 'day'));
+        $dates    = date("Y-m-d", strtotime($start . ' + ' . $i . 'day'));
+        if($sun == "Sun"){
+            $sun = "background:pink";    
+        }else{
+            $sun = "background:#FFF";
+        }
+           
+        $detail .=  $CI->Log_data->getDates($code,$dates,$sun);
+
+      //$detail .= '<td style="text-align: center; '.$sun.'">'.date("m/d", strtotime($start . ' + ' . $i . 'day')) .'</td>';
+    }
+    return $detail;
+}
+
+
 function data_loop($start,$end,$data){
     $detail = NULL;
     for($i = 0; $i < loop_date($start,$end) + 1; $i++)
@@ -410,4 +432,71 @@ function decimalHours($WORKHOUR)
 {
     $hms = explode(":", $WORKHOUR);
     return ($hms[0] + ($hms[1]/60) + ($hms[2]/3600));
+}
+
+function getbpjs($code,$num)
+{
+   
+    $CI = get_instance();
+    $CI->load->model('Employee_model');
+    $return = $CI->Employee_model->getalldec($code,$num);
+    $percent = 0 ;
+    if ($return == TRUE){
+        $percent = 1;   
+    }else{
+        $percent = 0;
+    }
+    return $percent;
+}
+
+function getastek($code,$num)
+{
+    $CI = get_instance();
+    $CI->load->model('Employee_model');
+    $return = $CI->Employee_model->getalldec($code,$num);
+    $percent = 0 ;
+    if ($return == TRUE){
+        $percent = 2;   
+    }else{
+        $percent = 0;
+    }
+    return $percent;   
+}
+
+function getpesiun($code,$num)
+{
+    $CI = get_instance();
+    $CI->load->model('Employee_model');
+    $return = $CI->Employee_model->getalldec($code,$num);
+    $percent = 0 ;
+    if ($return == TRUE){
+        $percent = 1;   
+    }else{
+        $percent = 0;
+    }
+    return $percent;   
+}
+
+function brandExcel() {
+    $this->load->library('excel');
+    $result = $this->config_model->getBrandsForExcel();
+    $this->excel->to_excel($result, 'brands-excel'); 
+}
+
+function sum_the_time($time1, $time2) {
+$times = array($time1, $time2);
+  $seconds = 0;
+  foreach ($times as $time)
+  {
+    list($hour,$minute,$second) = explode(':', $time);
+    $seconds += $hour*3600;
+    $seconds += $minute*60;
+    $seconds += $second;
+  }
+  $hours = floor($seconds/3600);
+  $seconds -= $hours*3600;
+  $minutes  = floor($seconds/60);
+  $seconds -= $minutes*60;
+  // return "{$hours}:{$minutes}:{$seconds}";
+  return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds); 
 }

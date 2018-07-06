@@ -108,7 +108,7 @@
 
                         <? 
                         
-                        if($key['gender'] == 1){
+                        if( $key['gender'] == 1){
                             $checkedM = 'checked';
                             $checkedF = '';
                         }else{
@@ -116,14 +116,13 @@
                             $checkedF = 'checked';
                         }
                         
-
                         ?>
 
                         <label class="radio radio-inline radio-grey radio-primary">
-                            <input type="radio" name="gender" value="1" <? echo $checkedM.' '.$checkedF;?> >
+                            <input type="radio" name="gender" value="1" <?php echo $checkedM; ?> >
                             <span class="input-span"></span>Male</label>
                         <label class="radio radio-inline radio-grey radio-primary">
-                            <input type="radio" name="gender" value="0" <? echo $checkedM.' '.$checkedF;?>>
+                            <input type="radio" name="gender" value="0" <?php echo $checkedF; ?> >
                             <span class="input-span"></span>Female</label>
                     </div>
                 </div>
@@ -299,13 +298,24 @@
                             <?
                                 foreach ($allowancesDiSelect as $keys => $values)
                                 {
-                                   
-                                    echo '<option value="'.$values['id'].'">'.$values['allowance_name'].'</option>';
+                                    
+                                    if($values['type'] == 'Allowance'){
+                                        $allo = '<span class="badge badge-primary badge-pill">['.substr($values['type'], 0,4).']</span>';
+                                    }else if($values['type'] == 'Deduction'){
+                                        $allo = '<span class="badge badge-success badge-pill">['.substr($values['type'], 0,4).']</span>';
+                                    }
+                                    
+                                    echo '<option value="'.$values['id'].'">'.$values['allowance_name'].' '.$allo.'</option>';
                                 }
                                 foreach ($allowancesSelect as $keys => $values)
                                 {
+                                    if($values['type'] == 'Allowance'){
+                                        $allo = '<span class="badge badge-primary badge-pill">['.substr($values['type'], 0,4).']</span>';
+                                    }else if($values['type'] == 'Deduction'){
+                                        $allo = '<span class="badge badge-success badge-pill">['.substr($values['type'], 0,4).']</span>';
+                                    }
                                    
-                                    echo '<option value="'.$values['id'].'" selected>'.$values['allowance_name'].'</option>';
+                                    echo '<option value="'.$values['id'].'" selected>'.$values['allowance_name'].' '.$allo.'</option>';
                                 }
 
                                
