@@ -17,21 +17,40 @@
                         <div class="table-responsive row">
 
                             <?php
-                                echo form_open_multipart($action);
-                     
-                                echo '<div class="form-group">';
-                                echo '<label>Judul ' . form_error('judul') . '</label>'; // show error judul
-                                echo form_input('judul', $judul, 'class="form-control" placeholder="Judul"');
-                                echo '</div>';
-                     
-                                echo '<div class="form-group">';
-                                echo '<label>File Excel ' . $error . '</label></br>'; // show error upload
-                                echo form_upload('userfile');
-                                echo '</div>';
-                     
-                                echo form_submit('mysubmit', 'Upload', 'class="btn btn-primary"');
-                                echo form_close();
-                                ?>
+                            $output = '';
+                            $output .= form_open_multipart('backend/import/save');
+                            $output .= '<div class="row">';
+                            $output .= '<div class="col-lg-12 col-sm-12"><div class="form-group">';
+                            $output .= form_label('Choose file', 'image');
+                            $output .= '<select class="form-control" name="option" id="option">';
+                            $output .= '<option value="" disabled selected> ==SELECT== </option>';
+                            $output .= '<option value="1"> Upload Potongan Pinjaman</option>';
+                            $output .= '<option value="2"> Upload Simpan Wajib</option>';
+                            $output .= '<option value="3"> Excel</option>';
+
+                            $output .= '</select>';
+                            $data = array(
+                                'name' => 'userfile',
+                                'id' => 'userfile',
+                                'class' => 'form-control filestyle',
+                                'value' => '',
+                                'data-icon' => 'false'
+                            );
+                            $output .= form_upload($data);
+                            $output .= '</div> <span style="color:red;">*Please choose an Excel file(.xls or .xlxs) as Input</span></div>';
+                            $output .= '<div class="col-lg-12 col-sm-12"><div class="form-group text-right">';
+                            $data = array(
+                                'name' => 'importfile',
+                                'id' => 'importfile-id',
+                                'class' => 'btn btn-primary',
+                                'value' => 'Import',
+                            );
+                            $output .= form_submit($data, 'Import Data');
+                            $output .= '</div>
+                                                    </div></div>';
+                            $output .= form_close();
+                            echo $output;
+                            ?>
                         </div>
                     </div>
                 </div>

@@ -111,6 +111,11 @@ class Employee_model extends CI_Model {
 
     }
 
+    public function insertData($nik,$firstName,$lastname,$email,$pob,$dob,$address1,$address2,$phone1,$phone2,$gender,$status,$position,$salary,$npwp,$bpjstk,$bpjsk,$regular,$group,$joinIn,$user_created,$position){
+         return $this->db->query("INSERT INTO ".$this->db->dbprefix('employees')." (id,employee_id,first_name,last_name,email,place_of_birth,birthday,gender,address1,address2,phone1,phone2,npwp,bpjstk,bpjs,regular,user_created,join_in,position) 
+            VALUES('','$nik','$firstName','$lastname','$email','$pob','$dob','$gender','$address1','$address2','$phone1','$phone2','$npwp','$bpjstk','$bpjsk','$status','$user_created','$joinIn','$position')");
+    }
+
     public function updateDataAllowance($id,$data){
             $this->db->query("DELETE FROM ".$this->db->dbprefix('allowances')." WHERE employee_id = '$id'");
 
@@ -245,9 +250,7 @@ class Employee_model extends CI_Model {
     }
 
     function add_leavelist($code,$permit,$date,$date_created,$user_created){
-         $hasil=$this->db->query("INSERT INTO ".$this->db->dbprefix('leaves')." (id,employee_id,permit,date,create_datetime,create_user)
-                                    VALUES('','$code','$permit','$date','$date_created','$user_created')");
-        return $hasil;
+        return $this->db->query("INSERT INTO ".$this->db->dbprefix('leaves')." (id,employee_id,permit,date,create_datetime,create_user) VALUES('','$code','$permit','$date','$date_created','$user_created')");
     }
 
     public function get_leavelist($id){
@@ -281,13 +284,11 @@ class Employee_model extends CI_Model {
     }
 
     function edit_leavelist($id,$code,$permit,$date,$date_updated,$user_updated){
-        $hasil=$this->db->query("UPDATE ".$this->db->dbprefix('leaves')." SET employee_id = '$code', permit ='$permit', update_datetime = '$date_updated' , update_user = '$user_updated', date='$date'  WHERE id = '$id'");
-        return $hasil;
+        return $this->db->query("UPDATE ".$this->db->dbprefix('leaves')." SET employee_id = '$code', permit ='$permit', update_datetime = '$date_updated' , update_user = '$user_updated', date='$date'  WHERE id = '$id'");
     }
 
-    public function del_leavelist($id){
-        $hasil=$this->db->query("DELETE FROM ".$this->db->dbprefix('leaves')." WHERE id='$id'");
-        return $hasil;
+    function del_leavelist($id){
+        return $this->db->query("DELETE FROM ".$this->db->dbprefix('leaves')." WHERE id='$id'");
     }
 
     function overtimelist(){
@@ -298,12 +299,116 @@ class Employee_model extends CI_Model {
         return $query->result_array();
     }
 
-    function add_overtimelist($code,$date,$date_created,$user_created){
-         $hasil=$this->db->query("INSERT INTO ".$this->db->dbprefix('overtime')." (id,employee_id,date,date_created,user_created)
-                                    VALUES('','$code','$date','$date_created','$user_created')");
+    public function get_overtimelist($id){
+        $this->db->select('id,employee_id,date');
+        $this->db->from('overtime');
+        $this->db->where('id',$id);
+
+        $query = $this->db->get();
+
+        $hasil = array();
+        if($query->num_rows()>0){
+            foreach ($query->result() as $data) {
+                $hasil=array(
+                    'id'              => $data->id,
+                    'editname'        => $data->employee_id,
+                    'date'            => $data->date
+                    );
+            }
+        }
         return $hasil;
     }
 
+    function add_overtimelist($code,$date,$date_created,$user_created){
+        return $this->db->query("INSERT INTO ".$this->db->dbprefix('overtime')." (id,employee_id,date,date_created,user_created) VALUES('','$code','$date','$date_created','$user_created')");
+    }
+
+    function edit_overtimelist($id,$code,$date,$date_updated,$user_updated){
+        return $this->db->query("UPDATE ".$this->db->dbprefix('overtime')." SET  employee_id = '$code' , date = '$date' , date_updated = '$date_updated' , user_updated = '$user_updated' WHERE id = '$id' ");
+    }
+
+    function del_overtimelist($id){
+        return $this->db->query("DELETE FROM ".$this->db->dbprefix('overtime')." WHERE id='$id'");
+    }
+
+    function Subtitutelist(){
+        $this->db->select('a.id, a.employee_id, CONCAT(b.first_name,b.last_name) as nama, a.todate, a.fromdate');
+        $this->db->from('subtitute a, employees b');
+        $this->db->where('a.employee_id = b.employee_id');    
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function add_subtitutelist($code,$todate,$fromdate,$date_created,$user_created){
+        return $this->db->query("INSERT INTO ".$this->db->dbprefix('subtitute')." (id,employee_id,fromdate,todate,status,date_created,user_created) VALUES('','$code','$fromdate','$todate','1','$date_created','$user_created')");
+    }
+
+    function edit_subtitutelist($id,$code,$fromdateEdit,$todateEdit,$date_updated,$user_updated){
+        return $this->db->query("UPDATE ".$this->db->dbprefix('subtitute')." SET  employee_id = '$code' , fromdate = '$fromdateEdit' , todate = '$todateEdit' , date_updated = '$date_updated' , user_updated = '$user_updated' WHERE id = '$id' ");
+    }
+
+    function get_subtitutelist($id){
+        $this->db->select('id,employee_id,fromdate,todate');
+        $this->db->from('subtitute');
+        $this->db->where('id',$id);
+        $query = $this->db->get();
+
+        $hasil = array();
+        if($query->num_rows()>0){
+            foreach ($query->result() as $data) {
+                $hasil=array(
+                    'id'              => $data->id,
+                    'employee_id'     => $data->employee_id,
+                    'fromdate'        => $data->fromdate,
+                    'todate'          => $data->todate
+                    );
+            }
+        }
+        return $hasil;
+    }
+
+     function del_subtitutelist($id){
+        return $this->db->query("DELETE FROM ".$this->db->dbprefix('subtitute')." WHERE id='$id'");
+    }
+
+    function overshiftlist(){
+        $this->db->select("a.id, a.employee_id1,a.employee_id2,a.date1,a.date2,(select b.first_name from ".$this->db->dbprefix('employees')." b where b.employee_id = a.employee_id1) as Name1,(select b.first_name from ".$this->db->dbprefix('employees')." b where b.employee_id = a.employee_id2) as Name2");
+        $this->db->from('overshift a');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function add_overshift($code1,$code2,$date1,$date2){
+         return $this->db->query("INSERT INTO ".$this->db->dbprefix('overshift')." VALUES('','$code1','$code2','$date1','$date2')");
+    }
+
+    function get_overshift($id){
+        $this->db->from('overshift');
+        $this->db->where('id',$id);
+        $query = $this->db->get();
+
+        $hasil = array();
+        if($query->num_rows()>0){
+            foreach ($query->result() as $data) {
+                $hasil=array(
+                    'id'               => $data->id,
+                    'employee_id1'     => $data->employee_id1,
+                    'employee_id2'     => $data->employee_id2,
+                    'date1'            => $data->date1,
+                    'date2'            => $data->date2
+                    );
+            }
+        }
+        return $hasil;
+    }
+
+    function edit_overshift($id,$code1,$code2,$date1,$date2){
+        return $this->db->query("UPDATE ".$this->db->dbprefix('overshift')." SET  employee_id1 = '$code1' , employee_id2 = '$code2' , date1 = '$date1' , date2 = '$date2' WHERE id = '$id' ");
+    }
+
+    function del_overshift($id){
+        return $this->db->query("DELETE FROM ".$this->db->dbprefix('overshift')." WHERE id='$id'");
+    }
 
     
 }

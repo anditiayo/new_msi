@@ -101,7 +101,7 @@
             <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="myModalLabel">Edit Barang</h3>
+                <h3 class="modal-title" id="myModalLabel">Edit</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 
             </div>
@@ -109,24 +109,26 @@
                 <div class="modal-body">
                     <input name="edit_id" id="edit_id"  type="hidden">
                     <div class="form-group">
-                        <label class="control-label col-xs-3" >Name</label>
+                        <label class="control-label col-xs-3" >Employee</label>
                         <div class="col-xs-9">
-                            <input name="time_name_e" id="time_name_e" class="form-control" type="text" style="width:335px;" required>
+
+                            <input list="editnames" name="editname" id="editname" class="form-control" value="<?=$pin?>" />
+                            <datalist id="editnames" >
+                            <?php
+                                foreach ($name as $key) {
+                                    echo '<option value='.$key['employee_id'].'>'.$key['first_name'].' '.$key['last_name'].'</option>';
+                                }
+                             ?>
+                            </datalist>
+                            
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-xs-3" >In</label>
-                        <div class="col-xs-9">
-                            <input name="time_in_e" id="time_in_e" class="form-control" type="text" style="width:335px;" required>
-                           
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-xs-3" >Out</label>
-                        <div class="col-xs-9">
-                            <input name="time_out_e" id="time_out_e" class="form-control" type="text" style="width:335px;" required>
+                        <label class="font-normal">Date</label>
+                        <div class="input-group date form_datetime">
+                            <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
+                            <input class="form-control" name="editdate" id="editdate" value="<? echo date('Y-m-d H:i:s',strtotime($date))?>">
                         </div>
                     </div>
 
@@ -155,7 +157,7 @@
                     <div class="modal-body">
                                           
                             <input type="hidden" name="kode" id="textkode" value="">
-                            <div class="alert alert-warning"><p>Apakah Anda yakin mau memhapus barang ini?</p></div>
+                            <div class="alert alert-warning"><p>Apakah Anda yakin mau memhapus ini?</p></div>
                                         
                     </div>
                     <div class="modal-footer">
@@ -207,16 +209,16 @@
             var id=$(this).attr('data');
             $.ajax({
                 type : "GET",
-                url  : "<?php echo base_url()?>backend/config/get_worktimelist",
+                url  : "<?php echo base_url()?>backend/employee/get_overtimelist",
                 dataType : "JSON",
                 data : {id:id},
                 success: function(data){
-                    $.each(data,function(id,time_name, time_in, time_out){
+                    $.each(data,function(id,editname, date){
                         $('#ModalaEdit').modal('show');
                         $('[name="edit_id"]').val(data.id);
-                        $('[name="time_name_e"]').val(data.time_name);
-                        $('[name="time_in_e"]').val(data.time_in);
-                        $('[name="time_out_e"]').val(data.time_out);
+                        $('[name="editname"]').val(data.editname);
+                        $('[name="editdate"]').val(data.date);
+                       
                     });
                 }
             });
@@ -253,14 +255,14 @@
         $('#btn_update').on('click',function(){
             
             var edit_id     = $('#edit_id').val();
-            var time_name_e = $('#time_name_e').val();
-            var time_in_e   = $('#time_in_e').val();
-            var time_out_e  = $('#time_out_e').val();
+            var editname    = $('#editname').val();
+            var editdate    = $('#editdate').val();
+            
             $.ajax({
                 type : "POST",
-                url  : "<?php echo base_url()?>backend/config/edit_worktimelist",
+                url  : "<?php echo base_url()?>backend/employee/edit_overtimelist",
                 dataType : "JSON",
-                data : {edit_id:edit_id, time_name_e:time_name_e , time_in_e:time_in_e, time_out_e:time_out_e},
+                data : {edit_id:edit_id, editname:editname , editdate:editdate},
                 success: function(data){
                     $('#ModalaEdit').modal('hide');
                      show_time();
@@ -274,7 +276,7 @@
             var id=$('#textkode').val();
             $.ajax({
             type : "POST",
-            url  : "<?php echo base_url()?>backend/config/del_worktimelist",
+            url  : "<?php echo base_url()?>backend/employee/del_overtimelist",
             dataType : "JSON",
                     data : {id: id},
                     success: function(data){

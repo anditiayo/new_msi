@@ -91,6 +91,7 @@ class Employee extends Backend
 			$this->data['worklist'] 	= $this->General_model->worklist();
 			$this->data['getPosition']	= $this->General_model->getPosition();
 			$this->data['status']  		= $this->General_model->getStatus();
+			$this->data['regencies']  	= $this->General_model->regencies();
 			$this->data['employee']     = 'class="active"';
 			$this->data['nbr_user']     = $count_user;
 			$this->data['nbr_group']    = $count_group;
@@ -155,7 +156,7 @@ class Employee extends Backend
 		}
 	}
 
-	public function submit(){
+	public function submitEdit(){
 		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
 		{
 			redirect('auth/login/backend', 'refresh');
@@ -192,6 +193,7 @@ class Employee extends Backend
 			$allowance	= $this->input->post('allowance');
 			$id			= $this->input->post('id');
 			$joinIn        = date("Y-m-d", strtotime($joinIn));
+			$birthday        = date("Y-m-d", strtotime($birthday));
 
 			$date_updated	= date('Y-m-d H:i:s');
 			$user_updateds 	= $this->data['user_info']['fullname'];
@@ -216,12 +218,75 @@ class Employee extends Backend
 			$this->Employee_model->updateDataAllowance($id,$data);
 			$this->Employee_model->updateDataSalary($id,isNumbers($salary));
 
-
-				
-
 			
 			
 			redirect('backend/employee/edit/'.$id);
+
+		}
+	}
+
+		public function submit(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+
+
+			$firstName	= $this->input->post('first_name');
+			$lastname	= $this->input->post('last_name');
+			$email		= $this->input->post('email');
+			$pob		= $this->input->post('pob');
+			$dob		= $this->input->post('dob');
+			$address1	= $this->input->post('address1');
+			$address2	= $this->input->post('address2');
+			$phone1		= $this->input->post('phone');
+			$phone2		= $this->input->post('mobile');
+			$gender		= $this->input->post('gender');
+			$joinIn		= $this->input->post('joinIn');
+			$status		= $this->input->post('status');
+			$position	= $this->input->post('position');
+			$salary		= $this->input->post('salary');
+			$npwp		= $this->input->post('npwp');
+			$bpjstk		= $this->input->post('bpjstk');
+			$bpjsk		= $this->input->post('bpjsk');
+			$regular	= $this->input->post('regular');
+			$group		= $this->input->post('group');
+			$allowance	= $this->input->post('allowance');
+			$nik		= $this->input->post('nik');
+			$joinIn     = date("Y-m-d", strtotime($joinIn));
+			$dob        = date("Y-m-d", strtotime($dob));
+
+			$date_updated	= date('Y-m-d H:i:s');
+			$user_created 	= $this->data['user_info']['fullname'];
+
+			$this->Employee_model->insertData($nik,$firstName,$lastname,$email,$pob,$dob,$address1,$address2,$phone1,$phone2,$gender,$status,$position,$salary,$npwp,$bpjstk,$bpjsk,$regular,$group,$joinIn,$user_created,$position);
+			
+			for ($i = 0; $i < count($allowance) ; $i++){
+				$data[] = array(
+					'employee_id' => $nik,
+					'allowance_type_id' => $allowance[$i]
+					);
+			}
+			$grup = array(
+					'grouptime_id' 	=> $group,
+					'employee_id' 	=> $nik,
+					'date_created'	=> $date_created,
+					'date_updated'	=> $date_updated,
+					'user_created'	=> $user_created,
+					'user_updated'	=> $user_updateds
+				);
+			$this->Employee_model->updateDataGroupwork($nik,$grup);
+			$this->Employee_model->updateDataAllowance($nik,$data);
+			$this->Employee_model->updateDataSalary($nik,isNumbers($salary));
+			
+			redirect('backend/employee/edit/'.$nik);
 
 		}
 	}
@@ -312,7 +377,7 @@ class Employee extends Backend
 			
 			$this->data['employee']     = 'class="active"';
 
-			$this->data['subtitle']     = $this->lang->line('schedule');
+			$this->data['subtitle']     = $this->lang->line('leave');
 			$this->data['page_content'] = 'backend/employee/leave';
 
 			$this->render();
@@ -338,8 +403,61 @@ class Employee extends Backend
 			
 			$this->data['employee']     = 'class="active"';
 
-			$this->data['subtitle']     = $this->lang->line('schedule');
+			$this->data['subtitle']     = $this->lang->line('overtime');
 			$this->data['page_content'] = 'backend/employee/overtime';
+
+			$this->render();
+		}
+	}
+	public function subtitute(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			
+			$this->data['date']			= $this->input->get('tgl', TRUE);
+			$this->data['pin']			= $this->input->get('pin', TRUE);
+			$this->data['segment'] 		= $this->uri->segment(3);
+			$this->data['grouplist'] 	= $this->General_model->grouplist();
+			$this->data['name']			= $this->Employee_model->get_all();
+			
+			$this->data['employee']     = 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('subtitute');
+			$this->data['page_content'] = 'backend/employee/subtitute';
+
+			$this->render();
+		}
+	}
+
+	public function overshift(){
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login/backend', 'refresh');
+		}
+		elseif ( ! $this->ion_auth->is_admin())
+		{
+			return show_error('You must be an administrator to view this page.');
+		}
+		else
+		{
+			
+			$this->data['date']			= $this->input->get('tgl', TRUE);
+			$this->data['pin']			= $this->input->get('pin', TRUE);
+			$this->data['segment'] 		= $this->uri->segment(3);
+			$this->data['grouplist'] 	= $this->General_model->grouplist();
+			$this->data['name']			= $this->Employee_model->get_all();
+			
+			$this->data['employee']     = 'class="active"';
+
+			$this->data['subtitle']     = $this->lang->line('overshift');
+			$this->data['page_content'] = 'backend/employee/overshift';
 
 			$this->render();
 		}
@@ -507,6 +625,85 @@ class Employee extends Backend
        
     }
 
+        public function save() {
+        $this->load->library('excel');
+        
+        if ($this->input->post('importfile')) {
+            $path = ROOT_UPLOAD_IMPORT_PATH;
+
+            $config['upload_path'] = $path;
+            $config['allowed_types'] = 'xlsx|xls|jpg|png';
+            $config['remove_spaces'] = TRUE;
+            $this->upload->initialize($config);
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('userfile')) {
+                $error = array('error' => $this->upload->display_errors());
+            } else {
+                $data = array('upload_data' => $this->upload->data());
+            }
+            
+            if (!empty($data['upload_data']['file_name'])) {
+                $import_xls_file = $data['upload_data']['file_name'];
+            } else {
+                $import_xls_file = 0;
+            }
+            $inputFileName = $path . $import_xls_file;
+            try {
+                $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                $objPHPExcel = $objReader->load($inputFileName);
+            } catch (Exception $e) {
+                die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME)
+                        . '": ' . $e->getMessage());
+            }
+            $allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+            
+            $arrayCount = count($allDataInSheet);
+            $flag = 0;
+            $createArray = array('First_Name', 'Last_Name', 'Email', 'DOB', 'Contact_NO');
+            $makeArray = array('First_Name' => 'First_Name', 'Last_Name' => 'Last_Name', 'Email' => 'Email', 'DOB' => 'DOB', 'Contact_NO' => 'Contact_NO');
+            $SheetDataKey = array();
+            foreach ($allDataInSheet as $dataInSheet) {
+                foreach ($dataInSheet as $key => $value) {
+                    if (in_array(trim($value), $createArray)) {
+                        $value = preg_replace('/\s+/', '', $value);
+                        $SheetDataKey[trim($value)] = $key;
+                    } else {
+                        
+                    }
+                }
+            }
+            $data = array_diff_key($makeArray, $SheetDataKey);
+           
+            if (empty($data)) {
+                $flag = 1;
+            }
+            if ($flag == 1) {
+                for ($i = 2; $i <= $arrayCount; $i++) {
+                    $addresses = array();
+                    $firstName = $SheetDataKey['First_Name'];
+                    $lastName = $SheetDataKey['Last_Name'];
+                    $email = $SheetDataKey['Email'];
+                    $dob = $SheetDataKey['DOB'];
+                    $contactNo = $SheetDataKey['Contact_NO'];
+                    $firstName = filter_var(trim($allDataInSheet[$i][$firstName]), FILTER_SANITIZE_STRING);
+                    $lastName = filter_var(trim($allDataInSheet[$i][$lastName]), FILTER_SANITIZE_STRING);
+                    $email = filter_var(trim($allDataInSheet[$i][$email]), FILTER_SANITIZE_EMAIL);
+                    $dob = filter_var(trim($allDataInSheet[$i][$dob]), FILTER_SANITIZE_STRING);
+                    $contactNo = filter_var(trim($allDataInSheet[$i][$contactNo]), FILTER_SANITIZE_STRING);
+                    $fetchData[] = array('first_name' => $firstName, 'last_name' => $lastName, 'email' => $email, 'dob' => $dob, 'contact_no' => $contactNo);
+                }              
+                $data['employeeInfo'] = $fetchData;
+                $this->import->setBatchImport($fetchData);
+                $this->import->importData();
+            } else {
+                echo "Please import correct file";
+            }
+        }
+        $this->load->view('import/display', $data);
+        
+    }
+
     public function proses()
     {
         // validasi judul
@@ -581,6 +778,136 @@ class Employee extends Backend
 		echo json_encode($data);
     }
 
+    function get_overtimelist(){
+		$id 	= $this->input->get('id');
+		$data 	= $this->Employee_model->get_overtimelist($id);
+		echo json_encode($data);
+	}
 
+    function edit_overtimelist(){
+    	$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$id			= $this->input->post('edit_id');
+		$code		= $this->input->post('editname');
+		$date		= $this->input->post('editdate');
+		$date		= date("Y-m-d", strtotime($date));
+		$date_updated	= date('Y-m-d H:i:s');
+		$user_updated 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->edit_overtimelist($id,$code,$date,$date_updated,$user_updated);
+		echo json_encode($data);
+    }
+
+    function del_overtimelist(){
+		$id=$this->input->post('id');
+		$data=$this->Employee_model->del_overtimelist($id);
+		echo json_encode($data);
+    }
+
+    function Subtitutelist(){
+    	$data = $this->Employee_model->Subtitutelist();
+		echo json_encode($data);
+    }
+
+    function add_subtitutelist(){
+    	$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$code			= $this->input->post('code');
+		$todate			= $this->input->post('todate');
+		$fromdate		= $this->input->post('fromdate');
+		$todate			= date("Y-m-d", strtotime($todate));
+		$fromdate		= date("Y-m-d", strtotime($fromdate));
+		$date_created	= date('Y-m-d H:i:s');
+		$user_created 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->add_subtitutelist($code,$fromdate,$todate,$date_created,$user_created);
+		echo json_encode($data);
+    }
+
+    function edit_subtitutelist(){
+    	$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$id				= $this->input->post('edit_id');
+		$code			= $this->input->post('idEdit');
+		$fromdateEdit	= $this->input->post('fromdateEdit');
+		$todateEdit		= $this->input->post('todateEdit');
+
+		$fromdateEdit	= date("Y-m-d", strtotime($fromdateEdit));
+		$todateEdit		= date("Y-m-d", strtotime($todateEdit));
+
+		
+		$date_updated	= date('Y-m-d H:i:s');
+		$user_updated 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->edit_subtitutelist($id,$code,$fromdateEdit,$todateEdit,$date_updated,$user_updated);
+		echo json_encode($data);
+    }
+
+    function get_subtitutelist(){
+    	$id 	= $this->input->get('id');
+		$data 	= $this->Employee_model->get_subtitutelist($id);
+		echo json_encode($data);
+	
+    }
+
+    function del_subtitutelist(){
+		$id=$this->input->post('id');
+		$data=$this->Employee_model->del_subtitutelist($id);
+		echo json_encode($data);
+    }
+    function overshiftlist(){
+    	$data = $this->Employee_model->overshiftlist();
+		echo json_encode($data);
+    }
+    function add_overshift(){
+    	$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$code1		= $this->input->post('code1');
+		$code2		= $this->input->post('code2');
+		$dateemp1		= $this->input->post('dateemp1');
+		$dateemp2		= $this->input->post('dateemp2');
+
+		$date1			= date("Y-m-d", strtotime($dateemp1));
+		$date2			= date("Y-m-d", strtotime($dateemp2));
+		$date_created	= date('Y-m-d H:i:s');
+		$user_created 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->add_overshift($code1,$code2,$date1,$date2);
+		echo json_encode($data);
+    		
+    }
+
+    function get_overshift(){
+    	$id 	= $this->input->get('id');
+		$data 	= $this->Employee_model->get_overshift($id);
+		echo json_encode($data);
+    }
+
+    function edit_overshift(){
+    	$this->data['user_info'] = $this->user_info_model->get_info($this->ion_auth->user()->row()->id);
+		
+		$id				= $this->input->post('edit_id');
+		$code1			= $this->input->post('codeEdit1');
+		$code2			= $this->input->post('codeEdit2');
+		$date1		= $this->input->post('dateEdit1');
+		$date2		= $this->input->post('dateEdit2');
+
+		$date1		= date("Y-m-d", strtotime($date1));
+		$date2		= date("Y-m-d", strtotime($date2));
+
+		
+		$date_updated	= date('Y-m-d H:i:s');
+		$user_updated 	= $this->data['user_info']['fullname'];
+		
+		$data 		= $this->Employee_model->edit_overshift($id,$code1,$code2,$date1,$date2);
+		echo json_encode($data);
+    	
+    }
+
+    function del_overshift(){
+    	$id=$this->input->post('id');
+		$data=$this->Employee_model->del_overshift($id);
+		echo json_encode($data);
+    }
 
 }

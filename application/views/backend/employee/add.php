@@ -8,36 +8,41 @@
                 <div class="ibox-title">General</div>
             </div>
             <div class="ibox-body">
+                 <?php echo form_open('backend/employee/submit'); ?>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="Enter Full Name">
+                            <input class="form-control" type="text" name="first_name" placeholder="Enter Full Name">
                         </div>
                         <div class="form-group mb-4">
                             <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Enter Last Name">
+                            <input class="form-control" type="text" name="last_name" placeholder="Enter Last Name">
                         </div>
                         <div class="form-group mb-4">
                             <label>Email</label>
-                            <input class="form-control" type="text" placeholder="Enter Email">
+                            <input class="form-control" type="text" name="email" placeholder="Enter Email">
                         </div>
-                        <div class="form-group mb-4">
+                         <div class="form-group mb-4">
                             <label>Place of Birth</label>
-                           <select class="selectpicker form-control" data-live-search="true">
-                                <option>Mustard</option>
-                                <option>Ketchup</option>
-                                <option>Flashlight</option>
-                                <option>Tabasco Nick</option>
-                            </select>
+                           <!--  <input class="form-control" type="text" placeholder="Enter Place of Birth" > -->
+                             <select class="form-control select2_demo_1" data-live-search="true" name="pob" id="pob">
+                                <option disabled="" selected=""> == SELECT == </option>
+                                <?php foreach ($regencies as $keys) {
+
+                                    ?>
+                                     <option <?php echo 'value="'.$keys['id'].'" '?> ><?echo $keys['name'];?></option>
+                                <?}?>
+                               
+                            
+                            </select> 
+
 
                         </div>
                         <div class="form-group mb-4">
                             <label>Date of Birth</label>
-                            <input class="form-control" id="ex-date" type="text">
-                            <span class="help-block">Data format dd/mm/yyyy
-                                            <span></span>
-                            </span>
+                            <input class="form-control" id="ex-date" name="dob" type="text">
+                            <span class="help-block">Data format dd/mm/yyyy</span>
 
                         </div>
                     </div>
@@ -46,14 +51,14 @@
                             <label>Address 1</label>
                             <div class="input-group-icon input-group-icon-left">
                                 <span class="input-icon input-icon-left"></span>
-                                <textarea class="form-control" rows="3" placeholder="Enter Address 1"></textarea>
+                                <textarea class="form-control" rows="3" name="address1" placeholder="Enter Address 1"></textarea>
                             </div>
                         </div>
                         <div class="form-group mb-4">
                             <label>Address 2</label>
                             <div class="input-group-icon input-group-icon-left">
                                 <span class="input-icon input-icon-left"></span>
-                                <textarea class="form-control" rows="3" placeholder="Enter Address 2"></textarea>
+                                <textarea class="form-control" rows="3" name="address2" placeholder="Enter Address 2"></textarea>
                             </div>
                         </div>
 
@@ -66,7 +71,7 @@
                                         <a class="dropdown-item" href="javascript:;">+62</a>
                                     </div>
                                 </div>
-                                <input class="form-control" id="ex-phone" type="text" placeholder="Enter Phone">
+                                <input class="form-control" id="ex-phone" name="phone" type="text" placeholder="Enter Phone">
                             </div>
 
                         </div>
@@ -79,7 +84,7 @@
                                         <a class="dropdown-item" href="javascript:;">+62</a>
                                     </div>
                                 </div>
-                                <input class="form-control" id="ex-phone2" type="text" placeholder="Enter Phone">
+                                <input class="form-control" id="ex-phone2" name="mobile" type="text" placeholder="Enter Phone">
                             </div>
                         </div>
                     </div>
@@ -89,10 +94,10 @@
                     <label>Gender</label>
                     <div class="mt-1">
                         <label class="radio radio-inline radio-grey radio-primary">
-                            <input type="radio" name="d" value="1" checked>
+                            <input type="radio" name="gender" value="1" checked>
                             <span class="input-span"></span>Male</label>
                         <label class="radio radio-inline radio-grey radio-primary">
-                            <input type="radio" name="d" value="0">
+                            <input type="radio" name="gender" value="0">
                             <span class="input-span"></span>Female</label>
                     </div>
                 </div>
@@ -153,13 +158,13 @@
                 <div class="col-md-2">
                     <div class="form-group mb-4">
                         <label>NIK</label>
-                        <input class="form-control" type="text" placeholder="Enter NIK">
+                        <input class="form-control" type="text" name="nik" placeholder="Enter NIK">
                     </div>
                     <div class="form-group" id="date_1">
                         <label class="font-normal">Join</label>
                         <div class="input-group date">
                             <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
-                            <input class="form-control" type="text" value="<? echo date(" m/d/Y ");?>">
+                            <input class="form-control" type="text" name="joinIn" value="<? echo date(" m/d/Y ");?>">
                         </div>
                     </div>
                     <div class="form-group mb-4">
@@ -258,18 +263,30 @@
                                     }else if($value['type'] == 'Deduction'){
                                         $allo = '<i class="badge badge-success badge-pill">['.substr($value['type'], 0,4).']</i>';
                                     }
-                                    echo '<option value="'.$value['id'].'">'.$value['allowance_name'].' '.$allo.'</option>';
+
+                                    echo '<option  value="'.$value['id'].'">'.$value['allowance_name'].' '.$allo.'</option>';
+
                                 }
                             ?>
+                            
                         </select>
                     </div>
+                   
+
                 </div>
             </div>
         </div>
-        <div class="ibox-footer">
-            <button class="btn btn-primary mr-2" type="button">Submit</button>
-            <button class="btn btn-outline-secondary" type="reset">Cancel</button>
+         <div class="ibox-footer">
+            <?php 
+            echo form_submit('submit', '{lang_save}', array('class' => 'btn btn-primary'));
+            echo anchor('backend/employee/', '{lang_cancel}', array('class' => 'btn btn-outline-secondary'));
+            ?>
+           
         </div>
+       
+        <?php echo form_close(); ?>
+    </div>
+
     </div>
 
 </div>

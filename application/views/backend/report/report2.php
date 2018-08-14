@@ -224,6 +224,7 @@ function printDiv(divName) {
 
                                     <?php
                                         $hitung = 1;
+                                        global $countErr;
                                         foreach ($employeeSearch as $key) {
                                             echo "<tr style='overflow: visible;'>";
                                             echo "<td class='headcol-1'>";
@@ -237,14 +238,16 @@ function printDiv(divName) {
                                             echo '</td>';
                                             echo '<td class="long" style="text-align:center;padding:2px;">';
                                             echo checkloopdate($start,$end,$code); 
+                                            $check = checkloopdate($start,$end,$code);
+
+                                            if($check == 'M'){
+                                                $countErr += 1;
+                                            } 
                                             echo '</td>';
-                                           
                                            $hitung ++;
                                         }
-                                       
-                                          
+                                        echo '<td style="text-align: center; ">'.$countErr.'</td>';
 
-                                           
                                 ?>
 
                                 </tbody>

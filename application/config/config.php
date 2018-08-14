@@ -38,6 +38,18 @@ $host_prod = $_SERVER['SERVER_ADDR'].'/smarthr2';
 $domain = (in_array($_SERVER['HTTP_HOST'], $config['host_dev'], TRUE)) ? $_SERVER['HTTP_HOST'] . '/' . $host_dev : $host_prod;
 
 $config['base_url'] = ( ! empty($_SERVER['HTTPS'])) ? 'https://' . $domain : 'http://' . $domain;
+define('SITE_URL', $config['base_url']);
+// windows path
+define('BASH_PATH', 'D:/xampp/htdocs/upload_excel/');	
+// ubuntu path
+//define('BASH_PATH', 'var/www/upload_excel/');	
+define('USER_IP_ADDRESS', $_SERVER['REMOTE_ADDR']);
+define('HTTP_CSS_PATH', $config['base_url'] . 'assets/css/');
+define('HTTP_IMAGES_PATH', $config['base_url'] . 'assets/images/');
+define('HTTP_JS_PATH', $config['base_url'] . 'assets/js/');
+define('HTTP_UPLOAD_IMPORT_PATH', $config['base_url'] . 'assets/uploads/import/');
+define('ROOT_UPLOAD_PATH', BASH_PATH.'assets/uploads/');
+define('ROOT_UPLOAD_IMPORT_PATH', BASH_PATH . 'assets/uploads/import/');
 
 /*
 |--------------------------------------------------------------------------

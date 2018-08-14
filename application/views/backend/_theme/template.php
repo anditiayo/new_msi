@@ -168,7 +168,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url();?>asets/vendors/jquery/dist/jquery.min.js"></script>
 
     <?}?>
-    
+    <script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js" type="text/javascript"></script>
 
     <script src="<?php echo base_url();?>asets/vendors/popper.js/dist/umd/popper.min.js"></script>
     <script src="<?php echo base_url();?>asets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -216,6 +216,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url();?>asets/js/scripts/toastr-demo.js"></script>
     <script src="<?php echo base_url();?>asets/js/scripts/calendar-demo.js"></script>
     <?}?>
+    <script type="text/javascript">
+
+$('#salary').inputmask("numeric", {
+    radixPoint: ",",
+    groupSeparator: ".",
+    digits: 2,
+    autoGroup: true,
+    prefix: 'Rp ', //Space after $, this will not truncate the first character.
+    rightAlign: false,
+    oncleared: function () { self.Value(''); }
+});
+/*        $('#salary').inputmask("numeric", {
+    radixPoint: ",",
+    groupSeparator: ",",
+    digits: 2,
+    autoGroup: true,
+    prefix: 'Rp', //No Space, this will truncate the first character
+    rightAlign: false,
+    oncleared: function () { self.Value(''); }
+});*/
+    </script>
     <script>
         $(function() {
             $('#datatable').DataTable({
@@ -291,7 +312,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             });
         })
     </script>
-    
+
     <script>
         $(function() {
             $('#ex-date').mask('99/99/9999', {
@@ -309,12 +330,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $('#time_out_e').mask('99:99:00', {
                 placeholder: 'tt:mm:dd'
             });
-           
+            /*$('#salary').mask('999.999.999', {
+                translation: {
+                    'N': {
+                        pattern: /[-]/,
+                        optional: true
+                    }
+                }
+            });*/
             $('#ex-ext').mask('(999) 999-9999? x9999');
             $('#ex-credit').mask('****-****-****-****', {
                 placeholder: '*'
             });
-            //$('#salary').mask('999.999.999.999');
+            
             $('#npwp').mask('99.999.999.9-999.999');
             
             $('#ex-tax').mask('99-9999999');

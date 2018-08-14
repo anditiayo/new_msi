@@ -298,6 +298,7 @@ function printDiv(divName) {
                                                         $POINT      = $param3['POINT'];
                                                         $LEMBUR     = $param3['LEMBUR'];
                                                         $NICKSTATUS = $param3['NICKSTATUS'];
+                                                        $NICKSUB    = $param3['NICKSUB'];
                                                         $NILAI      = $param3['NILAI'];
                                                         
                                                         /*if($OTSTAT == 1){
@@ -335,6 +336,13 @@ function printDiv(divName) {
                                                                     $link = 'employee/leave';
                                                                     $countErr += 1;
                                                                     $countPermit += $NILAI;
+                                                                }else if($NICKSUB==TRUE){
+                                                                    $jam = 0;
+                                                                    $status = $NICKSUB;
+                                                                    $background = 'color:red;';
+                                                                    $link = 'employee/leave';
+                                                                    $countErr += 1;
+                                                                    
                                                                 }else{
                                                                     $jam = 0;
                                                                     $status = 'M';
@@ -393,7 +401,7 @@ function printDiv(divName) {
                                                 }
                                               
                                                 $SHIFT3 = $SHIFT3;
-                                                $GAJI = $SALARY-($GAJIPERHARI*$countPermit)+($GAJIPERHARI*$countErr);
+                                                $GAJI = $SALARY-($GAJIPERHARI*$countErr);
                                                 $ASTEK = ($SALARY*(getastek($code,12)/100));
                                                 $BPJS = ($SALARY*(getbpjs($code,13)/100));
                                                 $PENSIUN = ($SALARY*(getpesiun($code,25)/100));
@@ -428,10 +436,6 @@ function printDiv(divName) {
                                                 echo '<td style="text-align:right;">BAYAR</td>';
                                                 /*echo '<td style="text-align:right;">'.number_format($TUNJANGAN).'</td>';
                                                 echo '<td>'.$countJam.'</td>';
-                                                
-                                                
-                                                
-                                                
                                                 */
                                                
                                                 echo "</tr>";

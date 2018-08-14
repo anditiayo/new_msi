@@ -428,6 +428,16 @@ function timeCount($masuk,$keluar,$code){
    
 }
 
+function getLogDate($date,$pin){
+    $CI = get_instance();
+    $CI->load->model('Log_data');
+    $return = $CI->Log_data->get_log_date($date,$pin);
+
+    return $return;
+   
+}
+
+
 function decimalHours($WORKHOUR)
 {
     $hms = explode(":", $WORKHOUR);
@@ -499,4 +509,24 @@ $times = array($time1, $time2);
   $seconds -= $minutes*60;
   // return "{$hours}:{$minutes}:{$seconds}";
   return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds); 
+}
+
+function array_merge_recursive_ex(array & $array1, array & $array2)
+{
+    $merged = $array1;
+
+    foreach ($array2 as $key => & $value)
+    {
+        if (is_array($value) && isset($merged[$key]) && is_array($merged[$key]))
+        {
+            $merged[$key] = array_merge_recursive_ex($merged[$key], $value);
+        } else if (is_numeric($key))
+        {
+             if (!in_array($value, $merged))
+                $merged[] = $value;
+        } else
+            $merged[$key] = $value;
+    }
+
+    return $merged;
 }

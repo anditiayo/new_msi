@@ -13,7 +13,7 @@
                 <div class="ibox-title">General</div>
             </div>
             <div class="ibox-body">
-                <?php echo form_open('backend/employee/submit'); ?>
+                <?php echo form_open('backend/employee/submitEdit'); ?>
                 <div class="row">
                     <div class="col-md-6">
 
@@ -32,7 +32,7 @@
                         <div class="form-group mb-4">
                             <label>Place of Birth</label>
                            <!--  <input class="form-control" type="text" placeholder="Enter Place of Birth" > -->
-                             <select class="form-control" data-live-search="true" name="pob" id="pob">
+                             <select class="form-control select2_demo_1" data-live-search="true" name="pob" id="pob">
                                 <?php foreach ($regencies as $keys) {
 
                                     if($keys['id'] == $key['pob']){
@@ -47,6 +47,7 @@
                                
                             
                             </select> 
+
 
                         </div>
                         <div class="form-group mb-4">
@@ -329,7 +330,7 @@
         <div class="ibox-footer">
             <?php 
             echo form_submit('submit', '{lang_save}', array('class' => 'btn btn-primary'));
-            echo anchor('backend/employee', '{lang_cancel}', array('class' => 'btn btn-outline-secondary'));
+            echo anchor('backend/employee/', '{lang_cancel}', array('class' => 'btn btn-outline-secondary'));
             ?>
            
         </div>

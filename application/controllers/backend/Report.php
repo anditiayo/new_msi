@@ -11,6 +11,9 @@ class Report extends Backend
 		$this->load->library('grocery_CRUD');
 		$this->load->model('Log_data');
 		$this->load->model('General_model');
+		$this->load->model('Employee_model');
+		$this->load->model('Reports');
+		$this->load->helper('parse');
 
 	}
 
@@ -86,6 +89,72 @@ class Report extends Backend
 			$this->render();
 		}
 	}
+
+	public function report(){
+    	if ( ! $this->ion_auth->logged_in() && ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login', 'refresh');
+		}
+		else
+		{
+			if (!empty($_POST['submit'])) {
+			  $heads = 'backend';
+			} else if (!empty($_POST['print'])) {
+			  $heads = 'print';
+			}else{
+				$heads = 'backend';
+			}
+
+			$this->data['users'] = $this->ion_auth->users()->result();
+
+			foreach ($this->data['users'] as $k => $user)
+			{
+				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+			}
+
+			$this->data['count_users']  = $this->db->count_all($this->config->item('tables', 'ion_auth')['users']);
+			$this->data['subtitle']     = $this->lang->line('Report');
+			
+			$start 			= $this->input->post('start');
+			$end 			= $this->input->post('end');
+			$departement 	= $this->input->post('departement');
+			$status			= $this->input->post('status');
+
+			
+
+			
+			if ($start != NULL AND $end != NULL){
+				$start_date 	= date("Y-m-d", strtotime($start));
+				$end_date 		= date("Y-m-d", strtotime($end));
+				$this->data['start']     	= $start;
+				$this->data['end']     		= $end;
+			}else{
+				$start_date = NULL;
+				$end_date 	= NULL;
+				$this->data['start']     	= NULL;
+				$this->data['end']     		= NULL;
+			}
+			$this->data['log']     		= $this->Log_data->get_log($start_date,$end_date);
+			$this->data['departement'] 	= $this->General_model->departementHead();
+			
+			$this->data['status'] 		= $this->General_model->getStatus();
+
+			$this->data['statusback'] 	= $status;
+			$this->data['departementback'] 	= $departement;			
+
+			$this->data['allowance']    = $this->General_model->allowances();
+				
+			
+			
+			$this->data['report']     	= 'class="active"';
+	        $this->data['bydate'] 		= $this->Log_data->get_log_by_date2($start_date,$end_date,$status,$departement);
+			$this->data['page_content'] = $heads.'/report/reports';
+
+			
+
+			$this->render();
+		}
+    }
 
 	public function type(){
 				if ( ! $this->ion_auth->logged_in() && ! $this->ion_auth->is_admin())
@@ -226,5 +295,17 @@ class Report extends Backend
 
 	
     }
+    function gettime(){
+    	$pin			= $this->input->post('pin');
+		$date			= $this->input->post('date');
+		
+		$date		= date("Y-m-d", strtotime($date));
+		
+		
+		return $this->Log_data->get_log_date($date,$pin);
+		
+    }
+
+
 
 }

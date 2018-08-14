@@ -1,4 +1,4 @@
-<?php
+\<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Log_data extends CI_Model {
@@ -19,26 +19,28 @@ class Log_data extends CI_Model {
 
 	 public function employeeSearch($status,$departement){
 	 	if($status == NULL && $departement != NULL){
-	 		$stat = "CASE WHEN a.status != 9 THEN
-						c.id = $departement
+	 		$stat = "CASE WHEN status != 9 THEN
+						id = $departement
 					END";
 	 	}else if($status != NULL && $departement == NULL){
 	 		$stat = "
-	 			CASE WHEN a.status != 9 THEN
-					a.status = $status
+	 			CASE WHEN status != 9 THEN
+					status = $status
 				END		
 	 		";
 	 	}else if($status != NULL && $departement != NULL){
 	 		$stat = "CASE WHEN a.status != 9 THEN
-					a.status = $status and c.id = $departement
+					status = $status and id = $departement
 					END	
 					";
 	 	}else{
-	 		$stat ="CASE WHEN a.status != 9 THEN
-						a.employee_id != NULL
+	 		$stat ="CASE WHEN status != 9 THEN
+						employee_id != NULL
 					END";
 	 	}
-		$this->db->select('a.id as id,
+	 	$this->db->query('CREATE TEMPORARY TABLE IF NOT EXISTS ' . $this->db->dbprefix('employee') .
+			'(
+							SELECT a.id as id,
 							a.employee_id as employee_id,
 							a.first_name as first_name,
 							a.last_name as last_name,
@@ -64,18 +66,38 @@ class Log_data extends CI_Model {
 							a.regular as regular,
 							a.user_created as user_created,
 							a.date_created as date_created,
-							a.date_updated as user_updated,
+							a.date_updated as date_updated,
 							a.user_updated as user_updated,
 							a.`status` as `status`,
 							a.position as position,
-							a.join_in as join_in');
-		
-		$this->db->from('employees a');
-		$this->db->join('groupwork b','on a.employee_id = b.employee_id');
-		$this->db->join('departement c','on b.grouptime_id = c.id');
+							a.join_in as join_in
+				FROM ' . $this->db->dbprefix('employees') . ' a
+				INNER JOIN ' . $this->db->dbprefix('groupwork') . ' b on a.employee_id = b.employee_id
+				INNER JOIN ' . $this->db->dbprefix('departement') . ' c on b.grouptime_id = c.id
+				
+				)'
+		);
+
+	 	$this->db->from('employee');
 		$this->db->where("$stat");
-		$this->db->order_by("a.employee_id", "asc");
+		$this->db->order_by("employee_id", "asc");
 		$query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function get_log_in($code,$date){
+		$this->db->select('MIN(DATE_TIME)');
+		$this->db->from('log_data');
+		$this->db->where("tgl = '$date' and pin = '$code' and status = 0 LIMIT 1");
+        $query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function get_log_out($code,$date){
+		$this->db->select('MAX(DATE_TIME)');
+		$this->db->from('log_data');
+		$this->db->where("tgl = '$date' and pin = '$code' and status = 1 LIMIT 1");
+        $query = $this->db->get();
 		return $query->result_array();
 	}
 	
@@ -105,9 +127,31 @@ class Log_data extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function get_log_date($date,$pin){
+		$this->db->from('log_data');
+		$this->db->where("pin='$pin' AND tgl = '$date' ");
+        $query = $this->db->get();
+		return $query->result_array();
+	}
+
+
 	public function get_log_by_id($id){
 		$this->db->from('log_data');
 		$this->db->where("id",$id);
+        $query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function getArray(){
+		$this->db->from('array');
+        $query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function getCount(){
+		$this->db->select('employee_id');
+		$this->db->from('array');
+		$this->db->group_by('employee_id');
         $query = $this->db->get();
 		return $query->result_array();
 	}
@@ -119,6 +163,8 @@ class Log_data extends CI_Model {
 				$results = array();
 				$codes = array();
 				$array = array();
+
+
 				foreach ($emp as $key){
 					$code = $key['employee_id'];
 					$codes[] = array(
@@ -129,18 +175,69 @@ class Log_data extends CI_Model {
 			        {
 			           	$date = date("Y-m-d", strtotime($start_date . ' + ' . $i . 'day'));
 
-						$query = $this->db->query("call GETDETAILSEMPLOYEE(".$code.",'$date')");  
+						$query = $this->db->query("call GETDETAILSEMPLOYEE(".$code.",'$date')"); 
 
-					  	$results[$code][$date] = $query->result_array();
+
+					  	/*$this->db->from('array');
+						$this->db->where("employee_id = '$code' AND THEDATE = '$date'");
+						$query = $this->db->get();*/
+						$objectArray = $query->result_array();
+					  	$results[$code][$date] = $objectArray;
+
 					  	mysqli_next_result( $this->db->conn_id );
+					  	
 					}
 				}
-				 return $results;
+				
+				
+				return $results;
 		 }
 		
 		
 		
 	}
+	public function get_log_by_date2($start_date,$end_date,$status,$departement){
+		
+		 if ($start_date != NULL AND $end_date != NULL){
+		 		$emp = $this->employeeSearch($status,$departement);
+				$results = array();
+				$codes = array();
+				$array = array();
+
+
+				foreach ($emp as $key){
+					$code = $key['employee_id'];
+					$codes[] = array(
+						'code' => $key['employee_id'],
+						'nama' => $key['first_name']
+					);
+					for($i = 0; $i < loop_date($start_date,$end_date) + 1; $i++)
+			        {
+			           	$date = date("Y-m-d", strtotime($start_date . ' + ' . $i . 'day'));
+
+						//$query = $this->db->query("call ABSENSE(".$code.",'$date')"); 
+
+						
+
+					  	$this->db->from('calculationdetail2');
+						$this->db->where("employee_id = '$code' AND THEDATE = '$date' ORDER BY TIMESTAMP DESC LIMIT 1");
+						$query = $this->db->get();
+						$objectArray = $query->result_array();
+					  	$results[$code][$date] = $objectArray;
+
+					  	//mysqli_next_result( $this->db->conn_id );
+					  	
+					}
+				}
+				
+				
+				return $results;
+		 }
+		
+		
+		
+	}
+
 
 	public function getDates($code,$date,$sun){
 		$query = $this->db->query("call GETDETAILSEMPLOYEE(".$code.",'$date')");
@@ -182,6 +279,7 @@ class Log_data extends CI_Model {
         		}
 
         }
+        
         return $query->free_result();
 	}
 
@@ -219,6 +317,8 @@ class Log_data extends CI_Model {
 		return $hasil = $this->db->query("INSERT INTO ".$this->db->dbprefix('log_data')." (id,pin,date_time,tgl,waktu,day, ver,status)
                                     VALUES('','$pin','$date_time','$date','$time','$day','2','$status')");
 	}
+
+	
 	
 
 }

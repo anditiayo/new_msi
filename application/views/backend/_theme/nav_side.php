@@ -78,7 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a  href="<?php echo site_url('backend/employee/add'); ?>">Add Employee</a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/employee/'); ?>">Employee Data</a>
+                            <a href="<?php echo site_url('backend/employee/'); ?>">Employee List</a>
                         </li>
                         <li>
                             <a href="<?php echo site_url('backend/employee/group'); ?>">Positioning</a>
@@ -87,13 +87,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a href="<?php echo base_url();?>backend/employee/schedule"> Calendar Events</a>
                         </li>  
                         <li>
-                            <a href="<?php echo site_url('backend/employee/leave'); ?>">Leaves </a>
+                            <a href="<?php echo site_url('backend/employee/leave'); ?>">Ijin </a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/employee/overtime'); ?>">Overtime </a>
+                            <a href="<?php echo site_url('backend/employee/overtime'); ?>">Lembur </a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('backend/employee/upload'); ?>">Upload</a>
+                             <a href="<?php echo site_url('backend/employee/subtitute'); ?>">Ganti Hari</a>
+                        </li>
+                        <li>
+                             <a href="<?php echo site_url('backend/employee/overshift'); ?>">Tukar Jadwal</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('backend/import'); ?>">Upload Koperasi</a>
                         </li>
                     </ul>
                 </li>
@@ -107,7 +113,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
 
                         <li>
-                            <a href="<?php echo site_url('backend/report/type'); ?>">Type 2 </a>
+                            <a href="<?php echo site_url('backend/report/report'); ?>">report</a>
                         </li>
                         
                         
