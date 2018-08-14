@@ -33,8 +33,8 @@
                                 <tr>
                                     <th>NIK</th>
                                     <th>Name</th>
-                                    <th>From</th>
-                                    <th>To</th>
+                                    <th>Ke</th>
+                                    <th>Dari</th>
                                     <th style="text-align: right;">Action</th>
                                 </tr>
                             </thead>
@@ -77,14 +77,14 @@
                         </div>
                     </div>
                      <div class="form-group">
-                        <label class="font-normal">from</label>
+                        <label class="font-normal">Ke</label>
                         <div class="input-group date form_datetime">
                             <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
                             <input class="form-control" name="fromdate" id="fromdate" value="<? echo date('Y-m-d H:i:s',strtotime($date))?>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="font-normal">to</label>
+                        <label class="font-normal">Dari</label>
                         <div class="input-group date form_datetime">
                             <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
                             <input class="form-control" name="todate" id="todate" value="<? echo date('Y-m-d H:i:s',strtotime($date))?>">
@@ -133,7 +133,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="font-normal">Date</label>
+                        <label class="font-normal">Ke</label>
                         <div class="input-group date form_datetime">
                             <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
                             <input class="form-control" name="fromdateEdit" id="fromdateEdit" value="<? echo date('Y-m-d H:i:s',strtotime($date))?>">
@@ -141,7 +141,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="font-normal">Date</label>
+                        <label class="font-normal">Dari</label>
                         <div class="input-group date form_datetime">
                             <span class="input-group-addon bg-white"><i class="fa fa-calendar"></i></span>
                             <input class="form-control" name="todateEdit" id="todateEdit" value="<? echo date('Y-m-d H:i:s',strtotime($date))?>">

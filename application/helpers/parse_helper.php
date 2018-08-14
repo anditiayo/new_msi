@@ -58,31 +58,31 @@ function umur($usia) {
     $age['years'] = intval($diff/31556926);
     $diff = $diff - (31556926 * $age['years']);
     if($curr['month'] > $month) {
-    	$age['months'] = $curr['month'] - $month;
+        $age['months'] = $curr['month'] - $month;
     if($curr['day'] < $day) {
-    	$age['months']--;
-    	$month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
+        $age['months']--;
+        $month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
     } else {
-    	$month_temp = strtotime($curr['year'].'-'.$curr['month'].'-'.$day);
+        $month_temp = strtotime($curr['year'].'-'.$curr['month'].'-'.$day);
     }
-    	$diff = $current_time - $month_temp;
+        $diff = $current_time - $month_temp;
     } elseif($curr['month'] == $month) {
     if($curr['day'] >= $day) {
-    	$age['months'] = 0;
+        $age['months'] = 0;
     } else {
-    	$age['months'] = 11;
-    	$month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
-    	$diff = $current_time - $month_temp;
+        $age['months'] = 11;
+        $month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
+        $diff = $current_time - $month_temp;
     }
     } else {
-    	$age['months'] = $curr['month'] - $month + 12;
+        $age['months'] = $curr['month'] - $month + 12;
     if($curr['day'] < $day) {
-    	$age['months']--;
-    	$month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
+        $age['months']--;
+        $month_temp = strtotime($curr['year'].'-'.$curr['lastmonth'].'-'.$day);
     } else {
-    	$month_temp = strtotime($curr['year'].'-'.$curr['month'].'-'.$day);
+        $month_temp = strtotime($curr['year'].'-'.$curr['month'].'-'.$day);
     }
-    	$diff = $current_time - $month_temp;
+        $diff = $current_time - $month_temp;
     }
 
     $age['days'] = intval($diff/86400);
@@ -174,16 +174,16 @@ function to_pdf($html, $filename='', $stream=TRUE)
 
 function cetak_report($html,$out)
 {
-	if ($out=='pdf')
-		to_pdf($html,'Report'.rand(100,1000));
-	else
-		echo $html;
+    if ($out=='pdf')
+        to_pdf($html,'Report'.rand(100,1000));
+    else
+        echo $html;
 
 }
 
 function nomor_pasien($id)
 {
-	return sprintf("%05d",$id); 
+    return sprintf("%05d",$id); 
 }
 
 function nama_bulan($i)
@@ -207,7 +207,7 @@ function bulan_romawi($i)
 function tanggal($tanggal)
 {
 return date('d',strtotime($tanggal)).'  '.nama_bulan(date('m',strtotime($tanggal))).' '.date('Y',strtotime($tanggal));
-	  			
+                
 }
 
 function t($v)
@@ -219,12 +219,12 @@ function t($v)
 }
 
 function tahun_akademik($str){
-	$r = substr($str, -1);
-	$t = substr($str,0, -1);
-	if($r==1)
-		return $t.' GANJIL';
-	else
-		return $t.' GENAP';
+    $r = substr($str, -1);
+    $t = substr($str,0, -1);
+    if($r==1)
+        return $t.' GANJIL';
+    else
+        return $t.' GENAP';
 
 }
 
@@ -301,6 +301,16 @@ function get_employee($code){
     return $detail;
 
 }
+
+function get_groups($code){
+
+    $CI = get_instance();
+    $CI->load->model('Log_data');
+    $detail = $CI->Log_data->get_group($code);
+    return $detail;
+
+}
+
 
 function is_array_empty($arr){
   if(is_array($arr)){     

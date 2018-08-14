@@ -40,7 +40,7 @@ $domain = (in_array($_SERVER['HTTP_HOST'], $config['host_dev'], TRUE)) ? $_SERVE
 $config['base_url'] = ( ! empty($_SERVER['HTTPS'])) ? 'https://' . $domain : 'http://' . $domain;
 define('SITE_URL', $config['base_url']);
 // windows path
-define('BASH_PATH', 'D:/xampp/htdocs/upload_excel/');	
+define('BASH_PATH', '/var/www/html/smarthr2/upload_excel/');	
 // ubuntu path
 //define('BASH_PATH', 'var/www/upload_excel/');	
 define('USER_IP_ADDRESS', $_SERVER['REMOTE_ADDR']);

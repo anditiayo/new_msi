@@ -100,7 +100,7 @@ function printDiv(divName) {
                             #innerdiv {
                                 width: 88%;
                                 overflow-x: scroll;
-                                margin-left: 20.01em;
+                                margin-left: 25.01em;
                                 padding-top: -10px;
                                 overflow-y: visible;
                                 padding-bottom: 1px;
@@ -138,7 +138,7 @@ function printDiv(divName) {
                             
                             .headcol2 {
                                 position: absolute;
-                                width: 5em;
+                                width: 10em;
                                 left: 15em;
                                 right: 6em;
                                 top: auto;
@@ -198,21 +198,21 @@ function printDiv(divName) {
                                         <th class=''>POT/HARI</th>
                                         <th class=''>PERIOD</th>
                                         <th class=''>OT</th>
-                                        <th class=''>TOTAL UPAH</th>
-                                        <th class=''>MASA KERJA</th>
-                                        <th class=''>TOTAL UANG SHIFT</th>
-                                        <th class=''>TOTAL OT</th>
-                                        <th class=''>TOTAL AWAL</th>
-                                        <th class=''>POT JHT</th>
-                                        <th class=''>POT BPJS</th>
-                                        <th class=''>POT PENSIUN</th>
-                                        <th class=''>POT PPH21</th>
+                                        <th class=''>TOTALUPAH</th>
+                                        <th class=''>MASAKERJA</th>
+                                        <th class=''>UANGSHIFT</th>
+                                        <th class=''>OVERTIME</th>
+                                        <th class=''>TOTALAWAL</th>
+                                        <th class=''>POTJHT</th>
+                                        <th class=''>POTBPJS</th>
+                                        <th class=''>POTPENSIUN</th>
+                                        <th class=''>POTPPH21</th>
                                         <th class=''>BAYAR</th>
                                         <th class=''>LAIN2</th>
-                                        <th class=''>IURAN KOP</th>
-                                        <th class=''>PINJ KOP</th>
+                                        <th class=''>IURANKOP</th>
+                                        <th class=''>PINJKOP</th>
                                         <th class=''>AKHIR</th>
-                                        <th class=''>TOTAL BAYAR</th>
+                                        <th class=''>TOTAL</th>
                                        
                                     </tr>
                                    
@@ -224,7 +224,360 @@ function printDiv(divName) {
                                     <?php
                                            /*echo '<pre>';
                                             print_r($bydate);*/
+                                            global $countJam;
+                                            global $countErr;
+                                            global $countPermit;
+                                            global $countJam;
+
                                             $hitung = 1;
+                                            foreach ($bydate as $key1 => $param1) {
+                                                echo "<tr style='overflow: visible;'>";
+                                                echo "<td class='headcol-1'>";
+                                                    echo $hitung;
+                                                echo "</td>";
+                                                echo "<td class='headcol2' >";
+                                                    $code = $key1;
+                                                    echo get_groups($code).' '.sprintf("%'04d", $code);     
+                                                echo "</td>";
+                                                echo "<td class='headcol'>";
+                                                    echo get_employee($code);
+                                                echo '</td>'; 
+                                                
+                                                
+                                                $countHari  = 0;
+                                                //echo '<td>'.count($param1).'</td>';
+                                                //echo "</tr>";
+                                                foreach ($param1 as $key2 => $param2) {
+                                                    $time   = $key2;
+                                                    $sun    = date("D", strtotime($time));
+                                                    $day    = date("d", strtotime($time));
+                                                    $d      = date("d", strtotime($start));
+
+                                                    if($sun == "Sun"){
+                                                        $sun = "background:pink";    
+                                                    }else{
+                                                        $sun = "background:#FFF";
+                                                    }
+                                                    
+                                                    echo '<td class="long" style="text-align:center;padding:2px; '.$sun.'">';
+                                                   
+                                                    $countHari   += 1;
+
+                                                    if($day == $d)
+                                                    {
+                                                        $countJam  = 0;
+                                                        $countErr  = 0;
+                                                        $countPermit  = 0;
+                                                        $SHIFT3    = 0;
+                                                        $HK = 0;
+                                                        $COUNTOT   = 0;
+                                                        $COUNTLEMBUR = 0; 
+                                                    }
+
+                                                    foreach ($param2 as $key3 => $param3) {
+                                                        $tgl            = date("Ymd", strtotime($param3['DATES']));
+                                                        $NIK            = $param3['NIK'];
+                                                        $DATES          = $param3['DATES'];
+                                                        $FNAME          = $param3['FNAME'];
+                                                        $LNAME          = $param3['LNAME'];
+                                                        $JAMMASUK       = $param3['JAMMASUK'];
+                                                        $JAMKELUAR      = $param3['JAMKELUAR'];
+                                                        $JOININ         = $param3['JOININ'];
+                                                        $NPOSISI        = $param3['NPOSISI'];
+                                                        $NSTATUS        = $param3['NSTATUS'];
+                                                        $GAJI           = $param3['GAJI'];
+                                                        $GROUPID        = $param3['GROUPID'];
+                                                        $GROUPSHIFTNAME = $param3['GROUPSHIFTNAME'];
+                                                        $GROUPNAME      = $param3['GROUPNAME'];
+                                                        $EVENTIN        = $param3['EVENTIN'];
+                                                        $EVENTOUT       = $param3['EVENTOUT'];
+                                                        $REGULARTIMENAME    = $param3['REGULARTIMENAME'];
+                                                        $REGULARIN      = $param3['REGULARIN'];
+                                                        $REGULAROUT     = $param3['REGULAROUT'];
+                                                        $DATES          = $param3['DATES'];
+                                                        $OVERTIME       = $param3['OVERTIME'];
+                                                        $SIMPANAN       = $param3['SIMPANAN'];
+                                                        $JMLPINJAMAN    = $param3['JMLPINJAMAN'];
+                                                        $CICILAN        = $param3['CICILAN'];
+                                                        $TODATE         = $param3['TODATE'];
+                                                        $FROMDATE       = $param3['FROMDATE'];
+                                                        $SUBTITUTE      = $param3['SUBTITUTE'];
+                                                        $PERMITS        = $param3['PERMITS'];
+                                                        $NPERMITS       = $param3['NPERMITS'];
+                                                        $NICKPERMITS    = $param3['NICKPERMITS'];
+                                                        $OVERTIMESTATS  = $param3['OVERTIMESTATS'];
+                                                        $ALLOWANCE      = $param3['ALLOWANCE'];
+                                                        $BPSJKET        = $param3['BPSJKET'];
+                                                        $BPSJKES        = $param3['BPSJKES'];
+                                                        $PENSIUN        = $param3['PENSIUN'];
+                                                        $WORKHOUR       = $param3['WORKHOUR'];
+                                                        $DATAIN         = $param3['DATAIN'];
+                                                        $DATAOUT        = $param3['DATAOUT'];
+                                                        $SHIFT          = $param3['SHIFT'];
+                                                        
+                                                        $REALIND        = $param3['REALIND'];
+                                                        $REALIN         = $param3['REALIN'];
+                                                        $REALOUT        = $param3['REALOUT'];
+
+                                                        $OT             = $param3['OTTIME'];
+                                                        $OTSTAT         = $param3['OTSTAT'];
+                                                        $OTHOUR         = $param3['OTHOUR'];
+                                                        $LEMBUR         = $param3['LEMBUR'];
+                                                        $POINT         = $param3['POINT'];
+
+                                                        $WORKHOUROT     = $param3['WORKHOUROT'];
+
+                                                                
+                                                        
+                                                        /*if($OTSTAT == 1){
+                                                            for($i=0 ; $i < $OTHOUR ; $i++){
+                                                                
+                                                                $COUNTOT += $OT;
+                                                                $DATEOT15 = date("Y-m-d H:i:s", strtotime('+'.$i.'hour +15 minutes',strtotime($EDATEOUT)));
+                                                                $DATEOT45 = date("Y-m-d H:i:s", strtotime('+'.$i.'hour +45 minutes',strtotime($EDATEOUT)));
+                                                                if($EDATEOUT > $DATEOT15 && $EDATEOUT < $DATEOT45){
+                                                                    $COUNTOT += 0.5;
+                                                                }else if( $EDATEOUT > $DATEOT45){}
+
+                                                            } 
+                                                        }*/
+
+                                                        $COUNTLEMBUR    += $LEMBUR;
+                                                        $COUNTOT        += $POINT;
+                                                        /*if($OTS == 1){
+                                                            $style = 'color:pink;';
+                                                            $COUNTOT += $POINT;
+                                                            $COUNTLEMBUR += $LEMBUR;
+                                                        }else{
+                                                            
+                                                            $COUNTOT +=  0;
+                                                        }*/
+
+                                                        //cek ganti hari
+                                                        /*if($SUBTITUTE == 'FR' || $SUBTITUTE == 'TO'){
+                                                            $SUB = 1;
+                                                        }else{
+                                                            $SUB = 0;
+                                                        }*/
+
+                                                        //cek ijin
+                                                       /* if($NICKPERMITS != ''){
+                                                            $NICKPERMITS = $NICKPERMITS; 
+                                                        }else{
+                                                            $NICKPERMITS = 0;
+                                                        }*/
+
+                                                        //cek jadwal
+                                                        if($EVENTIN != '' AND $EVENTOUT != ''){
+                                                            $event = 1;
+                                                        }else{
+                                                            $event = 'NO EVENT';
+                                                        }
+
+                                                        //cek shift3
+                                                        if($SHIFT == 3){
+                                                            $background = 'background:yellow;color:black;';
+                                                            $CEKSHIFT3 = 1;
+                                                        }else{
+                                                            $background = 'background:transparent;color:black;';
+                                                            $CEKSHIFT3 = 0;
+                                                        }
+
+                                                        if($WORKHOUR != NULL){
+                                                            
+                                                            if($WORKHOUR == '00:00:00'){
+
+                                                                if($EVENTIN != '' && $JAMMASUK == '' && $JAMKELUAR == ''){
+                                                                    $datenow = date('Y-m-d');
+
+                                                                    if($datenow <= $DATES){
+                                                                        $status = '';
+                                                                        $background = '';
+                                                                        $link ='';
+                                                                    }else{
+                                                                        if($NICKPERMITS != ''){
+                                                                            $status = $NICKPERMITS;
+                                                                            $background = 'padding:2px;background:red;color:white;';
+                                                                            $link = 'employee/leave';
+                                                                            $countPermit += 1;
+                                                                        }else if($SUBTITUTE == 'FR'){
+                                                                            $status = 'GH'.$SUBTITUTE;
+                                                                            $background = 'padding:2px;background:orange;color:black;';
+                                                                            $link = 'employee/subtitute';
+                                                                        }else if($SUBTITUTE == 'TO'){
+                                                                            $status = 'GH'.$SUBTITUTE;
+                                                                            $background = 'padding:2px;background:orange;color:black;';
+                                                                            $link = 'employee/subtitute';
+                                                                        }else{
+                                                                            $status = 'M';
+                                                                            $background = 'padding:2px;background:red;color:white;';
+                                                                            $countErr += 1;
+                                                                            $link = 'employee/leave';
+                                                                        }
+                                                                        
+                                                                        
+                                                                    }
+                                                                }else if($EVENTIN != '' && $JAMMASUK != '' && $JAMKELUAR == ''){
+                                                                    if($SHIFT == 3){
+                                                                        $status = '';
+                                                                        $background = '';
+                                                                        $link ='';
+                                                                    }else{
+                                                                        $status = 'EDIT';
+                                                                        $background = 'padding:2px;background:blue;color:white;';
+                                                                        $link = 'log';
+                                                                    }
+                                                                }else if($EVENTIN != '' && $JAMMASUK == '' && $JAMKELUAR != ''){
+                                                                    if($SHIFT == 3){
+                                                                        $status = '';
+                                                                        $background = '';
+                                                                        $link ='';
+                                                                    }else{
+                                                                        $status = 'EDIT';
+                                                                        $background = 'padding:2px;background:blue;color:white;';
+                                                                        $link = 'log';
+                                                                    }
+                                                                }else if($EVENTIN == '' && $JAMMASUK != '' && $JAMKELUAR != ''){
+                                                                    $status = 'EV';
+                                                                    $background = 'color:green;';
+                                                                    $link = 'employee/schedule';
+                                                                }else {
+                                                                    $status = '';
+                                                                    $background = '';
+                                                                    $link ='';
+                                                                }
+
+
+                                                                /*$status = 'EDIT'.$JAMMASUK.'='.$JAMKELUAR.'+'.$EVENTIN;
+                                                                $background = 'background:blue;color:black;';*/
+
+                                                            }else{
+                                                                $status = decimalHours($WORKHOUR);
+                                                                $HK = 1;
+                                                                $link = 'log';
+                                                            }
+                                                            
+                                                        }else{
+
+                                                            if($event == 1 ){
+                                                                $datenow = date('Y-m-d');
+
+                                                                if($datenow <= $DATES){
+                                                                    $status = '';
+                                                                        $background = '';
+                                                                        $link ='';
+                                                                }else{
+
+                                                                    if($NICKPERMITS != ''){
+                                                                        $status = $NICKPERMITS;
+                                                                        $background = 'padding:2px;background:grey;color:white;';
+                                                                        
+                                                                        $link = 'employee/leave';
+                                                                    }else{
+                                                                        $status = 'M';
+                                                                        $background = 'padding:2px;background:red;color:white;';
+                                                                        $countErr += 1;
+                                                                        $link = 'employee/leave';
+                                                                    }
+                                                                    
+                                                                }
+                                                                
+                                                            
+                                                            }else if($event == 'NO EVENT' ){
+                                                                if($OVERTIMESTATS != ''){
+                                                                    $status = sprintf('%0.2f', decimalHours($WORKHOUROT));
+                                                                    $background = 'color:green;';
+                                                                    $link = 'employee/schedule';
+                                                                }else if($SUBTITUTE == 'FR'){
+                                                                    $status = 'GH'.$SUBTITUTE;
+                                                                    $background = 'padding:2px;background:orange;color:black;';
+                                                                    $link = 'employee/subtitute';
+                                                                }else if($SUBTITUTE == 'TO'){
+                                                                    $status = 'GH'.$SUBTITUTE;
+                                                                    $background = 'padding:2px;background:orange;color:black;';
+                                                                    $link = 'employee/subtitute';
+                                                                }else{
+
+                                                                    $status = 'EV';
+                                                                    $background = 'padding:2px;background:green;color:white;';
+                                                                    $link = 'employee/schedule';
+                                                                }
+                                                                
+                                                                
+                                                            }
+
+                                                            
+                                                        }
+                                                        if($OVERTIMESTATS != ''){
+                                                            $star = '<span style="color:red;"">&#42;</span>';   
+                                                        }else{
+                                                            $star = '';   
+                                                        }
+                                                        
+                                                        echo '<a style="font-size:13px; text-align: center;padding:1px;'.$background.'" href="'.$link.'?tgl='.$tgl.'&pin='.$code.'" target="_blank">'.$status.'</a>'.$star;
+                                                        
+                                                        $SHIFT3+=$CEKSHIFT3;
+                                                        
+                                                       
+                                                        
+                                                        
+                                                    }
+                                                    echo '</td>';
+                                                }
+
+                                                ?>
+                                                   
+                                                <?
+
+                                                $GAJI_PERHARI        = $GAJI/30;
+                                                $ALLOWANCE_PER_HARI   = $ALLOWANCE/30;
+
+
+                                                #POTONGAN
+                                                $POT_TIDAK_MASUK_GAJI       = $countErr*$GAJI_PERHARI;
+                                                $POT_TIDAK_MASUK_ALLOWANCE  = $countErr*$ALLOWANCE_PER_HARI;
+                                                $POT_IJIN_ALLOWANCE         = $countPermit*$ALLOWANCE_PER_HARI;
+                                                
+                                                #TUNJANGAN
+                                                $TOTAL_ALLOWANCE             =  $ALLOWANCE - $POT_IJIN_ALLOWANCE - $POT_TIDAK_MASUK_ALLOWANCE;
+
+                                                $TOTAL_POTONGAN_TIDAK_MASUK  = $POT_TIDAK_MASUK_GAJI+$POT_TIDAK_MASUK_ALLOWANCE+$POT_IJIN_ALLOWANCE;
+
+                                                $H = floor($COUNTOT/60) ? floor($COUNTOT/60) .'' : '';
+                                                $M = $COUNTOT%60 ? $COUNTOT%60 .'' : '';
+
+                                                $TOTALAWAL          = $GAJI+$ALLOWANCE+$COUNTLEMBUR-$TOTAL_POTONGAN_TIDAK_MASUK;
+                                                $BAYAR              = $TOTALAWAL-$BPSJKET-$BPSJKES-$PENSIUN;
+                                                $AKHIR              = $BAYAR-$SIMPANAN-$CICILAN;
+
+                                                echo '<td>'.($countHari-$countErr).'</td>';
+                                                echo '<td>'.$SHIFT3.'</td>';
+                                                echo '<td>'.$countErr.'</td>';
+                                                echo '<td>'.$countHari.'</td>';
+                                                echo '<td>'.$COUNTOT.'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($GAJI).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($TOTAL_ALLOWANCE).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($SHIFT3*3000).'</td>';
+                                                echo '<td>'.number_format($COUNTLEMBUR).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($TOTALAWAL).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($BPSJKET).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($BPSJKES).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($PENSIUN).'</td>';
+                                              
+                                                echo '<td style="text-align:right;">0</td>';
+                                                echo '<td style="text-align:right;">'.number_format($BAYAR).'</td>';
+                                                echo '<td style="text-align:right;"><input type="text"  name="lain2"></td>';
+                                                echo '<td style="text-align:right;">'.number_format($SIMPANAN).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($CICILAN).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($AKHIR).'</td>';
+                                                echo '<td style="text-align:right;">'.number_format($AKHIR).'</td>';
+                                               
+                                                
+                                               
+                                                echo "</tr>";
+                                                $hitung++;
+                                            }
+/*                                            $hitung = 1;
                                             global $RECRUITED;
                                             global $SHIFT3;
                                             global $countErr;
@@ -312,7 +665,7 @@ function printDiv(divName) {
                                                                 }else if( $EDATEOUT > $DATEOT45){}
 
                                                             } 
-                                                        }*/
+                                                        }
 
 
                                                         if($OTS == 1){
@@ -434,9 +787,9 @@ function printDiv(divName) {
                                                 echo '<td style="text-align:right;">KOP</td>';
                                                 echo '<td style="text-align:right;">AKHIR</td>';
                                                 echo '<td style="text-align:right;">BAYAR</td>';
-                                                /*echo '<td style="text-align:right;">'.number_format($TUNJANGAN).'</td>';
-                                                echo '<td>'.$countJam.'</td>';
-                                                */
+                                                //echo '<td style="text-align:right;">'.number_format($TUNJANGAN).'</td>';
+                                                //echo '<td>'.$countJam.'</td>';
+                                                
                                                
                                                 echo "</tr>";
                                                 $hitung++; 
@@ -446,7 +799,7 @@ function printDiv(divName) {
                                            echo '<td colspan="'.($TOTALHARI+16).'" style="text-align:right">'.number_format($JUM).'</td>';
 
                                            
-                                           echo "</tr>";
+                                           echo "</tr>";*/
                                            
                                           
 

@@ -111,7 +111,7 @@ class Employee_model extends CI_Model {
 
     }
 
-    public function insertData($nik,$firstName,$lastname,$email,$pob,$dob,$address1,$address2,$phone1,$phone2,$gender,$status,$position,$salary,$npwp,$bpjstk,$bpjsk,$regular,$group,$joinIn,$user_created,$position){
+    public function insertData($nik,$firstName,$lastname,$email,$pob,$dob,$address1,$address2,$phone1,$phone2,$gender,$status,$salary,$npwp,$bpjstk,$bpjsk,$regular,$group,$joinIn,$user_created,$position){
          return $this->db->query("INSERT INTO ".$this->db->dbprefix('employees')." (id,employee_id,first_name,last_name,email,place_of_birth,birthday,gender,address1,address2,phone1,phone2,npwp,bpjstk,bpjs,regular,user_created,join_in,position) 
             VALUES('','$nik','$firstName','$lastname','$email','$pob','$dob','$gender','$address1','$address2','$phone1','$phone2','$npwp','$bpjstk','$bpjsk','$status','$user_created','$joinIn','$position')");
     }

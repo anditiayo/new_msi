@@ -1,4 +1,4 @@
-\<?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Log_data extends CI_Model {
@@ -18,27 +18,9 @@ class Log_data extends CI_Model {
 	}
 
 	 public function employeeSearch($status,$departement){
-	 	if($status == NULL && $departement != NULL){
-	 		$stat = "CASE WHEN status != 9 THEN
-						id = $departement
-					END";
-	 	}else if($status != NULL && $departement == NULL){
-	 		$stat = "
-	 			CASE WHEN status != 9 THEN
-					status = $status
-				END		
-	 		";
-	 	}else if($status != NULL && $departement != NULL){
-	 		$stat = "CASE WHEN a.status != 9 THEN
-					status = $status and id = $departement
-					END	
-					";
-	 	}else{
-	 		$stat ="CASE WHEN status != 9 THEN
-						employee_id != NULL
-					END";
-	 	}
-	 	$this->db->query('CREATE TEMPORARY TABLE IF NOT EXISTS ' . $this->db->dbprefix('employee') .
+	 	$query = $this->db->query("call S_CHECK()"); 
+	 	//mysqli_next_result( $this->db->conn_id );
+	 	/*$this->db->query('CREATE TEMPORARY TABLE IF NOT EXISTS ' . $this->db->dbprefix('employee') .
 			'(
 							SELECT a.id as id,
 							a.employee_id as employee_id,
@@ -70,17 +52,43 @@ class Log_data extends CI_Model {
 							a.user_updated as user_updated,
 							a.`status` as `status`,
 							a.position as position,
-							a.join_in as join_in
+							a.join_in as join_in,
+							c.label as dept_label,
+                            c.link as dept_link,
+                            c.id as dept_id,
+                            c.sort as dept_sort,
+                            c.parent as dept_parent
 				FROM ' . $this->db->dbprefix('employees') . ' a
 				INNER JOIN ' . $this->db->dbprefix('groupwork') . ' b on a.employee_id = b.employee_id
 				INNER JOIN ' . $this->db->dbprefix('departement') . ' c on b.grouptime_id = c.id
 				
 				)'
-		);
+		);*/
+
+	 	if($status == NULL && $departement != NULL){
+	 		$stat = "CASE WHEN status != 9 THEN
+	 					dept_parent = $departement
+					END";
+	 	}else if($status != NULL && $departement == NULL){
+	 		$stat = "
+	 			CASE WHEN status != 9 THEN
+					status = $status
+				END		
+	 		";
+	 	}else if($status != NULL && $departement != NULL){
+	 		$stat = "CASE WHEN status != 9 THEN
+					status = $status and dept_parent = $departement
+					END	
+					";
+	 	}else{
+	 		$stat ="CASE WHEN status != 9 THEN
+						employee_id != NULL
+					END";
+	 	}
 
 	 	$this->db->from('employee');
 		$this->db->where("$stat");
-		$this->db->order_by("employee_id", "asc");
+		$this->db->order_by("dept_parent,dept_id,employee_id", "asc");
 		$query = $this->db->get();
 		return $query->result_array();
 	}
@@ -102,13 +110,25 @@ class Log_data extends CI_Model {
 	}
 	
 	public function get_details($code){
-		$this->db->select('first_name as name');
-		$this->db->from('employees');
+		$this->db->select('CONCAT(first_name, " ",last_name) as name');
+		$this->db->from('employee');
 		$this->db->where('employee_id ='.$code);
 		$query = $this->db->get();
 		foreach ($query->result() as $row)
         {
                 echo $row->name;
+        }
+        return $query->free_result();  
+	}
+
+	public function get_group($code){
+		$this->db->select('dept_label');
+		$this->db->from('employee');
+		$this->db->where('employee_id ='.$code);
+		$query = $this->db->get();
+		foreach ($query->result() as $row)
+        {
+                echo $row->dept_label;
         }
         return $query->free_result();  
 	}
@@ -169,7 +189,8 @@ class Log_data extends CI_Model {
 					$code = $key['employee_id'];
 					$codes[] = array(
 						'code' => $key['employee_id'],
-						'nama' => $key['first_name']
+						'nama' => $key['first_name'],
+						'label' => $key['dept_label']
 					);
 					for($i = 0; $i < loop_date($start_date,$end_date) + 1; $i++)
 			        {
@@ -219,8 +240,8 @@ class Log_data extends CI_Model {
 
 						
 
-					  	$this->db->from('calculationdetail2');
-						$this->db->where("employee_id = '$code' AND THEDATE = '$date' ORDER BY TIMESTAMP DESC LIMIT 1");
+					  	$this->db->from('calculation');
+						$this->db->where("NIK = '$code' AND DATES = '$date' ORDER BY reg_date DESC LIMIT 1");
 						$query = $this->db->get();
 						$objectArray = $query->result_array();
 					  	$results[$code][$date] = $objectArray;
